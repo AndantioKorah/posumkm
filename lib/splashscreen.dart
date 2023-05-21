@@ -7,14 +7,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:posumkm/loginpage.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen ({Key? key}) : super(key: key);
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -23,7 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _navigateToHome() async {
     await Future.delayed(Duration(milliseconds: 1000), () {});
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   @override
@@ -37,16 +37,18 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           // ignore: prefer_const_literals_to_create_immutables
           children: [
-            Image(image: AssetImage(
-              "assets/images/logo-pos.png"), 
+            Image(
+              image: AssetImage("assets/images/logo-pos.png"),
               width: 150,
-              height: 150,),
+              height: 150,
+            ),
             SpinKitFadingFour(
               color: theme.colorScheme.onPrimaryContainer,
               size: 30.0,
             )
           ],
-        ),),
+        ),
+      ),
     );
   }
 }
