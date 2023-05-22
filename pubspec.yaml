@@ -40,6 +40,9 @@ dependencies:
   flutter_svg: ^2.0.6
   font_awesome_flutter: ^10.4.0
   page_transition: ^2.0.9
+  blurrycontainer: ^1.0.2
+  motion_tab_bar_v2: ^0.2.6
+  curved_navigation_bar: ^1.0.3
 
 flutter_native_splash:
   android: true
