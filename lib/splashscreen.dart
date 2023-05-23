@@ -4,9 +4,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-// import 'package:page_transition/page_transition.dart';
-// import 'package:page_transition/page_transition.dart';
 import 'package:posumkm/loginpage.dart';
+// import 'package:page_transition/page_transition.dart';
+// import 'package:page_transition/page_transition.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);

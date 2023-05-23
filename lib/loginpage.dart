@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:posumkm/baselayoutpage.dart';
 // import 'package:page_transition/page_transition.dart';
-import 'package:posumkm/homepage.dart';
 // import 'package:posumkm/splashscreen.dart';
 
 
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
 
                               Navigator.pushReplacement(
                                 context, MaterialPageRoute(builder: 
-                                (context) => HomePage())
+                                (context) => BaseLayoutPage())
                               );
                           },
                           child: Text(
