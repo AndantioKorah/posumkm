@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
       title: 'NiKita POS UMKM',
       theme: ThemeData(
         // fontFamily: 'PT-Sans',
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromRGBO(34, 46, 60, 1)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromRGBO(34, 46, 60, 1)),
         useMaterial3: true,
       ),
       home: const SplashScreen(),
@@ -28,21 +29,49 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class BaseTextStyle{
-  Color color = Colors.grey;
+class BaseTextStyle {
+  final Color color = Colors.grey;
 
   static const gridTextDivider = TextStyle(
-    fontSize: 12,
-    color: Colors.grey,
-    fontWeight: FontWeight.bold,
-    fontStyle: FontStyle.italic,
-    fontFamily: "PT-Sans"
-  );
+      fontSize: 12,
+      color: Colors.grey,
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+      fontFamily: "PT-Sans");
 
   static const gridItemText = TextStyle(
-    fontSize: 12,
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-    fontFamily: "PT-Sans"
-  );
+      fontSize: 12,
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontFamily: "PT-Sans");
+  
+   static const gridTextButton = TextStyle(
+      fontSize: 12,
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontFamily: "PT-Sans");
+}
+
+class LineDividerWidget extends StatelessWidget {
+  final Color color;
+  final double height;
+  // final double padding;
+
+  LineDividerWidget({
+    this.color = Colors.black,
+    this.height = 1,
+    // this.padding = EdgeInsets.all(10)
+  });
+  @override
+  Widget build(BuildContext context) {
+    // var theme = Theme.of(context);
+
+    return SizedBox(
+      height: height,
+      child: Container(
+        width: double.infinity,
+        color: color,
+      ),
+    );
+  }
 }

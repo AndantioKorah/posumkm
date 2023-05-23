@@ -31,78 +31,14 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class MasterDataWidget extends StatefulWidget{
-  const MasterDataWidget({super.key});
-
-  @override
-  State<MasterDataWidget> createState() => _MasterDataWidgetState();
-}
-
-class MenusWidget extends StatefulWidget{
+class MenusWidget extends StatefulWidget {
   const MenusWidget({super.key});
 
   @override
   State<MenusWidget> createState() => _MenusWidgetState();
 }
 
-class _MasterDataWidgetState extends State<MasterDataWidget> {
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
-    List<MenuList> menuMasterData = [
-      MenuList(1, "Menu", Icons.menu_book),
-      MenuList(2, "User", FontAwesomeIcons.userGear),
-    ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text("Master Data", 
-        style: BaseTextStyle.gridTextDivider,
-      ),
-      // SizedBox(
-      //   height: 10,
-      // ),
-      GridView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 50,
-          mainAxisSpacing: 10
-        ),
-        itemCount: menuMasterData.length,
-        itemBuilder: (context, index) {
-          return TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.transparent,
-            ),
-            onPressed: () {},
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment:  CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  menuMasterData[index].icon,
-                  color: theme.colorScheme.onPrimaryContainer,
-                  size: 25,
-                ),
-                SizedBox(height: 10,),
-                Text(
-                  menuMasterData[index].title,
-                  style: BaseTextStyle.gridItemText
-                )
-              ],
-            ),
-          );
-        },
-      ),
-      ]
-    );
-  }
-}
-
-class MenuList{
+class MenuList {
   int menuId;
   String title;
   IconData icon;
@@ -115,10 +51,128 @@ class _MenusWidgetState extends State<MenusWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: const [
-          MasterDataWidget()
+        children: [
+          MasterDataWidget(),
+          SizedBox(
+            height: 5,
+          ),
+          LineDividerWidget(
+            height: 0.5,
+            color: Colors.grey,
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          HistoryTransactionWidget()
         ],
       ),
     );
+  }
+}
+
+class HistoryTransactionWidget extends StatefulWidget {
+  const HistoryTransactionWidget({super.key});
+
+  @override
+  State<HistoryTransactionWidget> createState() =>
+      _HistoryTransactionWidgetState();
+}
+
+class _HistoryTransactionWidgetState extends State<HistoryTransactionWidget> {
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    return Column(children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "History Transaction",
+            style: BaseTextStyle.gridTextDivider,
+          ),
+          TextButton(
+            onPressed: () {},
+            style: TextButton.styleFrom(
+                backgroundColor: theme.colorScheme.onPrimary),
+            child: Row(
+              children: const [
+                Text(
+                  "Today",
+                  style: BaseTextStyle.gridTextButton,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Icon(
+                  FontAwesomeIcons.arrowDown,
+                  size: 10,
+                  color: Colors.black,
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    ]);
+  }
+}
+
+class MasterDataWidget extends StatefulWidget {
+  const MasterDataWidget({super.key});
+
+  @override
+  State<MasterDataWidget> createState() => _MasterDataWidgetState();
+}
+
+class _MasterDataWidgetState extends State<MasterDataWidget> {
+  @override
+  Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
+    List<MenuList> menuMasterData = [
+      MenuList(1, "Menu", Icons.menu_book),
+      MenuList(2, "User", FontAwesomeIcons.userGear),
+    ];
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(
+        "Master Data",
+        style: BaseTextStyle.gridTextDivider,
+      ),
+      // SizedBox(
+      //   height: 10,
+      // ),
+      GridView.builder(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, crossAxisSpacing: 50, mainAxisSpacing: 10),
+        itemCount: menuMasterData.length,
+        itemBuilder: (context, index) {
+          return TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.transparent,
+            ),
+            onPressed: () {},
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  menuMasterData[index].icon,
+                  color: theme.colorScheme.onPrimaryContainer,
+                  size: 25,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(menuMasterData[index].title,
+                    style: BaseTextStyle.gridItemText)
+              ],
+            ),
+          );
+        },
+      ),
+    ]);
   }
 }

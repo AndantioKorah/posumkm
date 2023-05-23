@@ -21,7 +21,7 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
   var selectedPage = 0;
   List<Widget> listWidget = [];
 
-  _changeStatePage(int selectedIndex){
+  _changeStatePage(int selectedIndex) {
     setState(() {
       selectedPage = selectedIndex;
     });
@@ -50,7 +50,7 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
         // backgroundColor: const Color.fromARGB(255, 227, 227, 227),
         // backgroundColor: Colors.grey[500],
         bottomNavigationBar: CurvedNavigationBar(
-          height: sizeScreen.height * 0.08,
+          height: 65,
           backgroundColor: Colors.white,
           buttonBackgroundColor: theme.colorScheme.onPrimaryContainer,
           color: theme.colorScheme.onPrimaryContainer,
@@ -95,7 +95,6 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
         ));
   }
 }
-
 
 class TopWidget extends StatelessWidget {
   const TopWidget({super.key});
