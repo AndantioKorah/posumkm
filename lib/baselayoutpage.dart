@@ -8,6 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/homepage.dart';
 import 'package:posumkm/transactionpage.dart';
 import 'package:posumkm/useraccaountpage.dart';
+
+import 'main.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class BaseLayoutPage extends StatefulWidget {
@@ -29,12 +31,12 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    var sizeScreen = MediaQuery.of(context).size;
+    // var sizeScreen = MediaQuery.of(context).size;
     var theme = Theme.of(context);
 
     switch (selectedPage) {
       case 0:
-        listWidget = [TopWidget(), HomePage()];
+        listWidget = [TopWidget(), HistoryTransactionWidget(), SizedBox(height: 20,), HomePage()];
         break;
       case 1:
         listWidget = [TransactionPage()];
@@ -47,10 +49,8 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
     }
 
     return Scaffold(
-        // backgroundColor: const Color.fromARGB(255, 227, 227, 227),
-        // backgroundColor: Colors.grey[500],
         bottomNavigationBar: CurvedNavigationBar(
-          height: 65,
+          height: 55,
           backgroundColor: Colors.white,
           buttonBackgroundColor: theme.colorScheme.onPrimaryContainer,
           color: theme.colorScheme.onPrimaryContainer,
@@ -96,52 +96,216 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
   }
 }
 
+class ItemTransactionWidget extends StatefulWidget {
+  final String jenisPembayaran;
+  final String tanggalTransaksi;
+  final String totalTransaksi;
+  final String listMenu;
+  final String jumlahMenu;
+
+  const ItemTransactionWidget(
+    {
+      super.key,
+      required this.jenisPembayaran,
+      required this.tanggalTransaksi,
+      required this.totalTransaksi,
+      required this.listMenu,
+      required this.jumlahMenu,
+    }
+);
+
+  @override
+  State<ItemTransactionWidget> createState() =>
+      _ItemTransactionWidgetState();
+}
+
+class _ItemTransactionWidgetState extends State<ItemTransactionWidget> {
+  @override
+  Widget build(BuildContext context) {
+
+    return InkWell(
+      onTap: (){},
+      child: Container(
+        width: double.infinity,
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                width: 50,
+                padding: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 41, 154, 36),
+                  borderRadius: BorderRadius.circular(5)
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(widget.jenisPembayaran, style: BaseTextStyle.ltJpTunai,)
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(widget.tanggalTransaksi, style: BaseTextStyle.ltTanggal,),
+                Text(widget.totalTransaksi, style: BaseTextStyle.ltRpLunas,),
+              ],
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(widget.listMenu, style: BaseTextStyle.ltListMenu)
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(widget.jumlahMenu, style: BaseTextStyle.ltItemCounts,)
+            ),
+            SizedBox(height: 8,),
+            LineDividerWidget(
+              color: Colors.grey,
+              height: 1,
+            ),
+            SizedBox(height: 8,),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HistoryTransactionWidget extends StatefulWidget {
+  const HistoryTransactionWidget({super.key});
+
+  @override
+  State<HistoryTransactionWidget> createState() =>
+      _HistoryTransactionWidgetState();
+}
+
+class _HistoryTransactionWidgetState extends State<HistoryTransactionWidget> {
+  @override
+  Widget build(BuildContext context) {
+    var sizeScreen = MediaQuery.of(context).size;
+    var theme = Theme.of(context);
+
+    return Expanded(
+      child: SingleChildScrollView(
+        child: Container(
+          // height: sizeScreen.height * 0.48,
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(255, 255, 255, 0.2),
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Column(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Transaksi Terakhir",
+                    style: BaseTextStyle.labelTransaksiHome,
+                  ),
+                  TextButton(
+                    onPressed: () {},
+                    style: TextButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                        padding: EdgeInsets.symmetric(horizontal: 5,)
+                    ),
+                    child: Row(
+                      children: const [
+                        Text(
+                          "Refresh ",
+                          style: BaseTextStyle.buttonTransaksiHome,
+                        ),
+                        Icon(
+                          Icons.autorenew_rounded,
+                          size: 13,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 10,),
+              ItemTransactionWidget(
+                tanggalTransaksi: "24 Mei 2023, 18:16",
+                jenisPembayaran: "Tunai",
+                jumlahMenu: "5 items",
+                listMenu: "Roti Bakar Keju, Tahu Isi, Pisang Molen, Pisang Goreng, Tahu Garing",
+                totalTransaksi: "Rp 70.239",
+              ),
+              ItemTransactionWidget(
+                tanggalTransaksi: "24 Mei 2023, 18:16",
+                jenisPembayaran: "Tunai",
+                jumlahMenu: "5 items",
+                listMenu: "Roti Bakar Keju, Tahu Isi, Pisang Molen, Pisang Goreng, Tahu Garing",
+                totalTransaksi: "Rp 70.239",
+              ),
+              ItemTransactionWidget(
+                tanggalTransaksi: "24 Mei 2023, 18:16",
+                jenisPembayaran: "Tunai",
+                jumlahMenu: "5 items",
+                listMenu: "Roti Bakar Keju, Tahu Isi, Pisang Molen, Pisang Goreng, Tahu Garing",
+                totalTransaksi: "Rp 70.239",
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class TopWidget extends StatelessWidget {
   const TopWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(20),
-        // margin: EdgeInsets.symmetric(vertical: 20),
-        // decoration: BoxDecoration(color: Colors.white),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DefaultTextStyle(
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[300],
-                fontWeight: FontWeight.w400,
-                // fontFamily: 'Rubik-Black'
-              ),
-              child: Text("Welcome,"),
+      width: double.infinity,
+      padding: EdgeInsets.all(20),
+      
+      // margin: EdgeInsets.symmetric(vertical: 20),
+      // decoration: BoxDecoration(color: Colors.white),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          DefaultTextStyle(
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.grey[300],
+              fontWeight: FontWeight.w400,
+              // fontFamily: 'Rubik-Black'
             ),
-            DefaultTextStyle(
-              style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'PT-Sans'),
-              child: Text("Andantio Korah"),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20),
-              margin: EdgeInsets.only(top: 15),
-              decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 255, 255, 0.2),
-                  borderRadius: BorderRadius.all(Radius.circular(10))),
-              child: CardContentWidget(),
-            )
-          ],
-        ));
+            child: Text("Welcome,"),
+          ),
+          DefaultTextStyle(
+            style: TextStyle(
+                fontSize: 25,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'PT-Sans'),
+            child: Text("Andantio Korah"),
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 5),
+            decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 255, 255, 0.2),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: CardContentWidget(),
+          )
+        ],
+      )
+    );
   }
 }
 
 class CardContentWidget extends StatelessWidget {
+  const CardContentWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     // var theme = Theme.of(context);
@@ -165,7 +329,7 @@ class CardContentWidget extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 10,
+          width: 5,
         ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

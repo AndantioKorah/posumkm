@@ -33,7 +33,7 @@ class BaseTextStyle {
   final Color color = Colors.grey;
 
   static const gridTextDivider = TextStyle(
-      fontSize: 12,
+      fontSize: 10,
       color: Colors.grey,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
@@ -48,6 +48,63 @@ class BaseTextStyle {
    static const gridTextButton = TextStyle(
       fontSize: 12,
       color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontFamily: "PT-Sans");
+
+  static const buttonTransaksiHome = TextStyle(
+      fontSize: 12,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontFamily: "PT-Sans");
+
+  static const labelTransaksiHome = TextStyle(
+      fontSize: 10,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+      fontFamily: "PT-Sans");
+
+  static const ltJpTunai = TextStyle(
+      fontSize: 10,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontStyle: FontStyle.italic,
+      fontFamily: "PT-Sans");
+  
+  static const ltTanggal = TextStyle(
+      fontSize: 12,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontFamily: "PT-Sans");
+
+  static const ltRpLunas = TextStyle(
+      fontSize: 12,
+      // color: Color.fromARGB(255, 0, 189, 69),
+      color: Color.fromARGB(255, 67, 255, 58),
+      fontWeight: FontWeight.w900,
+      fontFamily: "PT-Sans"
+      );
+
+  static const ltRpBelumLunas = TextStyle(
+      fontSize: 12,
+      // color: Color.fromARGB(255, 0, 189, 69),
+      color: Color.fromARGB(255, 227, 252, 0),
+      fontWeight: FontWeight.bold,
+      fontFamily: "PT-Sans"
+      );
+
+  static const ltListMenu = TextStyle(
+      fontSize: 11,
+      // color: Color.fromARGB(255, 0, 189, 69),
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      overflow: TextOverflow.ellipsis,
+      fontFamily: "PT-Sans");
+
+  static const ltItemCounts = TextStyle(
+      fontSize: 11,
+      // color: Color.fromARGB(255, 0, 189, 69),
+      color: Colors.white,
       fontWeight: FontWeight.bold,
       fontFamily: "PT-Sans");
 }

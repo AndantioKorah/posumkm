@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'main.dart';
 
@@ -17,16 +17,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // var sizeScreen = MediaQuery.of(context).size;
 
-    return Expanded(
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        child: MenusWidget(),
+    return Container(
+      height: 90,
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        left: 10,
+        top: 10,
+        right: 10
       ),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+      child: MenusWidget(),
     );
   }
 }
@@ -51,128 +54,102 @@ class _MenusWidgetState extends State<MenusWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: [
-          MasterDataWidget(),
-          SizedBox(
-            height: 5,
-          ),
-          LineDividerWidget(
-            height: 0.5,
-            color: Colors.grey,
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          HistoryTransactionWidget()
+        children: const [
+          MerchantMenuWidget(),
         ],
       ),
     );
   }
 }
 
-class HistoryTransactionWidget extends StatefulWidget {
-  const HistoryTransactionWidget({super.key});
+class MerchantMenuWidget extends StatefulWidget {
+  const MerchantMenuWidget({super.key});
 
   @override
-  State<HistoryTransactionWidget> createState() =>
-      _HistoryTransactionWidgetState();
+  State<MerchantMenuWidget> createState() => _MerchantMenuWidgetState();
 }
 
-class _HistoryTransactionWidgetState extends State<HistoryTransactionWidget> {
+class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "History Transaction",
-            style: BaseTextStyle.gridTextDivider,
-          ),
-          TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-                backgroundColor: theme.colorScheme.onPrimary),
-            child: Row(
-              children: const [
-                Text(
-                  "Today",
-                  style: BaseTextStyle.gridTextButton,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(
-                  FontAwesomeIcons.arrowDown,
-                  size: 10,
-                  color: Colors.black,
-                ),
-              ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Container(
+        width: double.infinity,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            CustomButton(
+              text: "Laporan",
+              icon: Icons.summarize_rounded,
             ),
-          )
-        ],
+            CustomButton(
+              text: "Menu",
+              icon: Icons.menu_book_rounded,
+            ),
+            CustomButton(
+              text: "User",
+              icon: Icons.manage_accounts_rounded,
+            ),
+          ],
+        ),
       ),
     ]);
   }
 }
 
-class MasterDataWidget extends StatefulWidget {
-  const MasterDataWidget({super.key});
+class CustomButton extends StatefulWidget {
+  final String text;
+  final IconData icon;
+  // final Widget page;
+
+  const CustomButton({
+    super.key,
+    required this.text,
+    required this.icon,
+    // required this.page
+  });
 
   @override
-  State<MasterDataWidget> createState() => _MasterDataWidgetState();
+  State<CustomButton> createState() => CustomButtonState();
 }
 
-class _MasterDataWidgetState extends State<MasterDataWidget> {
+class CustomButtonState extends State<CustomButton> {
+
   @override
   Widget build(BuildContext context) {
+    var sizeScreen = MediaQuery.of(context).size;
     var theme = Theme.of(context);
 
-    List<MenuList> menuMasterData = [
-      MenuList(1, "Menu", Icons.menu_book),
-      MenuList(2, "User", FontAwesomeIcons.userGear),
-    ];
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        "Master Data",
-        style: BaseTextStyle.gridTextDivider,
+    return InkWell(
+      onTap: (){},
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        width: sizeScreen.width * 0.28,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          // color: const Color.fromARGB(255, 248, 248, 248),
+          borderRadius: BorderRadius.circular(5),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Colors.grey.withOpacity(0.5),
+          //     spreadRadius: 1,
+          //     blurRadius: 1,
+          //     offset: Offset(1, 2), 
+          //   )
+          // ]
+        ),
+        child: Column(
+          children: [
+            Icon(
+              widget.icon,
+              color: theme.colorScheme.onPrimaryContainer,
+              size: 35,
+            ), 
+            Text(widget.text, style: BaseTextStyle.gridTextButton,)
+        ]),
       ),
-      // SizedBox(
-      //   height: 10,
-      // ),
-      GridView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, crossAxisSpacing: 50, mainAxisSpacing: 10),
-        itemCount: menuMasterData.length,
-        itemBuilder: (context, index) {
-          return TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.transparent,
-            ),
-            onPressed: () {},
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  menuMasterData[index].icon,
-                  color: theme.colorScheme.onPrimaryContainer,
-                  size: 25,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(menuMasterData[index].title,
-                    style: BaseTextStyle.gridItemText)
-              ],
-            ),
-          );
-        },
-      ),
-    ]);
+    );
   }
 }

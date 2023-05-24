@@ -96,7 +96,12 @@ flutter:
   #         style: italic
     - family: PT-Sans
       fonts:
-        - asset: assets\fonts\PTSans-Regular.ttf
+        - asset: assets\fonts\PT-Sans\PTSans-Regular.ttf
+        - asset: assets\fonts\PT-Sans\PTSans-Bold.ttf
+          weight: 700
+        - asset: assets\fonts\PT-Sans\PTSans-Italic.ttf
+          style: italic
+        
         
   #
   # For details regarding fonts from package dependencies,
