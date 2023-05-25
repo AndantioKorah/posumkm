@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:posumkm/baselayoutpage.dart';
+// import 'package:posumkm/baselayoutpage.dart';
+
+import 'functions/api/user.dart';
 // import 'package:page_transition/page_transition.dart';
 // import 'package:posumkm/splashscreen.dart';
 
@@ -130,19 +132,20 @@ class _LoginPageState extends State<LoginPage> {
                         child: TextButton(
                           style: TextButton.styleFrom(
                               backgroundColor: Colors.white),
-                          onPressed: () {
-                              // Navigator.push(context, 
-                              //   PageTransition(
-                              //     child: HomePage(), 
-                              //     type: PageTransitionType.fade
-                              //     )
-                              // );
+                          // onPressed: () {
+                          //     // Navigator.push(context, 
+                          //     //   PageTransition(
+                          //     //     child: HomePage(), 
+                          //     //     type: PageTransitionType.fade
+                          //     //     )
+                          //     // );
 
-                              Navigator.pushReplacement(
-                                context, MaterialPageRoute(builder: 
-                                (context) => BaseLayoutPage())
-                              );
-                          },
+                          //     Navigator.pushReplacement(
+                          //       context, MaterialPageRoute(builder: 
+                          //       (context) => BaseLayoutPage())
+                          //     );
+                          // },
+                          onPressed: () => loginFunction(),
                           child: Text(
                             "LOGIN",
                             style: TextStyle(
