@@ -5,12 +5,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:posumkm/homepage.dart';
-import 'package:posumkm/transactionpage.dart';
-import 'package:posumkm/useraccaountpage.dart';
+import 'package:posumkm/views/homepage.dart';
+import 'package:posumkm/views/transactionpage.dart';
+import 'package:posumkm/views/useraccaountpage.dart';
 
-import 'main.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:posumkm/main.dart';
 
 class BaseLayoutPage extends StatefulWidget {
   const BaseLayoutPage({Key? key}) : super(key: key);

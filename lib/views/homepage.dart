@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import 'main.dart';
+import 'package:posumkm/main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

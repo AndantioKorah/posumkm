@@ -1,14 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:posumkm/baselayoutpage.dart';
 
-import 'functions/api/user.dart';
-// import 'package:page_transition/page_transition.dart';
-// import 'package:posumkm/splashscreen.dart';
-
+import 'package:posumkm/controllers/api/UserController.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -18,13 +14,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  @override
-  void initState() {
-    super.initState();
 
-    // Future.delayed(const Duration(seconds: 3))
-    //     .then((value) => {FlutterNativeSplash.remove()});
-  }
+  final TextEditingController _username = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   // Future.delayed(const Duration(seconds: 3))
+  //   //     .then((value) => {FlutterNativeSplash.remove()});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.white),
                           keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
+                          controller: _username,
                         ),
                       ),
                       SizedBox(
@@ -121,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.white),
                           textInputAction: TextInputAction.done,
                           obscureText: true,
+                          controller: _password
                         ),
                       ),
                       SizedBox(
@@ -145,7 +147,25 @@ class _LoginPageState extends State<LoginPage> {
                           //       (context) => BaseLayoutPage())
                           //     );
                           // },
-                          onPressed: () => loginFunction(),
+                          onPressed: () => UserController.loginFunction(_username.text, _password.text).then(
+                            (value) {
+                              if(value.code == 200){
+
+                              } else {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.ERROR,
+                                  animType: AnimType.SCALE,
+                                  title: "LOGIN ERROR",
+                                  desc: value.message,
+                                  showCloseIcon: true,
+                                  btnOkText: "Tutup",
+                                  btnOkColor: theme.colorScheme.onPrimaryContainer,
+                                  btnOkOnPress: (){}
+                                ).show();
+                              }
+                            } 
+                          ),
                           child: Text(
                             "LOGIN",
                             style: TextStyle(
