@@ -4,7 +4,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:posumkm/views/baselayoutpage.dart';
 import 'package:posumkm/views/loginpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/UserModel.dart';
+import '../preferences/UserPreferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -21,18 +26,23 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigateToHome() async {
-    await Future.delayed(Duration(milliseconds: 1000), () {});
-    Navigator.pushReplacement(
+
+    SharedPreferences preference = await SharedPreferences.getInstance(); 
+    if(preference.containsKey("userLoggedIn")){
+      Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => BaseLayoutPage()));
+    } else {
+      Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
-    
     // Navigator.push(context, PageTransition(child: LoginPage(), type: PageTransitionType.fade));
+    }
+
   }
 
   @override
   Widget build(BuildContext context) {
     var sizeScreen = MediaQuery.of(context).size;
     // var theme = Theme.of(context);
-
     return Stack(
       children: [
         SplashBackground(),

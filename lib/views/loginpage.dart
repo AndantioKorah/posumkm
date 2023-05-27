@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:posumkm/controllers/api/UserController.dart';
+import 'package:posumkm/preferences/UserPreferences.dart';
+
+import 'baselayoutpage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -150,7 +153,11 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () => UserController.loginFunction(_username.text, _password.text).then(
                             (value) {
                               if(value.code == 200){
-
+                                UserPreferences.setUserLoggedIn(value.data);
+                                // Navigator.pushReplacement(
+                                //   context, MaterialPageRoute(builder: 
+                                //   (context) => BaseLayoutPage())
+                                // );
                               } else {
                                 AwesomeDialog(
                                   context: context,
