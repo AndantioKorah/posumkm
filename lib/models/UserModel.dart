@@ -1,23 +1,33 @@
 import 'HttpResponseModel.dart';
 
-class UserModel extends HttpResponseModel{
-  String? username, password, nama_user, id_m_user, id_m_role, id_m_merchant, nama_role, kode_nama_role, nama_merchant, alamat, logo;
- 
+class UserModel extends HttpResponseModel {
+  late String username,
+      password,
+      nama_user,
+      id_m_user,
+      id_m_role,
+      id_m_merchant,
+      nama_role,
+      kode_nama_role,
+      nama_merchant,
+      alamat,
+      logo;
+
   UserModel({
-    this.username,
-    this.password,
-    this.nama_user,
-    this.id_m_user,
-    this.id_m_role,
-    this.id_m_merchant,
-    this.nama_role,
-    this.kode_nama_role,
-    this.nama_merchant,
-    this.alamat,
-    this.logo,
+    required this.username,
+    required this.password,
+    required this.nama_user,
+    required this.id_m_user,
+    required this.id_m_role,
+    required this.id_m_merchant,
+    required this.nama_role,
+    required this.kode_nama_role,
+    required this.nama_merchant,
+    required this.alamat,
+    required this.logo,
   });
 
-  Map<String, dynamic> toJson(){
+  Map<String, dynamic> toJson() {
     Map<String, dynamic> result = <String, dynamic>{};
     result['username'] = username;
     result['password'] = password;
@@ -31,6 +41,49 @@ class UserModel extends HttpResponseModel{
     result['alamat'] = alamat;
     result['logo'] = logo;
 
-    return result; 
+    return result;
+  }
+
+  UserModel.fromJson(Map<String, dynamic> json) {
+    if (json['username'] != null) {
+      username = json['username'];
+    }
+    if (json['password'] != null) {
+      password = json['password'];
+    }
+    if (json['nama_user'] != null) {
+      nama_user = json['nama_user'];
+    }
+    if (json['id_m_user'] != null) {
+      id_m_user = json['id_m_user'];
+    }
+    if (json['id_m_role'] != null) {
+      id_m_role = json['id_m_role'];
+    }
+    if (json['id_m_merchant'] != null) {
+      id_m_merchant = json['id_m_merchant'];
+    }
+    if (json['nama_role'] != null) {
+      nama_role = json['nama_role'];
+    }
+    if (json['kode_nama_role'] != null) {
+      kode_nama_role = json['kode_nama_role'];
+    }
+    if (json['nama_merchant'] != null) {
+      nama_merchant = json['nama_merchant'];
+    } else {
+      nama_merchant = 'PROGRAMMER';
+    }
+    if (json['alamat'] != null) {
+      alamat = json['alamat'];
+    } else {
+      alamat = 'PROGRAMMER';
+    }
+    if (json['logo'] != null) {
+      logo = json['logo'];
+    }
+    if (json['kode_nama_role'] == 'programmer') {
+      logo = '';
+    }
   }
 }

@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:posumkm/providers/UserProvider.dart';
-// import 'package:posumkm/loginpage.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:posumkm/views/splashscreen.dart';
+import 'package:posumkm/views/SplashScreenPage.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => UserProvider()
-        ),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MaterialApp(
         title: 'NiKita POS UMKM',
@@ -51,8 +49,8 @@ class BaseTextStyle {
       color: Colors.black,
       fontWeight: FontWeight.bold,
       fontFamily: "PT-Sans");
-  
-   static const gridTextButton = TextStyle(
+
+  static const gridTextButton = TextStyle(
       fontSize: 12,
       color: Colors.black,
       fontWeight: FontWeight.bold,
@@ -77,7 +75,7 @@ class BaseTextStyle {
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
       fontFamily: "PT-Sans");
-  
+
   static const ltTanggal = TextStyle(
       fontSize: 12,
       color: Colors.white,
@@ -89,16 +87,14 @@ class BaseTextStyle {
       // color: Color.fromARGB(255, 0, 189, 69),
       color: Color.fromARGB(255, 67, 255, 58),
       fontWeight: FontWeight.w900,
-      fontFamily: "PT-Sans"
-      );
+      fontFamily: "PT-Sans");
 
   static const ltRpBelumLunas = TextStyle(
       fontSize: 12,
       // color: Color.fromARGB(255, 0, 189, 69),
       color: Color.fromARGB(255, 227, 252, 0),
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans"
-      );
+      fontFamily: "PT-Sans");
 
   static const ltListMenu = TextStyle(
       fontSize: 11,
@@ -121,7 +117,8 @@ class LineDividerWidget extends StatelessWidget {
   final double height;
   // final double padding;
 
-  LineDividerWidget({
+  const LineDividerWidget({
+    super.key,
     this.color = Colors.black,
     this.height = 1,
     // this.padding = EdgeInsets.all(10)
