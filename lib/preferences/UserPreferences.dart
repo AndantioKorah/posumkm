@@ -15,12 +15,11 @@ class UserPreferences {
     preference.setString("userLoggedIn", jsonEncode(user));
   }
 
-  static Future<dynamic> getUserLoggedIn() async {
+  static Future<UserModel> getUserLoggedIn() async {
     final preference = await SharedPreferences.getInstance();
-    final user = UserModel.fromJson(
+    return UserModel.fromJson(
         json.decode((preference.getString("userLoggedIn")).toString())
             as Map<String, dynamic>);
-    return user.toJson();
     // return UserModel(
     //     username: userLoggedIn['username'],
     //     password: userLoggedIn['password'],

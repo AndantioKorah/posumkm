@@ -2,17 +2,15 @@
 
 // import 'dart:ui';
 
-import 'dart:convert';
-
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:posumkm/views/HomePage.dart';
 import 'package:posumkm/views/TransactionPage.dart';
 import 'package:posumkm/views/UserAccountPage.dart';
 
 import 'package:posumkm/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/UserModel.dart';
 
@@ -26,20 +24,12 @@ class BaseLayoutPage extends StatefulWidget {
 }
 
 Future<void> _loadUserLoggedIn() async {
-  SharedPreferences pref = await SharedPreferences.getInstance();
-  userLoggedIn = UserModel.fromJson(
-      json.decode((pref.getString("userLoggedIn")).toString())
-          as Map<String, dynamic>);
+  UserPreferences.getUserLoggedIn().then((value) => userLoggedIn = value);
 }
 
 class _BaseLayoutPageState extends State<BaseLayoutPage> {
   var selectedPage = 0;
   List<Widget> listWidget = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   _changeStatePage(int selectedIndex) {
     setState(() {
