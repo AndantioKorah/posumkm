@@ -23,7 +23,7 @@ class BaseLayoutPage extends StatefulWidget {
   State<BaseLayoutPage> createState() => _BaseLayoutPageState();
 }
 
-Future<void> _loadUserLoggedIn() async {
+Future<void> loadUserLoggedIn() async {
   UserPreferences.getUserLoggedIn().then((value) => userLoggedIn = value);
 }
 
@@ -57,7 +57,7 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
         listWidget = [TransactionPage()];
         break;
       case 2:
-        listWidget = [UserAccountPage()];
+        listWidget = [TopWidgetUserAccount(), UserAccountPage()];
         break;
       default:
         throw UnimplementedError();
@@ -288,7 +288,7 @@ class TopWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _loadUserLoggedIn(),
+        future: loadUserLoggedIn(),
         builder: ((context, _) => Container(
             width: double.infinity,
             padding: EdgeInsets.all(20),
@@ -338,7 +338,7 @@ class CardContentWidget extends StatelessWidget {
     // var theme = Theme.of(context);
 
     return FutureBuilder(
-      future: _loadUserLoggedIn(),
+      future: loadUserLoggedIn(),
       builder: (context, _) => Row(
         children: [
           Container(
@@ -347,7 +347,7 @@ class CardContentWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xff7c94b6),
               image: DecorationImage(
-                image: AssetImage("assets/images/default-merchant.png"),
+                image: AssetImage("assets/images/logo-default-merchant.jpg"),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.all(Radius.circular(90.0)),

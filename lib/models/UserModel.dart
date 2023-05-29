@@ -6,12 +6,12 @@ class UserModel extends HttpResponseModel {
       nama_user,
       id_m_user,
       id_m_role,
-      id_m_merchant,
+      id_m_merchant = '',
       nama_role,
       kode_nama_role,
-      nama_merchant,
-      alamat,
-      logo;
+      nama_merchant = '',
+      alamat = '',
+      logo = '';
 
   UserModel({
     required this.username,

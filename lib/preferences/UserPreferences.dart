@@ -11,8 +11,7 @@ class UserPreferences {
     if (preference.containsKey("userLoggedIn")) {
       preference.clear();
     }
-
-    preference.setString("userLoggedIn", jsonEncode(user));
+    preference.setString("userLoggedIn", jsonEncode(user.toJson()));
   }
 
   static Future<UserModel> getUserLoggedIn() async {

@@ -1,8 +1,8 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:posumkm/main.dart';
 import 'package:posumkm/views/BaseLayoutPage.dart';
 import 'package:posumkm/views/LoginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   _navigateToHome() async {
     SharedPreferences preference = await SharedPreferences.getInstance();
     if (preference.containsKey("userLoggedIn")) {
+      // if (userLoggedInApps != null) {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => BaseLayoutPage()));
     } else {

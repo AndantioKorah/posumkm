@@ -1,13 +1,31 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:posumkm/providers/UserProvider.dart';
 import 'package:posumkm/views/SplashScreenPage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'models/UserModel.dart';
+
+UserModel? userLoggedInApps;
 
 void main() async {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  await _loadUserLoggedIn();
   runApp(const MyApp());
+}
+
+Future<void> _loadUserLoggedIn() async {
+  final preference = await SharedPreferences.getInstance();
+  if (preference.containsKey("userLoggedIn")) {
+    userLoggedInApps = UserModel.fromJson(
+        json.decode(preference.getString("userLoggedIn").toString()));
+  }
+  // UserPreferences.getUserLoggedIn().then((value) => userLoggedInApps = value);
 }
 
 class MyApp extends StatelessWidget {
