@@ -64,6 +64,10 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
     }
 
     return Scaffold(
+        // appBar: AppBar(
+        //   title: Text("POS UMKM"),
+        //   actions: [])
+        // ,
         bottomNavigationBar: CurvedNavigationBar(
           height: 55,
           backgroundColor: Colors.white,
@@ -91,22 +95,24 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
             ),
           ],
         ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                theme.colorScheme.onPrimaryContainer,
-                Color.fromRGBO(68, 80, 131, 1),
-                // theme.colorScheme.onPrimaryContainer,
-                // Color.fromRGBO(47, 56, 92, 1)
-              ],
+        body: SafeArea(
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  theme.colorScheme.onPrimaryContainer,
+                  Color.fromRGBO(68, 80, 131, 1),
+                  // theme.colorScheme.onPrimaryContainer,
+                  // Color.fromRGBO(47, 56, 92, 1)
+                ],
+              ),
             ),
+            child: Column(children: listWidget),
           ),
-          child: Column(children: listWidget),
         ));
   }
 }
@@ -360,28 +366,30 @@ class CardContentWidget extends StatelessWidget {
           SizedBox(
             width: 5,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DefaultTextStyle(
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  // fontFamily: 'PT-Sans',
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    // fontFamily: 'PT-Sans',
+                  ),
+                  child: Text(userLoggedIn?.nama_merchant ?? 'PROGRAMMER'),
                 ),
-                child: Text(userLoggedIn?.nama_merchant ?? 'PROGRAMMER'),
-              ),
-              DefaultTextStyle(
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  // fontFamily: 'PT-Sans',
+                DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                    // fontFamily: 'PT-Sans',
+                  ),
+                  child: Text(userLoggedIn?.alamat ?? 'PROGRAMMER'),
                 ),
-                child: Text(userLoggedIn?.alamat ?? 'PROGRAMMER'),
-              ),
-            ],
+              ],
+            ),
           )
         ],
       ),
