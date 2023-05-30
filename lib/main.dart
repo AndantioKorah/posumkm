@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:posumkm/providers/UserProvider.dart';
 // import 'package:posumkm/loginpage.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:posumkm/views/splashscreen.dart';
+import 'package:posumkm/views/splashscreenpage.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

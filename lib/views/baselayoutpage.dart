@@ -6,8 +6,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/views/homepage.dart';
-import 'package:posumkm/views/transactionpage.dart';
-import 'package:posumkm/views/useraccaountpage.dart';
+import 'package:posumkm/views/TransactionPage.dart';
+import 'package:posumkm/views/useraccountpage.dart';
 
 import 'package:posumkm/main.dart';
 
@@ -182,8 +182,8 @@ class HistoryTransactionWidget extends StatefulWidget {
 class _HistoryTransactionWidgetState extends State<HistoryTransactionWidget> {
   @override
   Widget build(BuildContext context) {
-    var sizeScreen = MediaQuery.of(context).size;
-    var theme = Theme.of(context);
+    // var sizeScreen = MediaQuery.of(context).size;
+    // var theme = Theme.of(context);
 
     return Expanded(
       child: SingleChildScrollView(
