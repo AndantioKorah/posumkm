@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/controllers/api/UserController.dart';
 import 'package:posumkm/preferences/UserPreferences.dart';
 
+import 'BaseLayoutPage.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -15,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
@@ -99,32 +100,31 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.grey[600]!.withOpacity(0.5),
                             borderRadius: BorderRadius.circular(40)),
                         child: TextField(
-                          decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(vertical: 12),
-                              border: InputBorder.none,
-                              hintText: 'Password',
-                              prefixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Icon(
-                                  FontAwesomeIcons.lock,
-                                  color: Colors.grey[300],
-                                  size: 15,
+                            decoration: InputDecoration(
+                                contentPadding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                                border: InputBorder.none,
+                                hintText: 'Password',
+                                prefixIcon: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  child: Icon(
+                                    FontAwesomeIcons.lock,
+                                    color: Colors.grey[300],
+                                    size: 15,
+                                  ),
                                 ),
-                              ),
-                              hintStyle: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.grey[300],
-                                  fontWeight: FontWeight.w400)),
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                          textInputAction: TextInputAction.done,
-                          obscureText: true,
-                          controller: _password
-                        ),
+                                hintStyle: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.grey[300],
+                                    fontWeight: FontWeight.w400)),
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                            textInputAction: TextInputAction.done,
+                            obscureText: true,
+                            controller: _password),
                       ),
                       SizedBox(
                         height: 30,
@@ -136,41 +136,41 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextButton.styleFrom(
                               backgroundColor: Colors.white),
                           // onPressed: () {
-                          //     // Navigator.push(context, 
+                          //     // Navigator.push(context,
                           //     //   PageTransition(
-                          //     //     child: HomePage(), 
+                          //     //     child: HomePage(),
                           //     //     type: PageTransitionType.fade
                           //     //     )
                           //     // );
 
                           //     Navigator.pushReplacement(
-                          //       context, MaterialPageRoute(builder: 
+                          //       context, MaterialPageRoute(builder:
                           //       (context) => BaseLayoutPage())
                           //     );
                           // },
-                          onPressed: () => UserController.loginFunction(_username.text, _password.text).then(
-                            (value) {
-                              if(value.code == 200){
-                                UserPreferences.setUserLoggedIn(value.data);
-                                // Navigator.pushReplacement(
-                                //   context, MaterialPageRoute(builder: 
-                                //   (context) => BaseLayoutPage())
-                                // );
-                              } else {
-                                AwesomeDialog(
-                                  context: context,
-                                  dialogType: DialogType.ERROR,
-                                  animType: AnimType.SCALE,
-                                  title: "LOGIN ERROR",
-                                  desc: value.message,
-                                  showCloseIcon: true,
-                                  btnOkText: "Tutup",
-                                  btnOkColor: theme.colorScheme.onPrimaryContainer,
-                                  btnOkOnPress: (){}
-                                ).show();
-                              }
-                            } 
-                          ),
+                          onPressed: () => UserController.loginFunction(
+                                  _username.text, _password.text)
+                              .then((value) {
+                            if (value.code == 200) {
+                              UserPreferences.setUserLoggedIn(value.data);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BaseLayoutPage()));
+                            } else {
+                              AwesomeDialog(
+                                      context: context,
+                                      dialogType: DialogType.ERROR,
+                                      animType: AnimType.SCALE,
+                                      title: "LOGIN ERROR",
+                                      desc: value.message,
+                                      showCloseIcon: true,
+                                      btnOkText: "Tutup",
+                                      btnOkColor: Colors.red,
+                                      btnOkOnPress: () {})
+                                  .show();
+                            }
+                          }),
                           child: Text(
                             "LOGIN",
                             style: TextStyle(
@@ -193,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class BottomWidget extends StatelessWidget{
+class BottomWidget extends StatelessWidget {
   const BottomWidget({super.key});
 
   @override
@@ -203,17 +203,18 @@ class BottomWidget extends StatelessWidget{
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-                backgroundColor: Colors.transparent),
-            child: Text(
-              "Lupa Password?",
-              style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey[400]),
-          )),
-          SizedBox(height: 50,)
+              onPressed: () {},
+              style: TextButton.styleFrom(backgroundColor: Colors.transparent),
+              child: Text(
+                "Lupa Password?",
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[400]),
+              )),
+          SizedBox(
+            height: 50,
+          )
         ],
       ),
     );

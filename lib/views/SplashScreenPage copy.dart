@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:posumkm/views/baselayoutpage.dart';
+import 'package:posumkm/main.dart';
+import 'package:posumkm/views/BaseLayoutPage.dart';
 import 'package:posumkm/views/LoginPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,14 +22,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _navigateToHome() async {
-    SharedPreferences preference = await SharedPreferences.getInstance(); 
-    if(preference.containsKey("userLoggedIn")){
+    SharedPreferences preference = await SharedPreferences.getInstance();
+    if (preference.containsKey("userLoggedIn")) {
+      // if (userLoggedInApps != null) {
       Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => BaseLayoutPage()));
+          context, MaterialPageRoute(builder: (context) => BaseLayoutPage()));
     } else {
       Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LoginPage()));
-        // Navigator.push(context, PageTransition(child: LoginPage(), type: PageTransitionType.fade));
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      // Navigator.push(context, PageTransition(child: LoginPage(), type: PageTransitionType.fade));
     }
   }
 
@@ -63,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-class BottomText extends StatelessWidget{
+class BottomText extends StatelessWidget {
   const BottomText({super.key});
 
   @override
@@ -76,22 +78,24 @@ class BottomText extends StatelessWidget{
       children: [
         DefaultTextStyle(
           style: TextStyle(
-            fontSize: 15,
-            color: theme.colorScheme.primaryContainer,
-            fontWeight: FontWeight.bold
-          ),
+              fontSize: 15,
+              color: theme.colorScheme.primaryContainer,
+              fontWeight: FontWeight.bold),
           child: Text("Make It Simple."),
         ),
-        SizedBox( height: 15, ),
+        SizedBox(
+          height: 15,
+        ),
         SpinKitFadingFour(
           color: theme.colorScheme.primaryContainer,
           size: 25,
         ),
-        SizedBox(height: 50,)
+        SizedBox(
+          height: 50,
+        )
       ],
     );
   }
-
 }
 
 class SplashBackground extends StatelessWidget {
@@ -104,17 +108,16 @@ class SplashBackground extends StatelessWidget {
     var theme = Theme.of(context);
 
     return Container(
-        decoration: BoxDecoration(
+      decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color.fromRGBO(47, 56, 92, 1),
-              theme.colorScheme.onPrimaryContainer,
-              Color.fromRGBO(47, 56, 92, 1)
-            ],
-          )
-        ),
-      );
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [
+          Color.fromRGBO(47, 56, 92, 1),
+          theme.colorScheme.onPrimaryContainer,
+          Color.fromRGBO(47, 56, 92, 1)
+        ],
+      )),
+    );
   }
 }
