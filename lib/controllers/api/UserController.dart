@@ -5,6 +5,7 @@ import 'package:posumkm/config/constants.dart';
 import 'package:posumkm/main.dart';
 import 'package:posumkm/models/HttpResponseModel.dart';
 import 'package:posumkm/models/UserModel.dart';
+import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserController {
@@ -54,24 +55,14 @@ class UserController {
     };
 
     var req = await http
-        .post(Uri.parse("${AppConstants.apiBaseUrl}user/changePassword"), body : body);
-    print(body);
-    print(req.body);   
+        .post(Uri.parse("${AppConstants.apiBaseUrl}user/changePassword"), body : body);   
     var res = json.decode(req.body);
     if (res['code'] == 200 && res['data'] != null) {
-      userModel = UserModel.fromJson(res['data']);
-      //   userModel = UserModel(
-      //       username: res['data']['username'],
-      //       password: res['data']['password'],
-      //       nama_user: res['data']['nama_user'],
-      //       id_m_user: res['data']['id_m_user'],
-      //       id_m_role: res['data']['id_m_role'],
-      //       id_m_merchant: res['data']['id_m_merchant'],
-      //       nama_role: res['data']['nama_role'],
-      //       kode_nama_role: res['data']['kode_nama_role'],
-      //       nama_merchant: res['data']['nama_merchant'],
-      //       alamat: res['data']['alamat'],
-      //       logo: res['data']['logo']);
+      users.password = res['data'];
+      userModel = users;
+
+      UserPreferences.setUserLoggedIn(users);
+      // pref.setString("userLoggedIn", json.encode(users).toString());
     }
 
     return HttpResponseModel(

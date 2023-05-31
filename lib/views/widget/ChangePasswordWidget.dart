@@ -1,18 +1,28 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+// import 'package:toast/toast.dart';
 
 import '../../controllers/api/UserController.dart';
+import 'HttpToastDialog.dart';
+
 
 void showChangePasswordDialog(BuildContext context){
   var theme = Theme.of(context);
-  final TextEditingController _old_password = TextEditingController();
-  final TextEditingController _new_password = TextEditingController();
-  final TextEditingController _confirm_new_password = TextEditingController();
-  
+
+  final TextEditingController oldPassword = TextEditingController();
+  final TextEditingController newPassword = TextEditingController();
+  final TextEditingController confirmNewPassword = TextEditingController();
+  final RoundedLoadingButtonController buttonSumbit = RoundedLoadingButtonController();
+
   AwesomeDialog(
     context: context,
     animType: AnimType.BOTTOMSLIDE,
     dialogType: DialogType.NO_HEADER,
+    // showCloseIcon: true,
+    autoDismiss: false,
+    onDissmissCallback: (_) {},
     body: Column(
       children: [
         Row(
@@ -84,7 +94,7 @@ void showChangePasswordDialog(BuildContext context){
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
                   obscureText: true,
-                  controller: _old_password,
+                  controller: oldPassword,
                 ),
               ),
             ),
@@ -125,7 +135,7 @@ void showChangePasswordDialog(BuildContext context){
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
                   obscureText: true,
-                  controller: _new_password,
+                  controller: newPassword,
                 ),
               ),
             ),
@@ -165,7 +175,7 @@ void showChangePasswordDialog(BuildContext context){
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
                   obscureText: true,
-                  controller: _confirm_new_password,
+                  controller: confirmNewPassword,
                 ),
               ),
             ),
@@ -173,10 +183,47 @@ void showChangePasswordDialog(BuildContext context){
         )
       ],
     ),
-    btnOkOnPress: () => UserController.changePasswordFunction(
-      _old_password.text, 
-      _new_password.text, 
-      _confirm_new_password.text).then((value) => print(value)),
+    btnOk: SizedBox(
+      width: double.infinity,
+      child: RoundedLoadingButton(
+        height: 45,
+        color: theme.colorScheme.onPrimaryContainer,
+        controller: buttonSumbit,
+        resetDuration: const Duration(seconds: 3),
+        resetAfterDuration: true,
+        child: const Text(
+          "Submit", 
+          style: TextStyle(
+            color: Colors.white),
+        ),
+        onPressed: () => {
+          UserController.changePasswordFunction(
+            oldPassword.text, 
+            newPassword.text, 
+            confirmNewPassword.text
+          ).then((value) => {
+            oldPassword.clear(),
+            newPassword.clear(),
+            confirmNewPassword.clear(),
+            httpToastDialog(
+              value, context, 
+              ToastGravity.BOTTOM, 
+              const Duration(seconds: 2),
+              const Duration(milliseconds: 100)
+            ),
+            if(value.code == 200){
+              Navigator.pop(context)
+            }
+          })
+        }
+      ),
+    ),
+    // btnOkOnPress: () => _attemptChangePassword(
+    //   oldPassword.text, 
+    //   newPassword.text, 
+    //   confirmNewPassword.text, 
+    //   context),
+    // onDissmissCallback: ,
     btnOkText: "SUBMIT",
     ).show();
 }

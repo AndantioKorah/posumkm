@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:posumkm/controllers/api/UserController.dart';
 import 'package:posumkm/preferences/UserPreferences.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 import 'BaseLayoutPage.dart';
 
@@ -17,8 +18,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _username = TextEditingController();
-  final TextEditingController _password = TextEditingController();
+  final TextEditingController userName = TextEditingController();
+  final TextEditingController password = TextEditingController();
+  final RoundedLoadingButtonController buttonSumbit = RoundedLoadingButtonController();
 
   // @override
   // void initState() {
@@ -89,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                               color: Colors.white),
                           keyboardType: TextInputType.name,
                           textInputAction: TextInputAction.next,
-                          controller: _username,
+                          controller: userName,
                         ),
                       ),
                       SizedBox(
@@ -124,32 +126,22 @@ class _LoginPageState extends State<LoginPage> {
                                 color: Colors.white),
                             textInputAction: TextInputAction.done,
                             obscureText: true,
-                            controller: _password),
+                            controller: password),
                       ),
                       SizedBox(
                         height: 30,
                       ),
                       SizedBox(
-                        width: sizeScreen.width,
+                        width: double.infinity,
                         height: 40,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                              backgroundColor: Colors.white),
-                          // onPressed: () {
-                          //     // Navigator.push(context,
-                          //     //   PageTransition(
-                          //     //     child: HomePage(),
-                          //     //     type: PageTransitionType.fade
-                          //     //     )
-                          //     // );
-
-                          //     Navigator.pushReplacement(
-                          //       context, MaterialPageRoute(builder:
-                          //       (context) => BaseLayoutPage())
-                          //     );
-                          // },
+                        child: RoundedLoadingButton(
+                          resetDuration: const Duration(seconds: 3),
+                          resetAfterDuration: true,
+                          valueColor: theme.colorScheme.onPrimaryContainer,
+                          color: Colors.white,
+                          controller: buttonSumbit,
                           onPressed: () => UserController.loginFunction(
-                                  _username.text, _password.text)
+                                  userName.text, password.text)
                               .then((value) {
                             if (value.code == 200) {
                               UserPreferences.setUserLoggedIn(value.data);
@@ -174,8 +166,8 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "LOGIN",
                             style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
                                 color: theme.colorScheme.onPrimaryContainer),
                           ),
                         ),

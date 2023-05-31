@@ -30,7 +30,7 @@ Future<void> _loadUserLoggedIn() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
+  
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -54,6 +54,12 @@ class MyApp extends StatelessWidget {
 
 class BaseTextStyle {
   final Color color = Colors.grey;
+
+  static const appBarTitle = TextStyle(
+      fontSize: 16,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontFamily: "PT-Sans");
 
   static const gridTextDivider = TextStyle(
       fontSize: 10,

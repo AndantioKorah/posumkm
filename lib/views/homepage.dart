@@ -1,8 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/main.dart';
+import 'package:posumkm/views/home_pages/LaporanPage.dart';
+import 'package:posumkm/views/home_pages/MenuPage.dart';
+import 'package:posumkm/views/home_pages/UserManagementPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -78,18 +82,48 @@ class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
         width: double.infinity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            CustomButton(
-              text: "Laporan",
-              icon: Icons.summarize_rounded,
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context, 
+                  PageTransition(
+                    child: LaporanPage(), 
+                    type: PageTransitionType.bottomToTop
+                  )
+                );
+              },
+              child: CustomButton(
+                text: "Laporan",
+                icon: Icons.summarize_rounded,
+              ),
             ),
-            CustomButton(
-              text: "Menu",
-              icon: Icons.menu_book_rounded,
+            InkWell(
+              onTap: () {
+                Navigator.push(context, 
+                  PageTransition(
+                    child: MenuPage(), 
+                    type: PageTransitionType.bottomToTop
+                  )
+                );
+              },
+              child: CustomButton(
+                text: "Menu",
+                icon: Icons.menu_book_rounded,
+              ),
             ),
-            CustomButton(
-              text: "User",
-              icon: Icons.manage_accounts_rounded,
+            InkWell(
+              onTap: () {
+                Navigator.push(context, 
+                  PageTransition(
+                    child: UserManagementPage(), 
+                    type: PageTransitionType.bottomToTop
+                  )
+                );
+              },
+              child: CustomButton(
+                text: "User",
+                icon: Icons.manage_accounts_rounded,
+              ),
             ),
           ],
         ),
@@ -121,34 +155,31 @@ class CustomButtonState extends State<CustomButton> {
     var sizeScreen = MediaQuery.of(context).size;
     var theme = Theme.of(context);
 
-    return InkWell(
-      onTap: (){},
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        width: sizeScreen.width * 0.28,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          // color: const Color.fromARGB(255, 248, 248, 248),
-          borderRadius: BorderRadius.circular(5),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.grey.withOpacity(0.5),
-          //     spreadRadius: 1,
-          //     blurRadius: 1,
-          //     offset: Offset(1, 2), 
-          //   )
-          // ]
-        ),
-        child: Column(
-          children: [
-            Icon(
-              widget.icon,
-              color: theme.colorScheme.onPrimaryContainer,
-              size: 35,
-            ), 
-            Text(widget.text, style: BaseTextStyle.gridTextButton,)
-        ]),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      width: sizeScreen.width * 0.28,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        // color: const Color.fromARGB(255, 248, 248, 248),
+        borderRadius: BorderRadius.circular(5),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.5),
+        //     spreadRadius: 1,
+        //     blurRadius: 1,
+        //     offset: Offset(1, 2), 
+        //   )
+        // ]
       ),
+      child: Column(
+        children: [
+          Icon(
+            widget.icon,
+            color: theme.colorScheme.onPrimaryContainer,
+            size: 35,
+          ), 
+          Text(widget.text, style: BaseTextStyle.gridTextButton,)
+      ]),
     );
   }
 }

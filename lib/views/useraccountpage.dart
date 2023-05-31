@@ -1,17 +1,13 @@
-// ignore_for_file: prefer_const_constructors
-
-// import 'dart:ui';
-
 import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:posumkm/controllers/api/UserController.dart';
 import 'package:posumkm/views/BaseLayoutPage.dart';
 import 'package:posumkm/views/SplashScreenPage.dart';
 import 'package:posumkm/views/widget/ChangePasswordWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../utils/ImageUtils.dart';
 
 class UserAccountPage extends StatefulWidget {
   const UserAccountPage({super.key});
@@ -27,7 +23,7 @@ class _UserAccountPageState extends State<UserAccountPage> {
       child: Container(
         // height: sizeScreen.height * .5,
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             color: Colors.white,
             // borderRadius: BorderRadius.only(
             //     topLeft: Radius.circular(20), topRight: Radius.circular(20))
@@ -35,18 +31,18 @@ class _UserAccountPageState extends State<UserAccountPage> {
         child: SingleChildScrollView(
           child: Column(
             children:  [
-              SizedBox(height: 10,),
+              // const SizedBox(height: 10,),
               InkWell(
                 onTap: () => showChangePasswordDialog(context),
-                child: ButtonUserPage(
+                child: const ButtonUserPage(
                   text: "Ganti Password", 
                   icon: Icons.lock_outline_rounded,
                 ),
               ),
-              SizedBox(height: 10,),
+              // const SizedBox(height: 10,),
               InkWell(
                 onTap: (){_showLogoutConfirmationDialog(context);},
-                child: ButtonUserPage(
+                child: const ButtonUserPage(
                   text: "Logout", 
                   icon: Icons.output_rounded, 
                 ),
@@ -96,10 +92,6 @@ class ButtonUserPage extends StatefulWidget {
   State<ButtonUserPage> createState() => ButtonUserPageState();
 }
 
-_showRightIcon(){
-  
-}
-
 class ButtonUserPageState extends State<ButtonUserPage> {
   @override
   Widget build(BuildContext context) {
@@ -108,9 +100,10 @@ class ButtonUserPageState extends State<ButtonUserPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       width: double.infinity,
+      color: Colors.transparent,
       child: Column(
         children: [
-          // SizedBox(height: 10,),
+          SizedBox(height: 10,),
           Row(
             children: [
               Expanded(child: Stack(
@@ -133,7 +126,7 @@ class ButtonUserPageState extends State<ButtonUserPage> {
               ))
             ]
           ),
-          SizedBox(height: 5,),
+          SizedBox(height: 10,),
           Container(
             height: .5,
             width: double.infinity,
@@ -163,7 +156,7 @@ class _TopWidgetUserAccountState extends State<TopWidgetUserAccount> {
           width: double.infinity,
           height: sizeScreen.height * .3,
           // padding: EdgeInsets.all(),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.transparent,
           ),
           child: Container(
@@ -172,21 +165,22 @@ class _TopWidgetUserAccountState extends State<TopWidgetUserAccount> {
             decoration: BoxDecoration(
               // borderRadius: BorderRadius.all(Radius.circular(10)),
               image: DecorationImage(
-                image: AssetImage("assets/images/logo-default-merchant.jpg"),
+                // image: AssetImage("assets/images/logo-default-merchant.jpg"),
+                image: ImageUtils().loadMerchantLogo(userLoggedIn?.logo ?? ''),
                 fit: BoxFit.cover,
               ),
             ),
             child: ClipRRect(
               child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
                 child: Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black.withOpacity(0.4),
                     // borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  child: ContentTopWidget(),
+                  child: const ContentTopWidget(),
                 ),
               ),
             ),
@@ -215,7 +209,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
             children: [
               DefaultTextStyle(
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -225,7 +219,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
               ),
               DefaultTextStyle(
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
@@ -233,7 +227,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
                 ),
                 child: Text(userLoggedIn?.nama_role ?? 'PROGRAMMER'),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Container(
@@ -242,22 +236,22 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
                 decoration: BoxDecoration(
                   color: const Color(0xff7c94b6),
                   image: DecorationImage(
-                    image: AssetImage("assets/images/logo-default-merchant.jpg"),
+                    image: ImageUtils().loadMerchantLogo(userLoggedIn?.logo ?? ''),
                     fit: BoxFit.cover,
                   ),
-                  borderRadius: BorderRadius.all(Radius.circular(90.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(90.0)),
                   border: Border.all(
-                    color: Colors.white,
-                    width: 1.0,
+                    color: Colors.transparent,
+                    // width: 11.0,
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               DefaultTextStyle(
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
@@ -267,7 +261,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
               ),
               DefaultTextStyle(
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 15,
                   color: Colors.white,
                   fontWeight: FontWeight.w500,
@@ -275,7 +269,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
                 ),
                 child: Text(userLoggedIn?.alamat ?? 'PROGRAMMER'),
               ),
-              DefaultTextStyle(
+              const DefaultTextStyle(
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 12,

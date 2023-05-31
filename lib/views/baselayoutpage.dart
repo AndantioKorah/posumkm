@@ -2,6 +2,8 @@
 
 // import 'dart:ui';
 
+import 'dart:convert';
+
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,6 +14,7 @@ import 'package:posumkm/views/UserAccountPage.dart';
 import 'package:posumkm/main.dart';
 
 import '../models/UserModel.dart';
+import '../utils/ImageUtils.dart';
 import 'TransactionPage.dart';
 
 UserModel? userLoggedIn;
@@ -64,10 +67,6 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
     }
 
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text("POS UMKM"),
-        //   actions: [])
-        // ,
         bottomNavigationBar: CurvedNavigationBar(
           height: 55,
           backgroundColor: Colors.white,
@@ -353,13 +352,13 @@ class CardContentWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xff7c94b6),
               image: DecorationImage(
-                image: AssetImage("assets/images/logo-default-merchant.jpg"),
+                image: ImageUtils().loadMerchantLogo(userLoggedIn?.logo ?? ''),
                 fit: BoxFit.cover,
               ),
               borderRadius: BorderRadius.all(Radius.circular(90.0)),
               border: Border.all(
                 color: Colors.white,
-                width: 1.0,
+                width: .5,
               ),
             ),
           ),
