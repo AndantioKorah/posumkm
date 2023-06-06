@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 
-class ImageUtils{
+class ImageUtils {
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
   }
@@ -15,8 +15,8 @@ class ImageUtils{
     return base64Encode(data);
   }
 
-  ImageProvider loadMerchantLogo(String logo){
-    if(logo.isNotEmpty){
+  ImageProvider loadMerchantLogo(String logo) {
+    if (logo.isNotEmpty) {
       // return const AssetImage("assets/images/logo-default-merchant.jpg");
       return MemoryImage(base64Decode(logo));
     } else {

@@ -24,27 +24,29 @@ class _UserAccountPageState extends State<UserAccountPage> {
         // height: sizeScreen.height * .5,
         width: double.infinity,
         decoration: const BoxDecoration(
-            color: Colors.white,
-            // borderRadius: BorderRadius.only(
-            //     topLeft: Radius.circular(20), topRight: Radius.circular(20))
-          ),
+          color: Colors.white,
+          // borderRadius: BorderRadius.only(
+          //     topLeft: Radius.circular(20), topRight: Radius.circular(20))
+        ),
         child: SingleChildScrollView(
           child: Column(
-            children:  [
+            children: [
               // const SizedBox(height: 10,),
               InkWell(
                 onTap: () => showChangePasswordDialog(context),
                 child: const ButtonUserPage(
-                  text: "Ganti Password", 
+                  text: "Ganti Password",
                   icon: Icons.lock_outline_rounded,
                 ),
               ),
               // const SizedBox(height: 10,),
               InkWell(
-                onTap: (){_showLogoutConfirmationDialog(context);},
+                onTap: () {
+                  _showLogoutConfirmationDialog(context);
+                },
                 child: const ButtonUserPage(
-                  text: "Logout", 
-                  icon: Icons.output_rounded, 
+                  text: "Logout",
+                  icon: Icons.output_rounded,
                 ),
               ),
             ],
@@ -55,25 +57,24 @@ class _UserAccountPageState extends State<UserAccountPage> {
   }
 }
 
-_showLogoutConfirmationDialog(BuildContext context){
+_showLogoutConfirmationDialog(BuildContext context) {
   AwesomeDialog(
-      context: context,
-      dialogType: DialogType.QUESTION,
-      animType: AnimType.TOPSLIDE,
-      title: "KONFIRMASI LOGOUT",
-      desc: "Apakah Anda yakin ingin Logout dari aplikasi? ",
-      showCloseIcon: true,
-      // btnOkText: "Tutup",
-      // btnOkColor: Colors.red,
-      btnOkOnPress: 
-        ()async {
-          final preference = await SharedPreferences.getInstance();
-          preference.clear();
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => SplashScreen()));
-        },
-      btnCancelOnPress: () {},
+    context: context,
+    dialogType: DialogType.QUESTION,
+    animType: AnimType.TOPSLIDE,
+    title: "KONFIRMASI LOGOUT",
+    desc: "Apakah Anda yakin ingin Logout dari aplikasi? ",
+    showCloseIcon: true,
+    // btnOkText: "Tutup",
+    // btnOkColor: Colors.red,
+    btnOkOnPress: () async {
+      final preference = await SharedPreferences.getInstance();
+      preference.clear();
+      // ignore: use_build_context_synchronously
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => SplashScreen()));
+    },
+    btnCancelOnPress: () {},
   ).show();
 }
 
@@ -103,30 +104,33 @@ class ButtonUserPageState extends State<ButtonUserPage> {
       color: Colors.transparent,
       child: Column(
         children: [
-          SizedBox(height: 10,),
-          Row(
-            children: [
-              Expanded(child: Stack(
-                children: [
-                  Icon(
-                    widget.icon,
-                    size: 20,
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
-                  Positioned(
-                    left: 30,
-                    child: Text(widget.text, style: TextStyle(
-                      fontSize: 14,
-                      color: theme.colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "PT-Sans")
-                    ),
-                  ),
-                ],
-              ))
-            ]
+          SizedBox(
+            height: 10,
           ),
-          SizedBox(height: 10,),
+          Row(children: [
+            Expanded(
+                child: Stack(
+              children: [
+                Icon(
+                  widget.icon,
+                  size: 20,
+                  color: theme.colorScheme.onPrimaryContainer,
+                ),
+                Positioned(
+                  left: 30,
+                  child: Text(widget.text,
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: theme.colorScheme.onPrimaryContainer,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "PT-Sans")),
+                ),
+              ],
+            ))
+          ]),
+          SizedBox(
+            height: 10,
+          ),
           Container(
             height: .5,
             width: double.infinity,
@@ -204,82 +208,80 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
     return FutureBuilder(
       future: loadUserLoggedIn(),
       builder: (context, _) => Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DefaultTextStyle(
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  // fontFamily: 'PT-Sans',
-                ),
-                child: Text(userLoggedIn?.nama_user ?? 'PROGRAMMER'),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          DefaultTextStyle(
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 25,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              // fontFamily: 'PT-Sans',
+            ),
+            child: Text(userLoggedIn?.nama_user ?? 'PROGRAMMER'),
+          ),
+          DefaultTextStyle(
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              // fontFamily: 'PT-Sans',
+            ),
+            child: Text(userLoggedIn?.nama_role ?? 'PROGRAMMER'),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: const Color(0xff7c94b6),
+              image: DecorationImage(
+                image: ImageUtils().loadMerchantLogo(userLoggedIn?.logo ?? ''),
+                fit: BoxFit.cover,
               ),
-              DefaultTextStyle(
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  // fontFamily: 'PT-Sans',
-                ),
-                child: Text(userLoggedIn?.nama_role ?? 'PROGRAMMER'),
+              borderRadius: const BorderRadius.all(Radius.circular(90.0)),
+              border: Border.all(
+                color: Colors.transparent,
+                // width: 11.0,
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: const Color(0xff7c94b6),
-                  image: DecorationImage(
-                    image: ImageUtils().loadMerchantLogo(userLoggedIn?.logo ?? ''),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(90.0)),
-                  border: Border.all(
-                    color: Colors.transparent,
-                    // width: 11.0,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              DefaultTextStyle(
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 25,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  // fontFamily: 'PT-Sans',
-                ),
-                child: Text(userLoggedIn?.nama_merchant ?? 'PROGRAMMER'),
-              ),
-              DefaultTextStyle(
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500,
-                  // fontFamily: 'PT-Sans',
-                ),
-                child: Text(userLoggedIn?.alamat ?? 'PROGRAMMER'),
-              ),
-              const DefaultTextStyle(
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.normal,
-                  // fontFamily: 'PT-Sans',
-                ),
-                child: Text('Expire Date: 18 Januari 2024'),
-              ),
-            ]),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          DefaultTextStyle(
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 25,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              // fontFamily: 'PT-Sans',
+            ),
+            child: Text(userLoggedIn?.nama_merchant ?? 'PROGRAMMER'),
+          ),
+          DefaultTextStyle(
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 15,
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              // fontFamily: 'PT-Sans',
+            ),
+            child: Text(userLoggedIn?.alamat ?? 'PROGRAMMER'),
+          ),
+          const DefaultTextStyle(
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+              fontWeight: FontWeight.normal,
+              // fontFamily: 'PT-Sans',
+            ),
+            child: Text('Expire Date: 18 Januari 2024'),
+          ),
+        ]),
       ),
     );
   }
