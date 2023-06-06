@@ -17,26 +17,40 @@ class MenuPageState extends State<MenuPage> {
       onWillPop: () async {
         return true;
       },
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left_rounded,
-              size: 30,
-              color: Colors.white,
+      child: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(
+                Icons.chevron_left_rounded,
+                size: 30,
+                color: Colors.white,
+              ),
+              onPressed: () => Navigator.of(context).pop()
             ),
-            onPressed: () => Navigator.of(context).pop()
+            backgroundColor: theme.colorScheme.onPrimaryContainer,
+            title: const Text("MASTER DATA MENU", style: BaseTextStyle.appBarTitle),
+            centerTitle: true,
+            bottom: const TabBar(
+              labelColor: Colors.white,
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              indicatorColor: Colors.white,
+              unselectedLabelColor: Colors.grey,
+              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
+              tabs: [
+                Tab(text: "Jenis"),
+                Tab(text: "Kategori"),
+                Tab(text: "Menu"),
+              ],
+            ),
           ),
-          backgroundColor: theme.colorScheme.onPrimaryContainer,
-          title: const Text("MENU", style: BaseTextStyle.appBarTitle),
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          child: Container(
-            color: Colors.white,
-            height: double.infinity,
-            width: double.infinity,
-          ) 
+          body: const TabBarView(
+            children: [
+              Center(child: Text("Jenis"),),
+              Center(child: Text("Kategori"),),
+              Center(child: Text("Menu"),)
+            ],)
         ),
       ),
     );
