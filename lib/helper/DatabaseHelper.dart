@@ -15,20 +15,20 @@ class DatabaseHelper {
       return db.execute(
         // ignore: prefer_adjacent_string_concatenation, prefer_interpolation_to_compose_strings
         "CREATE TABLE m_jenis_menu" +
-            "(id INTEGER PRIMARY KEY," +
+            "(id INTEGER PRIMARY KEY AUTO_INCREMENT," +
             "id_m_merchant INTEGER," +
             "nama_jenis_menu TEXT" +
             "deskripsi TEXT" +
             ");" +
             "CREATE TABLE m_kategori_menu" +
-            "(id INTEGER PRIMARY KEY," +
+            "(id INTEGER PRIMARY KEY AUTO_INCREMENT," +
             "id_m_jenis_menu INTEGER," +
             "id_m_merchant INTEGER," +
             "nama_kategori_menu TEXT" +
             "deskripsi TEXT" +
             ");" +
             "CREATE TABLE m_menu_merchant" +
-            "(id INTEGER PRIMARY KEY," +
+            "(id INTEGER PRIMARY KEY AUTO_INCREMENT," +
             "id_m_jenis_menu INTEGER," +
             "id_m_kategori_menu INTEGER," +
             "id_m_merchant INTEGER," +
@@ -38,6 +38,15 @@ class DatabaseHelper {
             ");",
       );
     }, version: _version);
+  }
+
+  static void insertListJenisMenu(List<JenisMenuModel> data) async {
+    final db = await _getDb();
+    for(var i; i < data.length; i++){
+      print("inserting "+data[i].nama_jenis_menu);
+      await db.insert("m_jenis_menu", data[i].toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+    }
   }
 
   static Future<int> insertJenisMenu(JenisMenuModel data) async {

@@ -1,4 +1,6 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:posumkm/controllers/api/MasterController.dart';
 
 import '../../main.dart';
 
@@ -20,6 +22,7 @@ class MenuPageState extends State<MenuPage> {
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
+          backgroundColor: Colors.grey[100],
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(
@@ -45,13 +48,245 @@ class MenuPageState extends State<MenuPage> {
               ],
             ),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              Center(child: Text("Jenis"),),
+              Column(
+                children: [
+                  Container(
+                    // height: 100,
+                    padding: const EdgeInsets.all(10),
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        // InkWell(
+                        //   child: CustomButton(
+                        //     color: Colors.amber[900],
+                        //     text: "Tambah",
+                        //     icon: Icons.add_rounded,
+                        //     colorText: Colors.white,
+                        //   ),
+                        // ),
+                        Expanded(
+                          child: Container(
+                            height: 40,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.white
+                              ),
+                              borderRadius: BorderRadius.circular(3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(.3),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: Offset(1, 4), 
+                                )
+                              ]
+                            ),
+                            child: const TextField(
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: "Poppins",
+                                fontSize: 14
+                              ),
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.only(right: 10, top: 8),
+                                border: InputBorder.none,
+                                hintText: "Cari Data",
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: "Poppins",),
+                                prefixIcon: Icon(Icons.search_rounded),
+                                prefixIconColor: Colors.grey
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10,),
+                        InkWell(
+                          onTap: () => MasterController.getAllJenisMenu().then((value) {
+                            if(value.code == 200){
+                            } else {
+                              AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.ERROR,
+                                  animType: AnimType.SCALE,
+                                  title: "LOGIN ERROR",
+                                  desc: value.message,
+                                  showCloseIcon: true,
+                                  btnOkText: "Tutup",
+                                  btnOkColor: Colors.red,
+                                  btnOkOnPress: () {})
+                              .show();
+                            }
+                          }),
+                          child: CustomButton(
+                            color: Colors.green[900],
+                            text: "Refresh",
+                            icon: Icons.refresh_rounded,
+                            colorText: Colors.white,
+                          )
+                        )
+                      ]),
+                  ),
+                  const Divider(height: 10, thickness: 1, color: Colors.white),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            // physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index){
+                              return JenisMenuItem();
+                            },
+                            itemCount: 5,
+                          ),
+                        ) 
+                      )
+                    ],
+                  ),
+                ],
+              ),
               Center(child: Text("Kategori"),),
               Center(child: Text("Menu"),)
             ],)
         ),
+      ),
+    );
+  }
+}
+
+class JenisMenuItem extends StatelessWidget {
+  const JenisMenuItem({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var sizeScreen = MediaQuery.of(context).size;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      width: double.infinity,
+      child: Column(
+        children: [
+          Container(
+            // width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: const Color.fromARGB(255, 238, 238, 238)
+              ),
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(.3),
+                  spreadRadius: 1,
+                  blurRadius: 4,
+                  offset: Offset(1, 4), 
+                )
+              ]
+            ),
+            child: Row(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                  width: sizeScreen.width * .65,
+                  child: const Text("Makanan", style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: "Poppins"
+                  ),),
+                ),
+                VerticalDivider(
+                  width: 5,
+                  thickness: 1,
+                  endIndent: 0,
+                  color: Colors.grey[200],),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: InkWell(
+                      child: Icon(
+                              Icons.edit_rounded,
+                              size: 25,
+                              color: Colors.amber[700],
+                            ),
+                    ),
+                  ),
+                ),
+                VerticalDivider(
+                  width: 5,
+                  thickness: 1,
+                  endIndent: 0,
+                  color: Colors.grey[200],),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: InkWell(
+                      child: Icon(
+                              Icons.delete_rounded,
+                              size: 25,
+                              color: Colors.red[800],
+                            ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final String text;
+  final Color? color;
+  final Color? colorText;
+  final IconData icon;
+
+  const CustomButton({
+    super.key, 
+    required this.text, 
+    required this.color, 
+    required this.icon,
+    this.colorText
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(50)
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 15,
+            color: colorText,
+          ),
+          const SizedBox(width: 5),
+          Text(text, 
+            style: TextStyle(
+              color: colorText, 
+              fontSize: 12, 
+              fontWeight: FontWeight.w700
+            ),
+          )
+        ],
       ),
     );
   }

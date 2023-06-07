@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'HttpResponseModel.dart';
 
 class JenisMenuModel extends HttpResponseModel {
@@ -23,10 +25,10 @@ class JenisMenuModel extends HttpResponseModel {
 
   JenisMenuModel.fromJson(Map<String, dynamic> json) {
     if (json['id'] != null) {
-      id = json['id'];
+      id = int.parse(json['id']);
     }
     if (json['id_m_merchant'] != null) {
-      id_m_merchant = json['id_m_merchant'];
+      id_m_merchant = int.parse(json['id_m_merchant']);
     }
     if (json['nama_jenis_menu'] != null) {
       nama_jenis_menu = json['nama_jenis_menu'];
@@ -36,3 +38,15 @@ class JenisMenuModel extends HttpResponseModel {
     }
   }
 }
+
+List<JenisMenuModel> convertToList(List<dynamic> res){
+    List<JenisMenuModel> jenisMenuModel = [];
+    JenisMenuModel? temp;
+
+    for(var i = 0; i < res.length; i++){
+      temp = JenisMenuModel.fromJson(res[i]);
+      jenisMenuModel.add(temp);
+    }
+
+    return jenisMenuModel;
+  }
