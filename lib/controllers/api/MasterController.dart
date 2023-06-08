@@ -10,34 +10,40 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/JenisMenuModel.dart';
 
+UserModel? userLoggedInApps;
+
 class MasterController {
   static UserModel? userModel;
   static List<JenisMenuModel> listJenisModel = [];
 
   static Future<HttpResponseModel> getAllJenisMenu() async {
-    try {
-      var req = await http.post(
-          Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis"),
-          body: {
-            "username": userLoggedInApps?.username,
-            "password": userLoggedInApps?.password,
-            "id_m_merchant": userLoggedInApps?.id_m_merchant,
-          });
-
-      var res = json.decode(req.body);
-      if (res['code'] == 200 && res['data'] != null) {
-        listJenisModel = convertToList(res['data']);
-
-        // await DBHelper.insertListJenisMenu(listJenisModel);
-
-        // listJenisModel = await DBHelper.getAllJenisMenu();
-      }
-      return HttpResponseModel(
-          code: res['code'], message: res['message'], data: listJenisModel);
-    } catch (e) {
-      return HttpResponseModel(
-          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    final preference = await SharedPreferences.getInstance();
+    if (preference.containsKey("userLoggedIn")) {
+      userLoggedInApps = UserModel.fromJson(
+          json.decode(preference.getString("userLoggedIn").toString()));
     }
+    // try {
+    var req = await http
+        .post(Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis"), body: {
+      "username": userLoggedInApps?.username,
+      "password": userLoggedInApps?.password,
+      "id_m_merchant": userLoggedInApps?.id_m_merchant,
+    });
+
+    var res = json.decode(req.body);
+    if (res['code'] == 200 && res['data'] != null) {
+      listJenisModel = convertToList(res['data']);
+      res['message'] = "Data Sudah Terupdate";
+      // await DBHelper.insertListJenisMenu(listJenisModel);
+
+      // listJenisModel = await DBHelper.getAllJenisMenu();
+    }
+    return HttpResponseModel(
+        code: res['code'], message: res['message'], data: listJenisModel);
+    // } catch (e) {
+    //   return HttpResponseModel(
+    //       code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    // }
   }
 
   static Future<HttpResponseModel> changePasswordFunction(String old_password,

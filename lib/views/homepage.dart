@@ -23,11 +23,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       height: 90,
       width: double.infinity,
-      padding: EdgeInsets.only(
-        left: 10,
-        top: 10,
-        right: 10
-      ),
+      padding: EdgeInsets.only(left: 10, top: 10, right: 10),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -75,9 +71,7 @@ class MerchantMenuWidget extends StatefulWidget {
 class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         width: double.infinity,
         child: Row(
@@ -85,12 +79,11 @@ class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
           children: [
             InkWell(
               onTap: () {
-                Navigator.push(context, 
-                  PageTransition(
-                    child: LaporanPage(), 
-                    type: PageTransitionType.bottomToTop
-                  )
-                );
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: LaporanPage(),
+                        type: PageTransitionType.bottomToTop));
               },
               child: CustomButton(
                 text: "Laporan",
@@ -99,12 +92,11 @@ class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context, 
-                  PageTransition(
-                    child: MenuPage(), 
-                    type: PageTransitionType.bottomToTop
-                  )
-                );
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: MenuPage(),
+                        type: PageTransitionType.bottomToTop));
               },
               child: CustomButton(
                 text: "Menu",
@@ -113,12 +105,11 @@ class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
             ),
             InkWell(
               onTap: () {
-                Navigator.push(context, 
-                  PageTransition(
-                    child: UserManagementPage(), 
-                    type: PageTransitionType.bottomToTop
-                  )
-                );
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: UserManagementPage(),
+                        type: PageTransitionType.bottomToTop));
               },
               child: CustomButton(
                 text: "User",
@@ -149,7 +140,6 @@ class CustomButton extends StatefulWidget {
 }
 
 class CustomButtonState extends State<CustomButton> {
-
   @override
   Widget build(BuildContext context) {
     var sizeScreen = MediaQuery.of(context).size;
@@ -167,18 +157,20 @@ class CustomButtonState extends State<CustomButton> {
         //     color: Colors.grey.withOpacity(0.5),
         //     spreadRadius: 1,
         //     blurRadius: 1,
-        //     offset: Offset(1, 2), 
+        //     offset: Offset(1, 2),
         //   )
         // ]
       ),
-      child: Column(
-        children: [
-          Icon(
-            widget.icon,
-            color: theme.colorScheme.onPrimaryContainer,
-            size: 35,
-          ), 
-          Text(widget.text, style: BaseTextStyle.gridTextButton,)
+      child: Column(children: [
+        Icon(
+          widget.icon,
+          color: theme.colorScheme.onPrimaryContainer,
+          size: 35,
+        ),
+        Text(
+          widget.text,
+          style: BaseTextStyle.gridTextButton,
+        )
       ]),
     );
   }

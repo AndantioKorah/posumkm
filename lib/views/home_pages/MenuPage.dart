@@ -1,9 +1,17 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:posumkm/models/HttpResponseModel.dart';
 import 'package:posumkm/models/JenisMenuModel.dart';
 
 import '../../controllers/api/MasterController.dart';
 import '../../main.dart';
+import '../widget/HttpToastDialog.dart';
+
+List<JenisMenuModel>? _listJenisMenu;
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -13,11 +21,16 @@ class MenuPage extends StatefulWidget {
 }
 
 class MenuPageState extends State<MenuPage> {
-  List<JenisMenuModel>? _listJenisMenu;
-
   Future<void> _getAllJenisMenu() async {
-    await MasterController.getAllJenisMenu()
-        .then((value) => _listJenisMenu = value.data);
+    final rs = await MasterController.getAllJenisMenu();
+    _listJenisMenu = rs.data;
+  }
+
+  Future<HttpResponseModel> _refreshJenisMenu() async {
+    HttpResponseModel rs = await MasterController.getAllJenisMenu();
+    _listJenisMenu = rs.data;
+    setState(() {});
+    return rs;
   }
 
   @override
@@ -28,7 +41,6 @@ class MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    // print('build');
     var theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async {
@@ -65,11 +77,12 @@ class MenuPageState extends State<MenuPage> {
             ),
             body: TabBarView(
               children: [
-                Column(
+                ListView(
                   children: [
                     Container(
                       // height: 100,
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 20),
                       width: double.infinity,
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -120,12 +133,40 @@ class MenuPageState extends State<MenuPage> {
                               width: 10,
                             ),
                             InkWell(
+                                onTap: () =>
+                                    _refreshJenisMenu().then((value) => {
+                                          if (value.code != 200)
+                                            {
+                                              AwesomeDialog(
+                                                      context: context,
+                                                      dialogType:
+                                                          DialogType.ERROR,
+                                                      animType: AnimType.SCALE,
+                                                      title: "ERROR",
+                                                      desc: value.message,
+                                                      showCloseIcon: true,
+                                                      btnOkText: "Tutup",
+                                                      btnOkColor: Colors.red,
+                                                      btnOkOnPress: () {})
+                                                  .show()
+                                            }
+                                          else
+                                            {
+                                              httpToastDialog(
+                                                  value,
+                                                  context,
+                                                  ToastGravity.BOTTOM,
+                                                  const Duration(seconds: 2),
+                                                  const Duration(
+                                                      milliseconds: 100)),
+                                            }
+                                        }),
                                 child: CustomButton(
-                              color: Colors.green[900],
-                              text: "Refresh",
-                              icon: Icons.refresh_rounded,
-                              colorText: Colors.white,
-                            ))
+                                  color: Colors.green[900],
+                                  text: "Refresh",
+                                  icon: Icons.refresh_rounded,
+                                  colorText: Colors.white,
+                                ))
                           ]),
                     ),
                     const Divider(
@@ -133,24 +174,20 @@ class MenuPageState extends State<MenuPage> {
                     Row(
                       children: [
                         Expanded(
-                            child: SingleChildScrollView(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            // physics: NeverScrollableScrollPhysics(),
-                            itemBuilder: (BuildContext context, int index) {
-                              return JenisMenuItem();
-                            },
-                            itemCount: 5,
-                          ),
+                            child: FutureBuilder(
+                          future: _getAllJenisMenu(),
+                          builder: (context, _) {
+                            return jenisMenuItem(_listJenisMenu);
+                          },
                         ))
                       ],
                     ),
                   ],
                 ),
-                Center(
+                const Center(
                   child: Text("Kategori"),
                 ),
-                Center(
+                const Center(
                   child: Text("Menu"),
                 )
               ],
@@ -160,97 +197,94 @@ class MenuPageState extends State<MenuPage> {
   }
 }
 
-// ignore: must_be_immutable
-class JenisMenuItem extends StatelessWidget {
-  JenisMenuItem({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    var sizeScreen = MediaQuery.of(context).size;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      width: double.infinity,
-      child: Column(
-        children: [
-          Container(
-            // width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border:
-                    Border.all(color: const Color.fromARGB(255, 238, 238, 238)),
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(.3),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: Offset(1, 4),
-                  )
-                ]),
-            child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                  width: sizeScreen.width * .65,
-                  child: const Text(
-                    "Makanan",
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontFamily: "Poppins"),
-                  ),
-                ),
-                VerticalDivider(
-                  width: 5,
-                  thickness: 1,
-                  endIndent: 0,
-                  color: Colors.grey[200],
-                ),
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: InkWell(
-                      child: Icon(
-                        Icons.edit_rounded,
-                        size: 25,
-                        color: Colors.amber[700],
+Widget jenisMenuItem(List<JenisMenuModel>? data) => ListView.builder(
+      shrinkWrap: true,
+      itemCount: _listJenisMenu?.length,
+      itemBuilder: (context, index) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          width: double.infinity,
+          child: Column(
+            children: [
+              Container(
+                // width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                        color: const Color.fromARGB(255, 238, 238, 238)),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(.3),
+                        spreadRadius: 1,
+                        blurRadius: 4,
+                        offset: Offset(1, 4),
+                      )
+                    ]),
+                child: Row(
+                  // crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 3, horizontal: 5),
+                      width: MediaQuery.of(context).size.width * .65,
+                      child: Text(
+                        _listJenisMenu![index].nama_jenis_menu,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins"),
                       ),
                     ),
-                  ),
-                ),
-                VerticalDivider(
-                  width: 5,
-                  thickness: 1,
-                  endIndent: 0,
-                  color: Colors.grey[200],
-                ),
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: InkWell(
-                      child: Icon(
-                        Icons.delete_rounded,
-                        size: 25,
-                        color: Colors.red[800],
+                    VerticalDivider(
+                      width: 5,
+                      thickness: 1,
+                      endIndent: 0,
+                      color: Colors.grey[200],
+                    ),
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: InkWell(
+                          child: Icon(
+                            Icons.edit_rounded,
+                            size: 25,
+                            color: Colors.amber[700],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    VerticalDivider(
+                      width: 5,
+                      thickness: 1,
+                      endIndent: 0,
+                      color: Colors.grey[200],
+                    ),
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: InkWell(
+                          child: Icon(
+                            Icons.delete_rounded,
+                            size: 25,
+                            color: Colors.red[800],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )
-        ],
-      ),
+              )
+            ],
+          ),
+        );
+      },
     );
-  }
-}
 
 class CustomButton extends StatelessWidget {
   final String text;

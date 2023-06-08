@@ -7,14 +7,14 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import '../../controllers/api/UserController.dart';
 import 'HttpToastDialog.dart';
 
-
-void showChangePasswordDialog(BuildContext context){
+void showChangePasswordDialog(BuildContext context) {
   var theme = Theme.of(context);
 
   final TextEditingController oldPassword = TextEditingController();
   final TextEditingController newPassword = TextEditingController();
   final TextEditingController confirmNewPassword = TextEditingController();
-  final RoundedLoadingButtonController buttonSumbit = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController buttonSumbit =
+      RoundedLoadingButtonController();
 
   AwesomeDialog(
     context: context,
@@ -27,20 +27,19 @@ void showChangePasswordDialog(BuildContext context){
       children: [
         Row(
           children: [
-            Expanded(child: 
-              Stack(
-                children: [
-                  Center(
-                    child: DefaultTextStyle(
-                      style: TextStyle(
+            Expanded(
+                child: Stack(
+              children: [
+                Center(
+                  child: DefaultTextStyle(
+                    style: TextStyle(
                         fontSize: 15,
                         color: theme.colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold
-                      ),
-                      child: Text("GANTI PASSWORD"),
-                    ),
+                        fontWeight: FontWeight.bold),
+                    child: Text("GANTI PASSWORD"),
                   ),
-                  Positioned(
+                ),
+                Positioned(
                     right: 15,
                     child: InkWell(
                       onTap: () => Navigator.pop(context),
@@ -49,11 +48,9 @@ void showChangePasswordDialog(BuildContext context){
                         size: 15,
                         color: Colors.black,
                       ),
-                    )
-                  )
-                ],
-              )
-            ),
+                    ))
+              ],
+            )),
           ],
         ),
         Column(
@@ -64,19 +61,14 @@ void showChangePasswordDialog(BuildContext context){
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(40),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1
-                    )),
+                    border: Border.all(color: Colors.grey, width: 1)),
                 child: TextField(
                   decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15),
+                      contentPadding: EdgeInsets.symmetric(vertical: 15),
                       border: InputBorder.none,
                       hintText: 'Password Lama',
                       prefixIcon: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Icon(
                           Icons.lock_clock_rounded,
                           color: Colors.black,
@@ -105,19 +97,14 @@ void showChangePasswordDialog(BuildContext context){
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(40),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1
-                    )),
+                    border: Border.all(color: Colors.grey, width: 1)),
                 child: TextField(
                   decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15),
+                      contentPadding: EdgeInsets.symmetric(vertical: 15),
                       border: InputBorder.none,
                       hintText: 'Password Baru',
                       prefixIcon: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Icon(
                           Icons.lock_rounded,
                           color: Colors.black,
@@ -145,19 +132,14 @@ void showChangePasswordDialog(BuildContext context){
                 decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(40),
-                    border: Border.all(
-                      color: Colors.grey,
-                      width: 1
-                    )),
+                    border: Border.all(color: Colors.grey, width: 1)),
                 child: TextField(
                   decoration: const InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 15),
+                      contentPadding: EdgeInsets.symmetric(vertical: 15),
                       border: InputBorder.none,
                       hintText: 'Konfirmasi Password Baru',
                       prefixIcon: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15),
+                        padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Icon(
                           Icons.lock_rounded,
                           color: Colors.black,
@@ -186,44 +168,38 @@ void showChangePasswordDialog(BuildContext context){
     btnOk: SizedBox(
       width: double.infinity,
       child: RoundedLoadingButton(
-        height: 45,
-        color: theme.colorScheme.onPrimaryContainer,
-        controller: buttonSumbit,
-        resetDuration: const Duration(seconds: 3),
-        resetAfterDuration: true,
-        child: const Text(
-          "Submit", 
-          style: TextStyle(
-            color: Colors.white),
-        ),
-        onPressed: () => {
-          UserController.changePasswordFunction(
-            oldPassword.text, 
-            newPassword.text, 
-            confirmNewPassword.text
-          ).then((value) => {
-            oldPassword.clear(),
-            newPassword.clear(),
-            confirmNewPassword.clear(),
-            httpToastDialog(
-              value, context, 
-              ToastGravity.BOTTOM, 
-              const Duration(seconds: 2),
-              const Duration(milliseconds: 100)
-            ),
-            if(value.code == 200){
-              Navigator.pop(context)
-            }
-          })
-        }
-      ),
+          height: 45,
+          color: theme.colorScheme.onPrimaryContainer,
+          controller: buttonSumbit,
+          resetDuration: const Duration(seconds: 3),
+          resetAfterDuration: true,
+          child: const Text(
+            "Submit",
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () => {
+                UserController.changePasswordFunction(oldPassword.text,
+                        newPassword.text, confirmNewPassword.text)
+                    .then((value) => {
+                          oldPassword.clear(),
+                          newPassword.clear(),
+                          confirmNewPassword.clear(),
+                          httpToastDialog(
+                              value,
+                              context,
+                              ToastGravity.BOTTOM,
+                              const Duration(seconds: 2),
+                              const Duration(milliseconds: 100)),
+                          if (value.code == 200) {Navigator.pop(context)}
+                        })
+              }),
     ),
     // btnOkOnPress: () => _attemptChangePassword(
-    //   oldPassword.text, 
-    //   newPassword.text, 
-    //   confirmNewPassword.text, 
+    //   oldPassword.text,
+    //   newPassword.text,
+    //   confirmNewPassword.text,
     //   context),
     // onDissmissCallback: ,
     btnOkText: "SUBMIT",
-    ).show();
+  ).show();
 }

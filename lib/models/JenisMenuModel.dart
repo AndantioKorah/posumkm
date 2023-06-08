@@ -36,14 +36,14 @@ class JenisMenuModel extends HttpResponseModel {
   }
 }
 
-List<JenisMenuModel> convertToList(List<dynamic> res){
-    List<JenisMenuModel> jenisMenuModel = [];
-    JenisMenuModel? temp;
+List<JenisMenuModel> convertToList(List<dynamic> res) {
+  List<JenisMenuModel> jenisMenuModel = [];
+  JenisMenuModel? temp;
 
-    for(var i = 0; i < res.length; i++){
-      temp = JenisMenuModel.fromJson(res[i]);
-      jenisMenuModel.add(temp);
-    }
-
-    return jenisMenuModel;
+  for (var i = 0; i < res.length; i++) {
+    temp = JenisMenuModel.fromJson(res[i]);
+    jenisMenuModel.add(temp);
   }
+
+  return jenisMenuModel;
+}
