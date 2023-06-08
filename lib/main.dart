@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 // import 'package:posumkm/preferences/UserPreferences.dart';
@@ -6,15 +7,21 @@ import 'package:posumkm/providers/UserProvider.dart';
 import 'package:posumkm/views/SplashScreenPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'models/UserModel.dart';
 
 UserModel? userLoggedInApps;
+var databaseFactory;
 
 void main() async {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  if(Platform.isWindows || Platform.isLinux){
+    sqfliteFfiInit();
+  }
 
+  databaseFactory = databaseFactoryFfi;
   await _loadUserLoggedIn();
   runApp(const MyApp());
 }

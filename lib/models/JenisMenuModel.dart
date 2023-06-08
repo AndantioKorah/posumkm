@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'HttpResponseModel.dart';
 
 class JenisMenuModel extends HttpResponseModel {
-  late int id, id_m_merchant;
-  late String nama_jenis_menu, deskripsi;
+  String nama_jenis_menu = "", deskripsi = "", id = "", id_m_merchant = "";
 
   JenisMenuModel({
     required this.id,
@@ -25,10 +22,10 @@ class JenisMenuModel extends HttpResponseModel {
 
   JenisMenuModel.fromJson(Map<String, dynamic> json) {
     if (json['id'] != null) {
-      id = int.parse(json['id']);
+      id = json['id'].toString();
     }
     if (json['id_m_merchant'] != null) {
-      id_m_merchant = int.parse(json['id_m_merchant']);
+      id_m_merchant = json['id_m_merchant'].toString();
     }
     if (json['nama_jenis_menu'] != null) {
       nama_jenis_menu = json['nama_jenis_menu'];

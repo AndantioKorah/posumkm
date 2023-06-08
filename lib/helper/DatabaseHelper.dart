@@ -10,32 +10,35 @@ class DatabaseHelper {
   static const _dbName = "db_posumkmws.db";
 
   static Future<Database> _getDb() async {
-    return openDatabase(join(await getDatabasesPath(), _dbName),
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, _dbName);
+
+    return openDatabase(path,
         onCreate: (db, version) {
       return db.execute(
         // ignore: prefer_adjacent_string_concatenation, prefer_interpolation_to_compose_strings
-        "CREATE TABLE m_jenis_menu" +
-            "(id INTEGER PRIMARY KEY AUTO_INCREMENT," +
-            "id_m_merchant INTEGER," +
-            "nama_jenis_menu TEXT" +
-            "deskripsi TEXT" +
-            ");" +
-            "CREATE TABLE m_kategori_menu" +
-            "(id INTEGER PRIMARY KEY AUTO_INCREMENT," +
-            "id_m_jenis_menu INTEGER," +
-            "id_m_merchant INTEGER," +
-            "nama_kategori_menu TEXT" +
-            "deskripsi TEXT" +
-            ");" +
-            "CREATE TABLE m_menu_merchant" +
-            "(id INTEGER PRIMARY KEY AUTO_INCREMENT," +
-            "id_m_jenis_menu INTEGER," +
-            "id_m_kategori_menu INTEGER," +
-            "id_m_merchant INTEGER," +
-            "nama_menu_merchant TEXT" +
-            "harga INTEGER" +
-            "deskripsi TEXT" +
-            ");",
+        """CREATE TABLE IF NOT EXISTS m_jenis_menu
+            (id INTEGER PRIMARY KEY,
+            id_m_merchant INTEGER,
+            nama_jenis_menu TEXT,
+            deskripsi TEXT
+            );
+            CREATE TABLE IF NOT EXISTS m_kategori_menu
+            (id INTEGER PRIMARY KEY,
+            id_m_jenis_menu INTEGER,
+            id_m_merchant INTEGER,
+            nama_kategori_menu TEXT,
+            deskripsi TEXT
+            );
+            CREATE TABLE IF NOT EXISTS m_menu_merchant
+            (id INTEGER PRIMARY KEY,
+            id_m_jenis_menu INTEGER,
+            id_m_kategori_menu INTEGER,
+            id_m_merchant INTEGER,
+            nama_menu_merchant TEXT,
+            harga INTEGER,
+            deskripsi TEXT
+            );""",
       );
     }, version: _version);
   }

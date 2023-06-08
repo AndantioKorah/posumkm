@@ -29,7 +29,9 @@ class MasterController {
       if (res['code'] == 200 && res['data'] != null) {
         listJenisModel = convertToList(res['data']);
 
-        DBHelper.insertListJenisMenu(listJenisModel);
+        await DBHelper.insertListJenisMenu(listJenisModel);
+
+        // listJenisModel = await DBHelper.getAllJenisMenu();
       }
       return HttpResponseModel(
           code: res['code'], message: res['message'], data: listJenisModel);
