@@ -17,12 +17,12 @@ var databaseFactory;
 void main() async {
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  if(Platform.isWindows || Platform.isLinux){
-    sqfliteFfiInit();
-  }
+  // if(Platform.isWindows || Platform.isLinux){
+  //   sqfliteFfiInit();
+  // }
 
-  databaseFactory = databaseFactoryFfi;
-  await _loadUserLoggedIn();
+  // databaseFactory = databaseFactoryFfi;
+  // await _loadUserLoggedIn();
   runApp(const MyApp());
 }
 
@@ -37,7 +37,7 @@ Future<void> _loadUserLoggedIn() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-  
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

@@ -2,14 +2,12 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:posumkm/config/constants.dart';
-import 'package:posumkm/helper/DatabaseHelper.dart';
 import 'package:posumkm/main.dart';
 import 'package:posumkm/models/HttpResponseModel.dart';
 import 'package:posumkm/models/UserModel.dart';
 import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../helper/DBHelper.dart';
 import '../../models/JenisMenuModel.dart';
 
 class MasterController {
@@ -18,18 +16,19 @@ class MasterController {
 
   static Future<HttpResponseModel> getAllJenisMenu() async {
     try {
-      var req = await http
-          .post(Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis"), body: {
-        "username": userLoggedInApps?.username,
-        "password": userLoggedInApps?.password,
-        "id_m_merchant": userLoggedInApps?.id_m_merchant,
-      });
+      var req = await http.post(
+          Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis"),
+          body: {
+            "username": userLoggedInApps?.username,
+            "password": userLoggedInApps?.password,
+            "id_m_merchant": userLoggedInApps?.id_m_merchant,
+          });
 
       var res = json.decode(req.body);
       if (res['code'] == 200 && res['data'] != null) {
         listJenisModel = convertToList(res['data']);
 
-        await DBHelper.insertListJenisMenu(listJenisModel);
+        // await DBHelper.insertListJenisMenu(listJenisModel);
 
         // listJenisModel = await DBHelper.getAllJenisMenu();
       }

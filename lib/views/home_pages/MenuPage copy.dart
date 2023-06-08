@@ -120,12 +120,30 @@ class MenuPageState extends State<MenuPage> {
                               width: 10,
                             ),
                             InkWell(
+                                onTap: () => MasterController.getAllJenisMenu()
+                                        .then((value) {
+                                      if (value.code == 200) {
+                                        print(value.data.le);
+                                      } else {
+                                        AwesomeDialog(
+                                                context: context,
+                                                dialogType: DialogType.ERROR,
+                                                animType: AnimType.SCALE,
+                                                title: "INTERNAL ERROR",
+                                                desc: value.message,
+                                                showCloseIcon: true,
+                                                btnOkText: "Tutup",
+                                                btnOkColor: Colors.red,
+                                                btnOkOnPress: () {})
+                                            .show();
+                                      }
+                                    }),
                                 child: CustomButton(
-                              color: Colors.green[900],
-                              text: "Refresh",
-                              icon: Icons.refresh_rounded,
-                              colorText: Colors.white,
-                            ))
+                                  color: Colors.green[900],
+                                  text: "Refresh",
+                                  icon: Icons.refresh_rounded,
+                                  colorText: Colors.white,
+                                ))
                           ]),
                     ),
                     const Divider(
@@ -138,9 +156,11 @@ class MenuPageState extends State<MenuPage> {
                             shrinkWrap: true,
                             // physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (BuildContext context, int index) {
-                              return JenisMenuItem();
+                              return JenisMenuItem(
+                                  position: index,
+                                  data: _listJenisMenu?[index]);
                             },
-                            itemCount: 5,
+                            itemCount: _listJenisMenu?.length,
                           ),
                         ))
                       ],
@@ -162,7 +182,10 @@ class MenuPageState extends State<MenuPage> {
 
 // ignore: must_be_immutable
 class JenisMenuItem extends StatelessWidget {
-  JenisMenuItem({super.key});
+  int position;
+  JenisMenuModel? data;
+
+  JenisMenuItem({required this.position, required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -196,9 +219,9 @@ class JenisMenuItem extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                   width: sizeScreen.width * .65,
-                  child: const Text(
-                    "Makanan",
-                    style: TextStyle(
+                  child: Text(
+                    data?.nama_jenis_menu ?? "",
+                    style: const TextStyle(
                         fontSize: 14,
                         color: Colors.black,
                         fontWeight: FontWeight.w700,
