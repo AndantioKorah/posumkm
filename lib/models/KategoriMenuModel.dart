@@ -1,10 +1,13 @@
 import 'HttpResponseModel.dart';
 
-class JenisMenuModel extends HttpResponseModel {
-  late int id, id_m_merchant, id_m_jenis_menu;
-  late String nama_kategori_menu, deskripsi;
+class KategoriMenuModel extends HttpResponseModel {
+  String nama_kategori_menu = "", 
+  deskripsi = "", 
+  id = "", 
+  id_m_merchant = "", 
+  id_m_jenis_menu = "";
 
-  JenisMenuModel({
+  KategoriMenuModel({
     required this.id,
     required this.id_m_merchant,
     required this.id_m_jenis_menu,
@@ -23,7 +26,7 @@ class JenisMenuModel extends HttpResponseModel {
     return result;
   }
 
-  JenisMenuModel.fromJson(Map<String, dynamic> json) {
+  KategoriMenuModel.fromJson(Map<String, dynamic> json) {
     if (json['id'] != null) {
       id = json['id'];
     }
@@ -40,4 +43,15 @@ class JenisMenuModel extends HttpResponseModel {
       deskripsi = json['deskripsi'];
     }
   }
+}
+
+List<KategoriMenuModel> convertToListKategoriMenu(List<dynamic> res) {
+  List<KategoriMenuModel> kategoriMenuModel = [];
+  KategoriMenuModel? temp;
+  for (var i = 0; i < res.length; i++) {
+    temp = KategoriMenuModel.fromJson(res[i]);
+    kategoriMenuModel.add(temp);
+  }
+
+  return kategoriMenuModel;
 }

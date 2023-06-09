@@ -36,7 +36,7 @@ class JenisMenuModel extends HttpResponseModel {
   }
 }
 
-List<JenisMenuModel> convertToList(List<dynamic> res) {
+List<JenisMenuModel> convertToListJenisMenu(List<dynamic> res) {
   List<JenisMenuModel> jenisMenuModel = [];
   JenisMenuModel? temp;
 

@@ -11,7 +11,7 @@ import '../../controllers/api/MasterController.dart';
 import '../../main.dart';
 import '../widget/HttpToastDialog.dart';
 
-List<JenisMenuModel>? _listJenisMenu;
+List<JenisMenuModel> _listJenisMenu = [];
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -23,7 +23,11 @@ class MenuPage extends StatefulWidget {
 class MenuPageState extends State<MenuPage> {
   Future<void> _getAllJenisMenu() async {
     final rs = await MasterController.getAllJenisMenu();
-    _listJenisMenu = rs.data;
+    if(rs.code == 200){
+      _listJenisMenu = rs.data;
+    } else {
+
+    }
   }
 
   Future<HttpResponseModel> _refreshJenisMenu() async {
@@ -31,6 +35,13 @@ class MenuPageState extends State<MenuPage> {
     _listJenisMenu = rs.data;
     setState(() {});
     return rs;
+  }
+
+  Future<void> _refreshMasterMenu() async {
+    HttpResponseModel rs = await MasterController.getAllMasterMenu();
+    print("endpoint: ${rs.data.toString()}");
+    // setState(() {});
+    // return rs;
   }
 
   @override
@@ -133,34 +144,35 @@ class MenuPageState extends State<MenuPage> {
                               width: 10,
                             ),
                             InkWell(
-                                onTap: () =>
-                                    _refreshJenisMenu().then((value) => {
-                                          if (value.code != 200)
-                                            {
-                                              AwesomeDialog(
-                                                      context: context,
-                                                      dialogType:
-                                                          DialogType.ERROR,
-                                                      animType: AnimType.SCALE,
-                                                      title: "ERROR",
-                                                      desc: value.message,
-                                                      showCloseIcon: true,
-                                                      btnOkText: "Tutup",
-                                                      btnOkColor: Colors.red,
-                                                      btnOkOnPress: () {})
-                                                  .show()
-                                            }
-                                          else
-                                            {
-                                              httpToastDialog(
-                                                  value,
-                                                  context,
-                                                  ToastGravity.BOTTOM,
-                                                  const Duration(seconds: 2),
-                                                  const Duration(
-                                                      milliseconds: 100)),
-                                            }
-                                        }),
+                              onTap: () => _refreshMasterMenu(),
+                                // onTap: () =>
+                                    // _refreshJenisMenu().then((value) => {
+                                    //       if (value.code != 200)
+                                    //         {
+                                    //           AwesomeDialog(
+                                    //                   context: context,
+                                    //                   dialogType:
+                                    //                       DialogType.ERROR,
+                                    //                   animType: AnimType.SCALE,
+                                    //                   title: "ERROR",
+                                    //                   desc: value.message,
+                                    //                   showCloseIcon: true,
+                                    //                   btnOkText: "Tutup",
+                                    //                   btnOkColor: Colors.red,
+                                    //                   btnOkOnPress: () {})
+                                    //               .show()
+                                    //         }
+                                    //       else
+                                    //         {
+                                    //           httpToastDialog(
+                                    //               value,
+                                    //               context,
+                                    //               ToastGravity.BOTTOM,
+                                    //               const Duration(seconds: 2),
+                                    //               const Duration(
+                                    //                   milliseconds: 100)),
+                                    //         }
+                                    //     }),
                                 child: CustomButton(
                                   color: Colors.green[900],
                                   text: "Refresh",
@@ -199,7 +211,7 @@ class MenuPageState extends State<MenuPage> {
 
 Widget jenisMenuItem(List<JenisMenuModel>? data) => ListView.builder(
       shrinkWrap: true,
-      itemCount: _listJenisMenu?.length,
+      itemCount: _listJenisMenu.length,
       itemBuilder: (context, index) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -231,7 +243,7 @@ Widget jenisMenuItem(List<JenisMenuModel>? data) => ListView.builder(
                           vertical: 3, horizontal: 5),
                       width: MediaQuery.of(context).size.width * .65,
                       child: Text(
-                        _listJenisMenu![index].nama_jenis_menu,
+                        _listJenisMenu[index].nama_jenis_menu,
                         style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
