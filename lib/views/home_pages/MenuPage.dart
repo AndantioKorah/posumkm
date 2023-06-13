@@ -20,10 +20,6 @@ import '../../models/KategoriMenuModel.dart';
 import '../../models/MenuMerchantModel.dart';
 import '../widget/HttpToastDialog.dart';
 
-List<JenisMenuModel> _listJenisMenu = [];
-List<KategoriMenuModel> _listKategoriMenu = [];
-List<MenuMerchantModel> _listMenuMerchant = [];
-MasterMenuModel? _masterMenuModel;
 bool _showLoader = true;
 bool _jenisMenuEmpty = true;
 bool _kategoriMenuEmpty = true;
@@ -38,34 +34,19 @@ class MenuPage extends StatefulWidget {
 }
 
 class MenuPageState extends State<MenuPage> {
+  List<JenisMenuModel> _listJenisMenu = [];
+  List<KategoriMenuModel> _listKategoriMenu = [];
+  List<MenuMerchantModel> _listMenuMerchant = [];
+  MasterMenuModel? _masterMenuModel;
   TextEditingController searchMenu = TextEditingController();
   TextEditingController searchJenis = TextEditingController();
   TextEditingController searchKategori = TextEditingController();
 
-  List<JenisMenuModel> tempForEach = _listJenisMenu;
-
-  Future<void> _getAllJenisMenu() async {
-    final rs = await MasterController.getAllJenisMenu();
-    if (rs.code == 200) {
-      _listJenisMenu = rs.data;
+  void _callbackJenisMenu(List<JenisMenuModel> newList) {
+    setState(() {
       _showLoader = false;
-    } else {}
-    setState(() {});
-  }
-
-  Future<HttpResponseModel> _refreshJenisMenu() async {
-    _showLoader = true;
-    setState(() {});
-    HttpResponseModel rs = await MasterController.getAllJenisMenu();
-    // ignore: unnecessary_null_comparison
-    if (rs != null) {
-      if (rs.code == 200) {
-        _listJenisMenu = rs.data;
-      }
-    }
-    _showLoader = false;
-    setState(() {});
-    return rs;
+      _listJenisMenu = newList;
+    });
   }
 
   Future<HttpResponseModel> _refreshMasterMenu() async {
@@ -91,7 +72,6 @@ class MenuPageState extends State<MenuPage> {
         if (_listMenuMerchant.isNotEmpty) {
           _menuMerchantEmpty = false;
         }
-        tempForEach = _listJenisMenu;
       }
     }
 
@@ -169,81 +149,86 @@ class MenuPageState extends State<MenuPage> {
               children: [
                 ListView(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 20),
-                      width: double.infinity,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(color: Colors.white),
-                                    borderRadius: BorderRadius.circular(3),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(.3),
-                                        spreadRadius: 1,
-                                        blurRadius: 4,
-                                        offset: Offset(1, 4),
-                                      )
-                                    ]),
-                                child: TextField(
-                                  controller: searchJenis,
-                                  onChanged: (searchValue) {
-                                    _showLoader = true;
-                                    setState(() {});
-                                    // ignore: unrelated_type_equality_checks
-                                    // if(widget.master == "jenis"){
-                                    List<JenisMenuModel> tempJenisMenu = [];
-                                    if (searchValue.isNotEmpty) {
-                                      tempForEach.forEach((rs) {
-                                        if (rs.nama_jenis_menu
-                                            .toLowerCase()
-                                            .contains(
-                                                searchValue.toLowerCase())) {
-                                          tempJenisMenu.add(rs);
-                                          _listJenisMenu = tempJenisMenu;
-                                          _showLoader = false;
-                                          setState(() {});
-                                        } else {
-                                          _listJenisMenu.clear();
-                                          _showLoader = false;
-                                          setState(() {});
-                                        }
-                                      });
-                                    } else {
-                                      _listJenisMenu = tempForEach;
-                                      _showLoader = false;
-                                      setState(() {});
-                                    }
-                                    // } else if(widget.master == "kategori") {
-                                    // } else if(widget.master == "menu") {
-                                    // }
-                                  },
-                                  style: const TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: "Poppins",
-                                      fontSize: 14),
-                                  decoration: const InputDecoration(
-                                      contentPadding:
-                                          EdgeInsets.only(right: 10, top: 8),
-                                      border: InputBorder.none,
-                                      hintText: "Cari Data",
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                        fontFamily: "Poppins",
-                                      ),
-                                      prefixIcon: Icon(Icons.search_rounded),
-                                      prefixIconColor: Colors.grey),
-                                ),
-                              ),
-                            ),
-                          ]),
+                    SearchField(
+                      list: _listJenisMenu,
+                      master: "jenis",
+                      searchController: searchJenis,
                     ),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 30, vertical: 20),
+                    //   width: double.infinity,
+                    //   child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.end,
+                    //       children: [
+                    //         Expanded(
+                    //           child: Container(
+                    //             height: 40,
+                    //             decoration: BoxDecoration(
+                    //                 color: Colors.white,
+                    //                 border: Border.all(color: Colors.white),
+                    //                 borderRadius: BorderRadius.circular(3),
+                    //                 boxShadow: [
+                    //                   BoxShadow(
+                    //                     color: Colors.grey.withOpacity(.3),
+                    //                     spreadRadius: 1,
+                    //                     blurRadius: 4,
+                    //                     offset: Offset(1, 4),
+                    //                   )
+                    //                 ]),
+                    //             child: TextField(
+                    //               controller: searchJenis,
+                    //               onChanged: (searchValue) {
+                    //                 _showLoader = true;
+                    //                 setState(() {});
+                    //                 // ignore: unrelated_type_equality_checks
+                    //                 // if(widget.master == "jenis"){
+                    //                 List<JenisMenuModel> tempJenisMenu = [];
+                    //                 if (searchValue.isNotEmpty) {
+                    //                   _listJenisMenu.forEach((rs) {
+                    //                     if (rs.nama_jenis_menu
+                    //                         .toLowerCase()
+                    //                         .contains(searchValue
+                    //                             .toLowerCase()
+                    //                             .toString())) {
+                    //                       tempJenisMenu.add(rs);
+                    //                       _listJenisMenu = tempJenisMenu;
+                    //                     }
+
+                    //                     if (tempJenisMenu.isEmpty) {
+                    //                       _listJenisMenu = [];
+                    //                     }
+                    //                   });
+                    //                 } else {
+                    //                   _listJenisMenu =
+                    //                       _masterMenuModel!.listJenisMenu;
+                    //                 }
+                    //                 _showLoader = false;
+                    //                 setState(() {});
+                    //                 // } else if(widget.master == "kategori") {
+                    //                 // } else if(widget.master == "menu") {
+                    //                 // }
+                    //               },
+                    //               style: const TextStyle(
+                    //                   color: Colors.black,
+                    //                   fontFamily: "Poppins",
+                    //                   fontSize: 14),
+                    //               decoration: const InputDecoration(
+                    //                   contentPadding:
+                    //                       EdgeInsets.only(right: 10, top: 8),
+                    //                   border: InputBorder.none,
+                    //                   hintText: "Cari Data",
+                    //                   hintStyle: TextStyle(
+                    //                     color: Colors.grey,
+                    //                     fontFamily: "Poppins",
+                    //                   ),
+                    //                   prefixIcon: Icon(Icons.search_rounded),
+                    //                   prefixIconColor: Colors.grey),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ]),
+                    // ),
                     const Divider(
                         height: 20, thickness: 1, color: Colors.white),
                     Row(
@@ -305,11 +290,13 @@ class SearchField extends StatefulWidget {
   TextEditingController searchController;
   List<dynamic> list;
   String master;
+  Function? callback;
 
   SearchField(
       {required this.list,
       required this.master,
       required this.searchController,
+      this.callback,
       super.key});
 
   @override
@@ -319,7 +306,7 @@ class SearchField extends StatefulWidget {
 class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
-    List<dynamic> _temp = widget.list;
+    var tempList = widget.list;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       width: double.infinity,
@@ -342,32 +329,32 @@ class _SearchFieldState extends State<SearchField> {
             child: TextField(
               controller: widget.searchController,
               onChanged: (searchValue) {
-                _showLoader = true;
                 // ignore: unrelated_type_equality_checks
                 if (widget.master == "jenis") {
-                  List<JenisMenuModel> tempForEach =
-                      _temp as List<JenisMenuModel>;
                   List<JenisMenuModel> tempJenisMenu = [];
                   if (searchValue.isNotEmpty) {
-                    tempForEach.forEach((rs) {
+                    widget.list.forEach((rs) {
                       if (rs.nama_jenis_menu
                           .toLowerCase()
-                          .contains(searchValue.toLowerCase())) {
+                          .contains(searchValue.toLowerCase().toString())) {
                         tempJenisMenu.add(rs);
-                        setState(() {
-                          _listJenisMenu = tempJenisMenu;
-                          _showLoader = false;
-                        });
+                        widget.list = tempJenisMenu;
+                      }
+
+                      if (tempJenisMenu.isEmpty) {
+                        widget.list = [];
                       }
                     });
                   } else {
-                    setState(() {
-                      _listJenisMenu = widget.list as List<JenisMenuModel>;
-                      _showLoader = false;
-                    });
+                    widget.list = tempList;
                   }
-                } else if (widget.master == "kategori") {
-                } else if (widget.master == "menu") {}
+                  _showLoader = false;
+                  widget.callback!(widget.list);
+                  setState(() {});
+                }
+                //else if(widget.master == "kategori") {
+                // } else if(widget.master == "menu") {
+                // }
               },
               style: const TextStyle(
                   color: Colors.black, fontFamily: "Poppins", fontSize: 14),
