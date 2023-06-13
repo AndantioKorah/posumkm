@@ -206,12 +206,10 @@ class MenuPageState extends State<MenuPage> {
                                             .contains(
                                                 searchValue.toLowerCase())) {
                                           tempJenisMenu.add(rs);
-                                          print("dsa: $_listJenisMenu.length");
                                           _listJenisMenu = tempJenisMenu;
                                           _showLoader = false;
                                           setState(() {});
                                         } else {
-                                          print("tidak ada");
                                           _listJenisMenu.clear();
                                           _showLoader = false;
                                           setState(() {});
@@ -356,7 +354,6 @@ class _SearchFieldState extends State<SearchField> {
                           .toLowerCase()
                           .contains(searchValue.toLowerCase())) {
                         tempJenisMenu.add(rs);
-                        print(_listJenisMenu.length);
                         setState(() {
                           _listJenisMenu = tempJenisMenu;
                           _showLoader = false;
@@ -364,7 +361,6 @@ class _SearchFieldState extends State<SearchField> {
                       }
                     });
                   } else {
-                    print(_listJenisMenu.length);
                     setState(() {
                       _listJenisMenu = widget.list as List<JenisMenuModel>;
                       _showLoader = false;
@@ -394,7 +390,6 @@ class _SearchFieldState extends State<SearchField> {
 }
 
 // searchTroughList(List<dynamic> data, String master, String searchValue){
-//   print("asd $searchValue", );
 //   if(master == "jenis"){
 //     temp = data; //simpan data yang sebelumnya terlebih dahulu
 //   }
@@ -653,7 +648,6 @@ Widget kategoriMenuItem(List<KategoriMenuModel> data) => ListView.builder(
     );
 
 Widget showJenisMenuItem(List<JenisMenuModel> data, BuildContext ctx) {
-  print(data.length);
   if (data.isNotEmpty) {
     return Expanded(child: jenisMenuItem(data));
   } else {
