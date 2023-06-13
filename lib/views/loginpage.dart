@@ -37,141 +37,170 @@ class _LoginPageState extends State<LoginPage> {
 
     return Stack(
       children: [
-        LoginBackground(),
+        // LoginBackground(),
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                theme.colorScheme.onPrimaryContainer,
+                Color.fromRGBO(39, 50, 112, 1),
+                // theme.colorScheme.onPrimaryContainer,
+                // Color.fromRGBO(47, 56, 92, 1)
+              ],
+            ),
+          ),
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: sizeScreen.height * .3,
+                ),
+                DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    // fontWeight: FontWeight.bold
+                  ),
+                  child: Text("Welcome to,"),
+                ),
+                DefaultTextStyle(
+                  style: TextStyle(
+                    fontSize: 40,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: "Poppins"
+                  ),
+                  child: Text("NiKita POS"),
+                ),
+              ]
+            ),
+          ),
+        ),
         Scaffold(
           backgroundColor: Colors.transparent,
+          // backgroundColor: theme.colorScheme.onPrimaryContainer,
           body: SafeArea(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Center(
-                  child: Text(
-                    'NiKita POS',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                Container(
+                  height: sizeScreen.height * .5,
+                  decoration: BoxDecoration(
+                    // color: theme.colorScheme.onPrimaryContainer,
+                    color: Colors.transparent,
+                    // image: DecorationImage(
+                    //   image: AssetImage("assets/images/login-image.png")
+                    // ),
                   ),
                 ),
-                SizedBox(
-                  height: 50,
-                ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 40),
+                  height: sizeScreen.height * .5,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      // topLeft: Radius.circular(10),
+                      topRight: Radius.circular(50)
+                    )
+                  ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[600]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(40)),
-                        child: TextField(
-                          decoration: InputDecoration(
-                              contentPadding:
-                                  const EdgeInsets.symmetric(vertical: 12),
-                              border: InputBorder.none,
-                              hintText: 'Username',
-                              prefixIcon: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                child: Icon(
-                                  FontAwesomeIcons.solidUser,
-                                  color: Colors.grey[300],
-                                  size: 15,
-                                ),
-                              ),
-                              hintStyle: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.grey[300],
-                                  fontWeight: FontWeight.w400)),
-                          style: TextStyle(
+                        padding: EdgeInsets.only(left: 40),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Please Login to continue',
+                            style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                          keyboardType: TextInputType.name,
-                          textInputAction: TextInputAction.next,
-                          controller: userName,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Colors.grey[600]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(40)),
-                        child: TextField(
-                            decoration: InputDecoration(
-                                contentPadding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                border: InputBorder.none,
-                                hintText: 'Password',
-                                prefixIcon: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  child: Icon(
-                                    FontAwesomeIcons.lock,
-                                    color: Colors.grey[300],
-                                    size: 15,
-                                  ),
-                                ),
-                                hintStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.grey[300],
-                                    fontWeight: FontWeight.w400)),
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                            textInputAction: TextInputAction.done,
-                            obscureText: true,
-                            controller: password),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 40,
-                        child: RoundedLoadingButton(
-                          resetDuration: const Duration(seconds: 3),
-                          resetAfterDuration: true,
-                          valueColor: theme.colorScheme.onPrimaryContainer,
-                          color: Colors.white,
-                          controller: buttonSumbit,
-                          onPressed: () => UserController.loginFunction(
-                                  userName.text, password.text)
-                              .then((value) {
-                            if (value.code == 200) {
-                              UserPreferences.setUserLoggedIn(value.data);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BaseLayoutPage()));
-                            } else {
-                              AwesomeDialog(
-                                      context: context,
-                                      dialogType: DialogType.ERROR,
-                                      animType: AnimType.SCALE,
-                                      title: "LOGIN ERROR",
-                                      desc: value.message,
-                                      showCloseIcon: true,
-                                      btnOkText: "Tutup",
-                                      btnOkColor: Colors.red,
-                                      btnOkOnPress: () {})
-                                  .show();
-                            }
-                          }),
-                          child: Text(
-                            "LOGIN",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.onPrimaryContainer),
+                              color: theme.colorScheme.onPrimaryContainer,
+                            ),
                           ),
                         ),
-                      )
+                      ),
+                      SizedBox(
+                        height: sizeScreen.height * .02,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            loginTextField(
+                              context,
+                              userName,
+                              "Username",
+                              TextInputAction.next,
+                              TextInputType.name,
+                              false,
+                              FontAwesomeIcons.solidUser
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            loginTextField(
+                              context, 
+                              password,
+                              "Password",
+                              TextInputAction.done,
+                              TextInputType.name,
+                              true,
+                              FontAwesomeIcons.key
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 40,
+                              child: RoundedLoadingButton(
+                                valueColor: Colors.white,
+                                animateOnTap: true,
+                                color: theme.colorScheme.onPrimaryContainer,
+                                controller: buttonSumbit,
+                                onPressed: () => UserController.loginFunction(
+                                        userName.text, password.text)
+                                    .then((value) {
+                                  buttonSumbit.reset();
+                                  if (value.code == 200) {
+                                    UserPreferences.setUserLoggedIn(value.data);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => BaseLayoutPage()));
+                                  } else {
+                                    AwesomeDialog(
+                                            context: context,
+                                            dialogType: DialogType.ERROR,
+                                            animType: AnimType.SCALE,
+                                            title: "LOGIN ERROR",
+                                            desc: value.message,
+                                            showCloseIcon: true,
+                                            btnOkText: "Tutup",
+                                            btnOkColor: Colors.red,
+                                            btnOkOnPress: () {})
+                                        .show();
+                                  }
+                                }),
+                                child: Text(
+                                  "LOGIN",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -179,10 +208,57 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-        BottomWidget()
+        // BottomWidget()
       ],
     );
   }
+}
+
+Widget loginTextField(
+  BuildContext ctx,
+  TextEditingController controller,
+  String hinText,
+  TextInputAction action,
+  TextInputType type,
+  bool obscureText,
+  IconData icon
+){
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.transparent,
+      border: Border(
+        bottom: BorderSide(
+          color: Theme.of(ctx).colorScheme.onPrimaryContainer
+        )
+      )
+      // border: Border.all(
+      //     color: Theme.of(ctx).colorScheme.onPrimaryContainer.withOpacity(.5)
+      //   ),
+      // borderRadius: BorderRadius.circular(0)
+    ),
+    child: TextField(
+      decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hinText,
+          prefixIcon: Icon(
+            icon,
+            color: Theme.of(ctx).colorScheme.onPrimaryContainer,
+            size: 15,
+          ),
+          hintStyle: TextStyle(
+              fontSize: 15,
+              color: Theme.of(ctx).colorScheme.onPrimaryContainer.withOpacity(.5),
+              fontWeight: FontWeight.w400)),
+      style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
+          color: Theme.of(ctx).colorScheme.onPrimaryContainer,),
+      keyboardType: type,
+      textInputAction: action,
+      controller: controller,
+      obscureText: obscureText,
+    ),
+  );
 }
 
 class BottomWidget extends StatelessWidget {
@@ -202,10 +278,10 @@ class BottomWidget extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[400]),
+                    color: Theme.of(context).colorScheme.onPrimaryContainer),
               )),
           SizedBox(
-            height: 50,
+            height: MediaQuery.of(context).size.height * .05,
           )
         ],
       ),

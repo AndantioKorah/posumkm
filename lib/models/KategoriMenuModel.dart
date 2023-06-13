@@ -5,13 +5,15 @@ class KategoriMenuModel extends HttpResponseModel {
   deskripsi = "", 
   id = "", 
   id_m_merchant = "", 
-  id_m_jenis_menu = "";
+  id_m_jenis_menu = "",
+  nama_jenis_menu = "";
 
   KategoriMenuModel({
     required this.id,
     required this.id_m_merchant,
     required this.id_m_jenis_menu,
     required this.nama_kategori_menu,
+    required this.nama_jenis_menu,
     required this.deskripsi,
   });
 
@@ -21,6 +23,7 @@ class KategoriMenuModel extends HttpResponseModel {
     result['id_m_merchant'] = id_m_merchant;
     result['id_m_jenis_menu'] = id_m_jenis_menu;
     result['nama_kategori_menu'] = nama_kategori_menu;
+    result['nama_jenis_menu'] = nama_jenis_menu;
     result['deskripsi'] = deskripsi;
 
     return result;
@@ -38,6 +41,9 @@ class KategoriMenuModel extends HttpResponseModel {
     }
     if (json['nama_kategori_menu'] != null) {
       nama_kategori_menu = json['nama_kategori_menu'];
+    }
+    if (json['nama_jenis_menu'] != null) {
+      nama_jenis_menu = json['nama_jenis_menu'];
     }
     if (json['deskripsi'] != null) {
       deskripsi = json['deskripsi'];

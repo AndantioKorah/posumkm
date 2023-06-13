@@ -7,7 +7,6 @@ import 'package:posumkm/providers/UserProvider.dart';
 import 'package:posumkm/views/SplashScreenPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'models/UserModel.dart';
 
@@ -48,7 +47,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'NiKita POS UMKM',
         theme: ThemeData(
-          // fontFamily: 'PT-Sans',
+          fontFamily: 'Varela-Round',
           colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromRGBO(34, 46, 60, 1)),
           useMaterial3: true,
@@ -66,66 +65,66 @@ class BaseTextStyle {
       fontSize: 16,
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans");
+      fontFamily: "Varela-Round");
 
   static const gridTextDivider = TextStyle(
       fontSize: 10,
       color: Colors.grey,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const gridItemText = TextStyle(
       fontSize: 12,
       color: Colors.black,
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const gridTextButton = TextStyle(
       fontSize: 12,
       color: Colors.black,
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const buttonTransaksiHome = TextStyle(
       fontSize: 12,
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const labelTransaksiHome = TextStyle(
       fontSize: 10,
       color: Colors.white,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const ltJpTunai = TextStyle(
       fontSize: 10,
       color: Colors.white,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const ltTanggal = TextStyle(
       fontSize: 12,
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const ltRpLunas = TextStyle(
       fontSize: 12,
       // color: Color.fromARGB(255, 0, 189, 69),
       color: Color.fromARGB(255, 67, 255, 58),
       fontWeight: FontWeight.w900,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const ltRpBelumLunas = TextStyle(
       fontSize: 12,
       // color: Color.fromARGB(255, 0, 189, 69),
       color: Color.fromARGB(255, 227, 252, 0),
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const ltListMenu = TextStyle(
       fontSize: 11,
@@ -133,14 +132,14 @@ class BaseTextStyle {
       color: Colors.white,
       fontWeight: FontWeight.bold,
       overflow: TextOverflow.ellipsis,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 
   static const ltItemCounts = TextStyle(
       fontSize: 11,
       // color: Color.fromARGB(255, 0, 189, 69),
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      fontFamily: "PT-Sans");
+      fontFamily: "Poppins");
 }
 
 class LineDividerWidget extends StatelessWidget {

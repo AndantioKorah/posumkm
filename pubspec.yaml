@@ -52,6 +52,7 @@ dependencies:
   rounded_loading_button: ^2.1.0
   sqflite: ^2.2.8+4
   sqflite_common_ffi: ^2.2.5
+  money_formatter: ^0.0.4
 
 flutter_native_splash:
   android: true
@@ -118,6 +119,9 @@ flutter:
           weight: 700
         - asset: assets/fonts/Poppins/Poppins-Italic.ttf
           style: italic
+    - family: Varela-Round
+      fonts:
+        - asset: assets/fonts/VarelaRound-Regular.ttf
         
   #
   # For details regarding fonts from package dependencies,
