@@ -10,6 +10,7 @@ import 'package:posumkm/models/HttpResponseModel.dart';
 import 'package:posumkm/models/JenisMenuModel.dart';
 import 'package:posumkm/models/MasterMenuModel.dart';
 import 'package:posumkm/utils/Utils.dart';
+import 'package:posumkm/views/home_pages/EditMasterMenu.dart';
 import 'package:posumkm/views/widget/EmptyDataImageWidget.dart';
 import 'package:posumkm/views/widget/LoadingImageWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +26,13 @@ bool _jenisMenuEmpty = true;
 bool _kategoriMenuEmpty = true;
 bool _menuMerchantEmpty = true;
 var sprf;
+List<JenisMenuModel> _listJenisMenu = [];
+List<KategoriMenuModel> _listKategoriMenu = [];
+List<MenuMerchantModel> _listMenuMerchant = [];
+MasterMenuModel? _masterMenuModel;
+TextEditingController searchMenu = TextEditingController();
+TextEditingController searchJenis = TextEditingController();
+TextEditingController searchKategori = TextEditingController();
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -34,22 +42,41 @@ class MenuPage extends StatefulWidget {
 }
 
 class MenuPageState extends State<MenuPage> {
-  List<JenisMenuModel> _listJenisMenu = [];
-  List<KategoriMenuModel> _listKategoriMenu = [];
-  List<MenuMerchantModel> _listMenuMerchant = [];
-  MasterMenuModel? _masterMenuModel;
-  TextEditingController searchMenu = TextEditingController();
-  TextEditingController searchJenis = TextEditingController();
-  TextEditingController searchKategori = TextEditingController();
-
-  void _callbackJenisMenu(List<JenisMenuModel> newList) {
+  void _callbackJenisMenu(newList) {
     setState(() {
       _showLoader = false;
-      _listJenisMenu = newList;
+      if(newList.length > 0){
+        _listJenisMenu = newList;
+      } else {
+        _listJenisMenu = [];
+      }
+    });
+  }
+
+  void _callbackKategoriMenu(newList) {
+    setState(() {
+      _showLoader = false;
+      if(newList.length > 0){
+        _listKategoriMenu = newList;
+      } else {
+        _listKategoriMenu = [];
+      }
+    });
+  }
+
+  void _callbackMenuMerchant(newList) {
+    setState(() {
+      _showLoader = false;
+      if(newList.length > 0){
+        _listMenuMerchant = newList;
+      } else {
+        _listMenuMerchant = [];
+      }
     });
   }
 
   Future<HttpResponseModel> _refreshMasterMenu() async {
+    print("masuk sini harusnya");
     _showLoader = true;
     setState(() {});
     HttpResponseModel rs = await MasterController.getAllMasterMenu();
@@ -153,6 +180,7 @@ class MenuPageState extends State<MenuPage> {
                       list: _listJenisMenu,
                       master: "jenis",
                       searchController: searchJenis,
+                      callback: _callbackJenisMenu,
                     ),
                     // Container(
                     //   padding: const EdgeInsets.symmetric(
@@ -236,7 +264,7 @@ class MenuPageState extends State<MenuPage> {
                         _showLoader
                             ? loadingDataWidget(context)
                             : _listJenisMenu.isNotEmpty
-                                ? showJenisMenuItem(_listJenisMenu, context)
+                                ? showJenisMenuItem(_listJenisMenu, context, _refreshMasterMenu)
                                 : emptyDataWidget(context)
                       ],
                     ),
@@ -248,6 +276,7 @@ class MenuPageState extends State<MenuPage> {
                       list: _listKategoriMenu,
                       master: "kategori",
                       searchController: searchKategori,
+                      callback: _callbackKategoriMenu,
                     ),
                     const Divider(
                         height: 20, thickness: 1, color: Colors.white),
@@ -266,6 +295,7 @@ class MenuPageState extends State<MenuPage> {
                       list: _listMenuMerchant,
                       master: "menu",
                       searchController: searchMenu,
+                      callback: _callbackMenuMerchant,
                     ),
                     const Divider(
                         height: 20, thickness: 1, color: Colors.white),
@@ -290,13 +320,13 @@ class SearchField extends StatefulWidget {
   TextEditingController searchController;
   List<dynamic> list;
   String master;
-  Function? callback;
+  final Function callback;
 
   SearchField(
       {required this.list,
       required this.master,
       required this.searchController,
-      this.callback,
+      required this.callback,
       super.key});
 
   @override
@@ -306,7 +336,6 @@ class SearchField extends StatefulWidget {
 class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
-    var tempList = widget.list;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       width: double.infinity,
@@ -333,7 +362,7 @@ class _SearchFieldState extends State<SearchField> {
                 if (widget.master == "jenis") {
                   List<JenisMenuModel> tempJenisMenu = [];
                   if (searchValue.isNotEmpty) {
-                    widget.list.forEach((rs) {
+                    _masterMenuModel!.listJenisMenu.forEach((rs) {
                       if (rs.nama_jenis_menu
                           .toLowerCase()
                           .contains(searchValue.toLowerCase().toString())) {
@@ -346,15 +375,61 @@ class _SearchFieldState extends State<SearchField> {
                       }
                     });
                   } else {
-                    widget.list = tempList;
+                    widget.list = _masterMenuModel!.listJenisMenu;
                   }
-                  _showLoader = false;
-                  widget.callback!(widget.list);
-                  setState(() {});
+                  widget.callback(widget.list);
                 }
-                //else if(widget.master == "kategori") {
-                // } else if(widget.master == "menu") {
-                // }
+                else if(widget.master == "kategori") {
+                  List<KategoriMenuModel> tempKategoriMenu = [];
+                  if (searchValue.isNotEmpty) {
+                    _masterMenuModel!.listKategoriMenu.forEach((rs) {
+                      if (rs.nama_jenis_menu
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase().toString()) || 
+                          rs.nama_kategori_menu
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase().toString())) {
+                        tempKategoriMenu.add(rs);
+                        widget.list = tempKategoriMenu;
+                      }
+
+                      if (tempKategoriMenu.isEmpty) {
+                        widget.list = [];
+                      }
+                    });
+                  } else {
+                    widget.list = _masterMenuModel!.listKategoriMenu;
+                  }
+                  widget.callback(widget.list);
+                } else if(widget.master == "menu") {
+                  List<MenuMerchantModel> tempMenuMerchant = [];
+                  if (searchValue.isNotEmpty) {
+                    _masterMenuModel!.listMenuMerchant.forEach((rs) {
+                      if (rs.nama_jenis_menu
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase().toString()) || 
+                          rs.nama_kategori_menu
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase().toString()) || 
+                          rs.nama_menu_merchant
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase().toString()) ||
+                          rs.harga
+                          .toLowerCase()
+                          .contains(searchValue.toLowerCase().toString())) {
+                        tempMenuMerchant.add(rs);
+                        widget.list = tempMenuMerchant;
+                      }
+
+                      if (tempMenuMerchant.isEmpty) {
+                        widget.list = [];
+                      }
+                    });
+                  } else {
+                    widget.list = _masterMenuModel!.listMenuMerchant;
+                  }
+                  widget.callback(widget.list);
+                }
               },
               style: const TextStyle(
                   color: Colors.black, fontFamily: "Poppins", fontSize: 14),
@@ -634,103 +709,107 @@ Widget kategoriMenuItem(List<KategoriMenuModel> data) => ListView.builder(
       },
     );
 
-Widget showJenisMenuItem(List<JenisMenuModel> data, BuildContext ctx) {
+Widget showJenisMenuItem(List<JenisMenuModel> data, BuildContext ctx, Function callback) {
   if (data.isNotEmpty) {
-    return Expanded(child: jenisMenuItem(data));
+    return Expanded(child: jenisMenuItem(data, callback));
   } else {
     return emptyDataWidget(ctx);
   }
 }
 
-Widget jenisMenuItem(List<JenisMenuModel>? data) => ListView.builder(
-      shrinkWrap: true,
-      itemCount: data!.length,
-      itemBuilder: (context, index) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          width: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                // width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                        color: const Color.fromARGB(255, 238, 238, 238)),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(.3),
-                        spreadRadius: 1,
-                        blurRadius: 4,
-                        offset: Offset(1, 4),
-                      )
-                    ]),
-                child: Row(
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 3, horizontal: 5),
-                      width: MediaQuery.of(context).size.width * .65,
-                      child: Text(
-                        data[index].nama_jenis_menu,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: "Poppins"),
-                      ),
+Widget jenisMenuItem(List<JenisMenuModel>? data, Function callback) => ListView.builder(
+    shrinkWrap: true,
+    itemCount: data!.length,
+    itemBuilder: (context, index) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        width: double.infinity,
+        child: Column(
+          children: [
+            Container(
+              // width: double.infinity,
+              height: 50,
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                      color: const Color.fromARGB(255, 238, 238, 238)),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(.3),
+                      spreadRadius: 1,
+                      blurRadius: 4,
+                      offset: Offset(1, 4),
+                    )
+                  ]),
+              child: Row(
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 3, horizontal: 5),
+                    width: MediaQuery.of(context).size.width * .65,
+                    child: Text(
+                      data[index].nama_jenis_menu,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Poppins"),
                     ),
-                    VerticalDivider(
-                      width: 5,
-                      thickness: 1,
-                      endIndent: 0,
-                      color: Colors.grey[200],
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: InkWell(
-                          child: Icon(
-                            Icons.edit_rounded,
-                            size: 25,
-                            color: Colors.amber[700],
-                          ),
+                  ),
+                  VerticalDivider(
+                    width: 5,
+                    thickness: 1,
+                    endIndent: 0,
+                    color: Colors.grey[200],
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: InkWell(
+                        onTap: (){
+                          EditMasterMenu().editDataJenis(
+                            data[index], context, callback);
+                        },
+                        child: Icon(
+                          Icons.edit_rounded,
+                          size: 25,
+                          color: Colors.amber[700],
                         ),
                       ),
                     ),
-                    VerticalDivider(
-                      width: 5,
-                      thickness: 1,
-                      endIndent: 0,
-                      color: Colors.grey[200],
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: InkWell(
-                          child: Icon(
-                            Icons.delete_rounded,
-                            size: 25,
-                            color: Colors.red[800],
-                          ),
+                  ),
+                  VerticalDivider(
+                    width: 5,
+                    thickness: 1,
+                    endIndent: 0,
+                    color: Colors.grey[200],
+                  ),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: InkWell(
+                        child: Icon(
+                          Icons.delete_rounded,
+                          size: 25,
+                          color: Colors.red[800],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    );
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    },
+  );
 
 class CustomButton extends StatelessWidget {
   final String text;

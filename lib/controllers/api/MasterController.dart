@@ -93,33 +93,26 @@ class MasterController {
     }
   }
 
-  static Future<HttpResponseModel> changePasswordFunction(String old_password,
-      String new_password, String confirm_new_password) async {
+  static Future<HttpResponseModel> editMasterJenis(String nama_jenis_menu,
+      String id,) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
     Map<String, String> body = {
-      "old_password": old_password,
-      "new_password": new_password,
-      "confirm_new_password": confirm_new_password,
+      "nama_jenis_menu": nama_jenis_menu,
+      "id": id,
+      "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
     };
 
     var req = await http.post(
-        Uri.parse("${AppConstants.apiBaseUrl}user/changePassword"),
+        Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis/edit"),
         body: body);
     try {
       var res = json.decode(req.body);
-      if (res['code'] == 200 && res['data'] != null) {
-        users.password = res['data'];
-        userModel = users;
-
-        UserPreferences.setUserLoggedIn(users);
-      }
-
       return HttpResponseModel(
-          code: res['code'], message: res['message'], data: userModel);
+          code: res['code'], message: res['message'], data: res['data']);
     } catch (e) {
       return HttpResponseModel(
           code: 500, message: "Terjadi Kesalahan \n $e", data: null);
