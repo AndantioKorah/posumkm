@@ -118,4 +118,28 @@ class MasterController {
           code: 500, message: "Terjadi Kesalahan \n $e", data: null);
     }
   }
+
+  static Future<HttpResponseModel> deleteMasterJenis(String id,) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "id": id,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis/delete"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
 }

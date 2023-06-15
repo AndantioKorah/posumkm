@@ -40,7 +40,7 @@ class EditMasterMenu{
                       width: MediaQuery.of(context).size.width * .2,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: Colors.black,
+                        color: Colors.grey[500],
                         borderRadius: BorderRadius.circular(50)
                       ),
                     ),
@@ -50,6 +50,7 @@ class EditMasterMenu{
                   ),
                   const SizedBox(height: 20,),
                   TextField(
+                    autofocus: true,
                     style: styleText.valueEditMaster,
                     controller: _namaJenisController,
                     decoration: InputDecoration(
@@ -84,8 +85,8 @@ class EditMasterMenu{
                           const Duration(seconds: 3),
                         ),
                         if(value.code == 200){
-                          callbackFunction
-                          // Navigator.of(context).pop()
+                          callbackFunction(""),
+                          Navigator.of(context).pop()
                         }
                       });
                     },

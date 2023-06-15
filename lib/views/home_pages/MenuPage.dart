@@ -11,8 +11,10 @@ import 'package:posumkm/models/JenisMenuModel.dart';
 import 'package:posumkm/models/MasterMenuModel.dart';
 import 'package:posumkm/utils/Utils.dart';
 import 'package:posumkm/views/home_pages/EditMasterMenu.dart';
+import 'package:posumkm/views/widget/ConfirmationDialog.dart';
 import 'package:posumkm/views/widget/EmptyDataImageWidget.dart';
 import 'package:posumkm/views/widget/LoadingImageWidget.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controllers/api/MasterController.dart';
@@ -75,8 +77,11 @@ class MenuPageState extends State<MenuPage> {
     });
   }
 
+  void _callbackRefreshMasterMenu(randomString){
+    _refreshMasterMenu();
+  }
+
   Future<HttpResponseModel> _refreshMasterMenu() async {
-    print("masuk sini harusnya");
     _showLoader = true;
     setState(() {});
     HttpResponseModel rs = await MasterController.getAllMasterMenu();
@@ -182,81 +187,6 @@ class MenuPageState extends State<MenuPage> {
                       searchController: searchJenis,
                       callback: _callbackJenisMenu,
                     ),
-                    // Container(
-                    //   padding: const EdgeInsets.symmetric(
-                    //       horizontal: 30, vertical: 20),
-                    //   width: double.infinity,
-                    //   child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.end,
-                    //       children: [
-                    //         Expanded(
-                    //           child: Container(
-                    //             height: 40,
-                    //             decoration: BoxDecoration(
-                    //                 color: Colors.white,
-                    //                 border: Border.all(color: Colors.white),
-                    //                 borderRadius: BorderRadius.circular(3),
-                    //                 boxShadow: [
-                    //                   BoxShadow(
-                    //                     color: Colors.grey.withOpacity(.3),
-                    //                     spreadRadius: 1,
-                    //                     blurRadius: 4,
-                    //                     offset: Offset(1, 4),
-                    //                   )
-                    //                 ]),
-                    //             child: TextField(
-                    //               controller: searchJenis,
-                    //               onChanged: (searchValue) {
-                    //                 _showLoader = true;
-                    //                 setState(() {});
-                    //                 // ignore: unrelated_type_equality_checks
-                    //                 // if(widget.master == "jenis"){
-                    //                 List<JenisMenuModel> tempJenisMenu = [];
-                    //                 if (searchValue.isNotEmpty) {
-                    //                   _listJenisMenu.forEach((rs) {
-                    //                     if (rs.nama_jenis_menu
-                    //                         .toLowerCase()
-                    //                         .contains(searchValue
-                    //                             .toLowerCase()
-                    //                             .toString())) {
-                    //                       tempJenisMenu.add(rs);
-                    //                       _listJenisMenu = tempJenisMenu;
-                    //                     }
-
-                    //                     if (tempJenisMenu.isEmpty) {
-                    //                       _listJenisMenu = [];
-                    //                     }
-                    //                   });
-                    //                 } else {
-                    //                   _listJenisMenu =
-                    //                       _masterMenuModel!.listJenisMenu;
-                    //                 }
-                    //                 _showLoader = false;
-                    //                 setState(() {});
-                    //                 // } else if(widget.master == "kategori") {
-                    //                 // } else if(widget.master == "menu") {
-                    //                 // }
-                    //               },
-                    //               style: const TextStyle(
-                    //                   color: Colors.black,
-                    //                   fontFamily: "Poppins",
-                    //                   fontSize: 14),
-                    //               decoration: const InputDecoration(
-                    //                   contentPadding:
-                    //                       EdgeInsets.only(right: 10, top: 8),
-                    //                   border: InputBorder.none,
-                    //                   hintText: "Cari Data",
-                    //                   hintStyle: TextStyle(
-                    //                     color: Colors.grey,
-                    //                     fontFamily: "Poppins",
-                    //                   ),
-                    //                   prefixIcon: Icon(Icons.search_rounded),
-                    //                   prefixIconColor: Colors.grey),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ]),
-                    // ),
                     const Divider(
                         height: 20, thickness: 1, color: Colors.white),
                     Row(
@@ -264,8 +194,14 @@ class MenuPageState extends State<MenuPage> {
                         _showLoader
                             ? loadingDataWidget(context)
                             : _listJenisMenu.isNotEmpty
-                                ? showJenisMenuItem(_listJenisMenu, context, _refreshMasterMenu)
-                                : emptyDataWidget(context)
+                                ? ShowJenisMenuItem(
+                                  data: _listJenisMenu,
+                                  callbackFunction: _callbackRefreshMasterMenu,
+                                )
+                                : emptyDataWidget(context),
+                        // FloatingActionButton(
+                        //   onPressed: () => print("haii")
+                        // )
                       ],
                     ),
                   ],
@@ -451,12 +387,6 @@ class _SearchFieldState extends State<SearchField> {
   }
 }
 
-// searchTroughList(List<dynamic> data, String master, String searchValue){
-//   if(master == "jenis"){
-//     temp = data; //simpan data yang sebelumnya terlebih dahulu
-//   }
-// }
-
 Widget showMenuMerchant(List<MenuMerchantModel> data, BuildContext ctx) {
   if (data.isNotEmpty) {
     return Expanded(child: showMenuMerchantList(data));
@@ -559,7 +489,7 @@ Widget showMenuMerchantList(List<MenuMerchantModel> data) => ListView.builder(
                         child: InkWell(
                           child: Icon(
                             Icons.edit_rounded,
-                            size: 25,
+                            size: 20,
                             color: Colors.amber[700],
                           ),
                         ),
@@ -578,7 +508,7 @@ Widget showMenuMerchantList(List<MenuMerchantModel> data) => ListView.builder(
                         child: InkWell(
                           child: Icon(
                             Icons.delete_rounded,
-                            size: 25,
+                            size: 20,
                             color: Colors.red[800],
                           ),
                         ),
@@ -675,7 +605,7 @@ Widget kategoriMenuItem(List<KategoriMenuModel> data) => ListView.builder(
                         child: InkWell(
                           child: Icon(
                             Icons.edit_rounded,
-                            size: 25,
+                            size: 20,
                             color: Colors.amber[700],
                           ),
                         ),
@@ -694,7 +624,7 @@ Widget kategoriMenuItem(List<KategoriMenuModel> data) => ListView.builder(
                         child: InkWell(
                           child: Icon(
                             Icons.delete_rounded,
-                            size: 25,
+                            size: 20,
                             color: Colors.red[800],
                           ),
                         ),
@@ -709,107 +639,170 @@ Widget kategoriMenuItem(List<KategoriMenuModel> data) => ListView.builder(
       },
     );
 
-Widget showJenisMenuItem(List<JenisMenuModel> data, BuildContext ctx, Function callback) {
-  if (data.isNotEmpty) {
-    return Expanded(child: jenisMenuItem(data, callback));
-  } else {
-    return emptyDataWidget(ctx);
-  }
+// ignore: must_be_immutable
+class ShowJenisMenuItem extends StatefulWidget {
+  List<JenisMenuModel> data;
+  Function callbackFunction;
+
+  ShowJenisMenuItem({
+    super.key,
+    required this.data,
+    required this.callbackFunction
+  });
+
+  @override
+  State<ShowJenisMenuItem> createState() => _ShowJenisMenuItemState();
 }
 
-Widget jenisMenuItem(List<JenisMenuModel>? data, Function callback) => ListView.builder(
-    shrinkWrap: true,
-    itemCount: data!.length,
-    itemBuilder: (context, index) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-        width: double.infinity,
-        child: Column(
-          children: [
-            Container(
-              // width: double.infinity,
-              height: 50,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                      color: const Color.fromARGB(255, 238, 238, 238)),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(.3),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: Offset(1, 4),
-                    )
-                  ]),
-              child: Row(
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+class _ShowJenisMenuItemState extends State<ShowJenisMenuItem> {
+  final RoundedLoadingButtonController _btnDeleteController = RoundedLoadingButtonController();
+
+  @override
+  Widget build(BuildContext context) {
+    if(widget.data.isEmpty){
+      return emptyDataWidget(context);
+    } else {
+      return Expanded(
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: widget.data.length,
+          itemBuilder: (context, index) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              width: double.infinity,
+              child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 3, horizontal: 5),
-                    width: MediaQuery.of(context).size.width * .65,
-                    child: Text(
-                      data[index].nama_jenis_menu,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Poppins"),
-                    ),
-                  ),
-                  VerticalDivider(
-                    width: 5,
-                    thickness: 1,
-                    endIndent: 0,
-                    color: Colors.grey[200],
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: InkWell(
-                        onTap: (){
-                          EditMasterMenu().editDataJenis(
-                            data[index], context, callback);
-                        },
-                        child: Icon(
-                          Icons.edit_rounded,
-                          size: 25,
-                          color: Colors.amber[700],
+                    // width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                            color: const Color.fromARGB(255, 238, 238, 238)),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(.3),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                            offset: const Offset(1, 4),
+                          )
+                        ]),
+                    child: Row(
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 5),
+                          width: MediaQuery.of(context).size.width * .65,
+                          child: Text(
+                            widget.data[index].nama_jenis_menu,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Poppins"),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  VerticalDivider(
-                    width: 5,
-                    thickness: 1,
-                    endIndent: 0,
-                    color: Colors.grey[200],
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: InkWell(
-                        child: Icon(
-                          Icons.delete_rounded,
-                          size: 25,
-                          color: Colors.red[800],
+                        VerticalDivider(
+                          width: 5,
+                          thickness: 1,
+                          endIndent: 0,
+                          color: Colors.grey[200],
                         ),
-                      ),
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: InkWell(
+                              onTap: () {
+                                EditMasterMenu().editDataJenis(
+                                  widget.data[index], context, widget.callbackFunction);
+                              },
+                              // onTap: (){
+                              //   widget.callbackFunction("haii");
+                              // },
+                              child: Icon(
+                                Icons.edit_rounded,
+                                size: 20,
+                                color: Colors.amber[700],
+                              ),
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          width: 5,
+                          thickness: 1,
+                          endIndent: 0,
+                          color: Colors.grey[200],
+                        ),
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            child: InkWell(
+                              onTap: (){
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.QUESTION,
+                                  animType: AnimType.TOPSLIDE,
+                                  title: "Hapus Data",
+                                  desc: "Apakah Anda yakin ingin menghapus data ini?",
+                                  showCloseIcon: true,
+                                  btnOk: RoundedLoadingButton(
+                                    height: 40,
+                                    color: Colors.red[900],
+                                    controller: _btnDeleteController,
+                                    onPressed: () {
+                                      MasterController.deleteMasterJenis(widget.data[index].id)
+                                      .then((value) {
+                                        httpToastDialog(
+                                          value,
+                                          context,
+                                          ToastGravity.BOTTOM,
+                                          const Duration(seconds: 3),
+                                          const Duration(seconds: 3)
+                                        );
+                                        if(value.code == 200){
+                                          Navigator.pop(context);
+                                          widget.callbackFunction("");
+                                        }
+                                        _btnDeleteController.reset();
+                                      });
+                                    },
+                                    child: const Text("Hapus", 
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white
+                                      ))
+                                    ),
+                                  // btnOkText: "Tutup",
+                                  // btnOkColor: Colors.red,
+                                ).show();
+                              },
+                              child: Icon(
+                                Icons.delete_rounded,
+                                size: 20,
+                                color: Colors.red[800],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  )
                 ],
               ),
-            )
-          ],
-        ),
+            );
+          },
+        )
       );
-    },
-  );
+    }
+  }
+}
 
 class CustomButton extends StatelessWidget {
   final String text;
