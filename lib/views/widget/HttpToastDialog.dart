@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../models/HttpResponseModel.dart';
 
@@ -17,9 +18,9 @@ void httpToastDialog(
   IconData _icon = Icons.close_rounded;
   Color? _icon_color = Colors.white;
 
-  if (res?.code == 200) {
+  if (res?.code == 200 || res?.code == 201) {
     _color = Colors.green[900];
-    _icon = Icons.check_circle_rounded;
+    _icon = FontAwesomeIcons.circleCheck;
     _icon_color = Colors.white;
   }
 

@@ -6,6 +6,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/models/HttpResponseModel.dart';
 import 'package:posumkm/models/JenisMenuModel.dart';
 import 'package:posumkm/models/MasterMenuModel.dart';
@@ -35,6 +36,7 @@ MasterMenuModel? _masterMenuModel;
 TextEditingController searchMenu = TextEditingController();
 TextEditingController searchJenis = TextEditingController();
 TextEditingController searchKategori = TextEditingController();
+int tabIndex = 0;
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -43,7 +45,7 @@ class MenuPage extends StatefulWidget {
   State<MenuPage> createState() => MenuPageState();
 }
 
-class MenuPageState extends State<MenuPage> {
+class MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin {
   void _callbackJenisMenu(newList) {
     setState(() {
       _showLoader = false;
@@ -78,11 +80,11 @@ class MenuPageState extends State<MenuPage> {
   }
 
   void _callbackRefreshMasterMenu(randomString){
-    _refreshMasterMenu();
+    _refreshMasterMenu(false);
   }
 
-  Future<HttpResponseModel> _refreshMasterMenu() async {
-    _showLoader = true;
+  Future<HttpResponseModel> _refreshMasterMenu(bool showLoader) async {
+    _showLoader = showLoader;
     setState(() {});
     HttpResponseModel rs = await MasterController.getAllMasterMenu();
 
@@ -112,10 +114,15 @@ class MenuPageState extends State<MenuPage> {
     return rs;
   }
 
+  void _changeTabIndex(int val){
+    tabIndex = val;
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
-    _refreshMasterMenu();
+    _refreshMasterMenu(true);
   }
 
   @override
@@ -127,7 +134,14 @@ class MenuPageState extends State<MenuPage> {
       },
       child: DefaultTabController(
         length: 3,
-        child: Scaffold(
+        child: Builder(builder: (BuildContext context){
+          final TabController tabController = DefaultTabController.of(context);
+          tabController.addListener(() {
+            if (!tabController.indexIsChanging) {
+              _changeTabIndex(tabController.index);
+            }
+          });
+          return Scaffold(
             backgroundColor: Colors.grey[100],
             appBar: AppBar(
               leading: IconButton(
@@ -145,7 +159,7 @@ class MenuPageState extends State<MenuPage> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: InkWell(
-                    onTap: () => _refreshMasterMenu().then((value) => {
+                    onTap: () => _refreshMasterMenu(true).then((value) => {
                           if (value.code != 200)
                             {
                               httpToastDialog(
@@ -175,6 +189,25 @@ class MenuPageState extends State<MenuPage> {
                   Tab(text: "Kategori"),
                   Tab(text: "Menu"),
                 ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              mini: true,
+              backgroundColor: theme.colorScheme.onPrimaryContainer,
+              clipBehavior: Clip.antiAlias,
+              onPressed: () {
+                if(tabIndex == 0){
+                  EditMasterMenu().editDataJenis(
+                    null, context, _callbackRefreshMasterMenu);
+                } else if(tabIndex == 1){
+                  EditMasterMenu().editDataKategori(
+                    null, context, _callbackRefreshMasterMenu);
+                }
+              },
+              child: const Icon(
+                FontAwesomeIcons.squarePlus,
+                size: 20,
+                color: Colors.white,
               ),
             ),
             body: TabBarView(
@@ -220,7 +253,7 @@ class MenuPageState extends State<MenuPage> {
                       children: [
                         _showLoader
                             ? loadingDataWidget(context)
-                            : showKategoriMenu(_listKategoriMenu, context)
+                            : showKategoriMenu(_listKategoriMenu, context, _callbackRefreshMasterMenu)
                       ],
                     )
                   ],
@@ -245,7 +278,8 @@ class MenuPageState extends State<MenuPage> {
                   ],
                 )
               ],
-            )),
+            ));
+        }),
       ),
     );
   }
@@ -523,121 +557,167 @@ Widget showMenuMerchantList(List<MenuMerchantModel> data) => ListView.builder(
       },
     );
 
-Widget showKategoriMenu(List<KategoriMenuModel> data, BuildContext ctx) {
+Widget showKategoriMenu(List<KategoriMenuModel> data,
+BuildContext ctx, Function callbackFunction){
+  RoundedLoadingButtonController _btnDeleteController = RoundedLoadingButtonController();
   if (data.isNotEmpty) {
-    return Expanded(child: kategoriMenuItem(data));
+    return Expanded(child: kategoriMenuItem(data, callbackFunction, _btnDeleteController));
   } else {
     return emptyDataWidget(ctx);
   }
 }
 
-Widget kategoriMenuItem(List<KategoriMenuModel> data) => ListView.builder(
-      shrinkWrap: true,
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        var jenisMenu = data[index].nama_jenis_menu != ""
-            ? data[index].nama_jenis_menu
-            : "-";
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          width: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                // width: double.infinity,
-                height: 60,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                        color: const Color.fromARGB(255, 238, 238, 238)),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(.3),
-                        spreadRadius: 1,
-                        blurRadius: 4,
-                        offset: Offset(1, 4),
+Widget kategoriMenuItem(List<KategoriMenuModel> data, Function callbackFunction, RoundedLoadingButtonController _btnDeleteController) => ListView.builder(
+  shrinkWrap: true,
+  itemCount: data.length,
+  itemBuilder: (context, index) {
+    var jenisMenu = data[index].nama_jenis_menu != ""
+        ? data[index].nama_jenis_menu
+        : "-";
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      width: double.infinity,
+      child: Column(
+        children: [
+          Container(
+            // width: double.infinity,
+            height: 60,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                    color: const Color.fromARGB(255, 238, 238, 238)),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(.3),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: Offset(1, 4),
+                  )
+                ]),
+            child: Row(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10, horizontal: 10),
+                  width: MediaQuery.of(context).size.width * .65,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data[index].nama_kategori_menu,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins"),
+                      ),
+                      Text(
+                        "Jenis: $jenisMenu",
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                            // fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins"),
                       )
-                    ]),
-                child: Row(
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      width: MediaQuery.of(context).size.width * .65,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data[index].nama_kategori_menu,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Poppins"),
-                          ),
-                          Text(
-                            "Jenis: $jenisMenu",
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.black,
-                                // fontWeight: FontWeight.w700,
-                                fontFamily: "Poppins"),
-                          )
-                        ],
-                      ),
-                    ),
-                    VerticalDivider(
-                      width: 5,
-                      thickness: 1,
-                      endIndent: 0,
-                      color: Colors.grey[200],
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: InkWell(
-                          child: Icon(
-                            Icons.edit_rounded,
-                            size: 20,
-                            color: Colors.amber[700],
-                          ),
-                        ),
-                      ),
-                    ),
-                    VerticalDivider(
-                      width: 5,
-                      thickness: 1,
-                      endIndent: 0,
-                      color: Colors.grey[200],
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: InkWell(
-                          child: Icon(
-                            Icons.delete_rounded,
-                            size: 20,
-                            color: Colors.red[800],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
-        );
-      },
+                VerticalDivider(
+                  width: 5,
+                  thickness: 1,
+                  endIndent: 0,
+                  color: Colors.grey[200],
+                ),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: InkWell(
+                      onTap: () {
+                        EditMasterMenu().editDataKategori(
+                          data[index], context, callbackFunction);
+                      },
+                      child: Icon(
+                        Icons.edit_rounded,
+                        size: 20,
+                        color: Colors.amber[700],
+                      ),
+                    ),
+                  ),
+                ),
+                VerticalDivider(
+                  width: 5,
+                  thickness: 1,
+                  endIndent: 0,
+                  color: Colors.grey[200],
+                ),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: InkWell(
+                      onTap: () => {
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.TOPSLIDE,
+                          title: "Hapus Data",
+                          desc: "Apakah Anda yakin ingin menghapus data ini?",
+                          showCloseIcon: true,
+                          btnOk: RoundedLoadingButton(
+                            height: 40,
+                            color: Colors.red[900],
+                            controller: _btnDeleteController,
+                            onPressed: () {
+                              MasterController.deleteMasterKategori(data[index].id)
+                              .then((value) {
+                                httpToastDialog(
+                                  value,
+                                  context,
+                                  ToastGravity.BOTTOM,
+                                  const Duration(seconds: 3),
+                                  const Duration(seconds: 3)
+                                );
+                                if(value.code == 200){
+                                  Navigator.pop(context);
+                                  callbackFunction("");
+                                }
+                                _btnDeleteController.reset();
+                              });
+                            },
+                            child: const Text("Hapus", 
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white
+                              ))
+                            ),
+                          // btnOkText: "Tutup",
+                          // btnOkColor: Colors.red,
+                        ).show()
+                      },
+                      child: Icon(
+                        Icons.delete_rounded,
+                        size: 20,
+                        color: Colors.red[800],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
+  },
+);
 
 // ignore: must_be_immutable
 class ShowJenisMenuItem extends StatefulWidget {

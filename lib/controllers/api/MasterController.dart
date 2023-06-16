@@ -93,6 +93,30 @@ class MasterController {
     }
   }
 
+  static Future<HttpResponseModel> tambahMasterJenis(String nama_jenis_menu) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "nama_jenis_menu": nama_jenis_menu,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis/create"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
   static Future<HttpResponseModel> editMasterJenis(String nama_jenis_menu,
       String id,) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -132,6 +156,83 @@ class MasterController {
 
     var req = await http.post(
         Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis/delete"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
+  static Future<HttpResponseModel> tambahMasterKategori(String nama_kategori_menu,
+  String id_m_jenis_menu) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "nama_kategori_menu": nama_kategori_menu,
+      "id_m_jenis_menu": id_m_jenis_menu,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/menu/kategori/create"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
+  static Future<HttpResponseModel> editMasterKategori(String nama_kategori_menu,
+      String id, String id_m_jenis_menu) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "nama_kategori_menu": nama_kategori_menu,
+      "id": id,
+      "id_m_jenis_menu": id_m_jenis_menu,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/menu/kategori/edit"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
+  static Future<HttpResponseModel> deleteMasterKategori(String id,) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "id": id,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/menu/kategori/delete"),
         body: body);
     try {
       var res = json.decode(req.body);

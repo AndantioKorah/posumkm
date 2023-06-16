@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Varela-Round',
           colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color.fromRGBO(34, 46, 60, 1)),
+              seedColor: Color.fromRGBO(34, 46, 60, 1)),
           useMaterial3: true,
         ),
         home: const SplashScreen(),
