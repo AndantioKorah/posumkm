@@ -201,7 +201,7 @@ class MenuPageState extends State<MenuPage> with SingleTickerProviderStateMixin 
                     null, context, _callbackRefreshMasterMenu);
                 } else if(tabIndex == 1){
                   EditMasterMenu().editDataKategori(
-                    null, context, _callbackRefreshMasterMenu);
+                    null, _listJenisMenu, context, _callbackRefreshMasterMenu);
                 }
               },
               child: const Icon(
@@ -641,7 +641,7 @@ Widget kategoriMenuItem(List<KategoriMenuModel> data, Function callbackFunction,
                     child: InkWell(
                       onTap: () {
                         EditMasterMenu().editDataKategori(
-                          data[index], context, callbackFunction);
+                          data[index], _listJenisMenu, context, callbackFunction);
                       },
                       child: Icon(
                         Icons.edit_rounded,

@@ -28,35 +28,38 @@ class MasterController {
           json.decode(preference.getString("userLoggedIn").toString()));
     }
     try {
-    var req = await http
-        .post(Uri.parse("${AppConstants.apiBaseUrl}master/menu"), body: {
-      "username": userLoggedInApps?.username,
-      "password": userLoggedInApps?.password,
-      "id_m_merchant": userLoggedInApps?.id_m_merchant,
-    });
+      var req = await http
+          .post(Uri.parse("${AppConstants.apiBaseUrl}master/menu"), body: {
+        "username": userLoggedInApps?.username,
+        "password": userLoggedInApps?.password,
+        "id_m_merchant": userLoggedInApps?.id_m_merchant,
+      });
 
-    var res = json.decode(req.body);
-    if (res['code'] == 200 && res['data'] != null) {
-      // masterMenuModel = MasterMenuModel.fromJson(json.decode(res['data'].toString()));
-      if(res['data']['jenis_menu'] != null){
-        listJenisMenuModel = convertToListJenisMenu(res['data']['jenis_menu']);
-      }
-      if(res['data']['kategori_menu'] != null){
-        listKategoriModel = convertToListKategoriMenu(res['data']['kategori_menu']);
-      }
-      if(res['data']['menu_merchant'] != null){
-        // print(res['data']['menu_merchant']);
-        listMenuMerchantModel = convertToListMenuMerchant(res['data']['menu_merchant']);
-      }
+      var res = json.decode(req.body);
+      if (res['code'] == 200 && res['data'] != null) {
+        // masterMenuModel = MasterMenuModel.fromJson(json.decode(res['data'].toString()));
+        if (res['data']['jenis_menu'] != null) {
+          listJenisMenuModel =
+              convertToListJenisMenu(res['data']['jenis_menu']);
+        }
+        if (res['data']['kategori_menu'] != null) {
+          listKategoriModel =
+              convertToListKategoriMenu(res['data']['kategori_menu']);
+        }
+        if (res['data']['menu_merchant'] != null) {
+          // print(res['data']['menu_merchant']);
+          listMenuMerchantModel =
+              convertToListMenuMerchant(res['data']['menu_merchant']);
+        }
 
-      masterMenuModel = MasterMenuModel(
-        listJenisMenu: listJenisMenuModel,
-        listKategoriMenu: listKategoriModel,
-        listMenuMerchant: listMenuMerchantModel);
-      res['message'] = "Data Sudah Terupdate";
-    }
-    return HttpResponseModel(
-        code: res['code'], message: res['message'], data: masterMenuModel);
+        masterMenuModel = MasterMenuModel(
+            listJenisMenu: listJenisMenuModel,
+            listKategoriMenu: listKategoriModel,
+            listMenuMerchant: listMenuMerchantModel);
+        res['message'] = "Data Sudah Terupdate";
+      }
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: masterMenuModel);
     } catch (e) {
       return HttpResponseModel(
           code: 500, message: "Terjadi Kesalahan \n $e", data: null);
@@ -70,30 +73,32 @@ class MasterController {
           json.decode(preference.getString("userLoggedIn").toString()));
     }
     try {
-    var req = await http
-        .post(Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis"), body: {
-      "username": userLoggedInApps?.username,
-      "password": userLoggedInApps?.password,
-      "id_m_merchant": userLoggedInApps?.id_m_merchant,
-    });
+      var req = await http.post(
+          Uri.parse("${AppConstants.apiBaseUrl}master/menu/jenis"),
+          body: {
+            "username": userLoggedInApps?.username,
+            "password": userLoggedInApps?.password,
+            "id_m_merchant": userLoggedInApps?.id_m_merchant,
+          });
 
-    var res = json.decode(req.body);
-    if (res['code'] == 200 && res['data'] != null) {
-      listJenisModel = convertToListJenisMenu(res['data']);
-      res['message'] = "Data Sudah Terupdate";
-      // await DBHelper.insertListJenisMenu(listJenisModel);
+      var res = json.decode(req.body);
+      if (res['code'] == 200 && res['data'] != null) {
+        listJenisModel = convertToListJenisMenu(res['data']);
+        res['message'] = "Data Sudah Terupdate";
+        // await DBHelper.insertListJenisMenu(listJenisModel);
 
-      // listJenisModel = await DBHelper.getAllJenisMenu();
-    }
-    return HttpResponseModel(
-        code: res['code'], message: res['message'], data: listJenisModel);
+        // listJenisModel = await DBHelper.getAllJenisMenu();
+      }
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: listJenisModel);
     } catch (e) {
       return HttpResponseModel(
           code: 500, message: "Terjadi Kesalahan \n $e", data: null);
     }
   }
 
-  static Future<HttpResponseModel> tambahMasterJenis(String nama_jenis_menu) async {
+  static Future<HttpResponseModel> tambahMasterJenis(
+      String nama_jenis_menu) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
@@ -117,8 +122,10 @@ class MasterController {
     }
   }
 
-  static Future<HttpResponseModel> editMasterJenis(String nama_jenis_menu,
-      String id,) async {
+  static Future<HttpResponseModel> editMasterJenis(
+    String nama_jenis_menu,
+    String id,
+  ) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
@@ -143,7 +150,9 @@ class MasterController {
     }
   }
 
-  static Future<HttpResponseModel> deleteMasterJenis(String id,) async {
+  static Future<HttpResponseModel> deleteMasterJenis(
+    String id,
+  ) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
@@ -167,8 +176,8 @@ class MasterController {
     }
   }
 
-  static Future<HttpResponseModel> tambahMasterKategori(String nama_kategori_menu,
-  String id_m_jenis_menu) async {
+  static Future<HttpResponseModel> tambahMasterKategori(
+      String nama_kategori_menu, String id_m_jenis_menu) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
@@ -193,8 +202,8 @@ class MasterController {
     }
   }
 
-  static Future<HttpResponseModel> editMasterKategori(String nama_kategori_menu,
-      String id, String id_m_jenis_menu) async {
+  static Future<HttpResponseModel> editMasterKategori(
+      String nama_kategori_menu, String id, String id_m_jenis_menu) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
@@ -220,7 +229,9 @@ class MasterController {
     }
   }
 
-  static Future<HttpResponseModel> deleteMasterKategori(String id,) async {
+  static Future<HttpResponseModel> deleteMasterKategori(
+    String id,
+  ) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
