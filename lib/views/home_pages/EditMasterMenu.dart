@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -146,7 +145,6 @@ class EditMasterMenu {
     late HttpResponseModel res;
     JenisMenuModel? selectedJenisMenu;
     String selectedId = "0";
-    JenisMenuModel? temp;
     if (listJenisMenu.isNotEmpty) {
       for (var data in listJenisMenu) {
         if (item != null) {

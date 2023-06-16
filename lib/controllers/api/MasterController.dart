@@ -8,7 +8,6 @@ import 'package:posumkm/models/KategoriMenuModel.dart';
 import 'package:posumkm/models/MasterMenuModel.dart';
 import 'package:posumkm/models/MenuMerchantModel.dart';
 import 'package:posumkm/models/UserModel.dart';
-import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 UserModel? userLoggedInApps;
