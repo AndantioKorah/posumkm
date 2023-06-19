@@ -63,6 +63,6 @@ fToast.showToast(
   ));
 
   if(res?.code == 302){
-    redirectLogout(context, res!.message!);
+    redirectLogout(context, "");
   }
 }
