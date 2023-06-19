@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:posumkm/controllers/api/UserController.dart';
 import 'package:posumkm/views/BaseLayoutPage.dart';
 import 'package:posumkm/views/SplashScreenPage.dart';
 import 'package:posumkm/views/widget/ChangePasswordWidget.dart';
+import 'package:posumkm/views/widget/Redicrect.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/ImageUtils.dart';
@@ -68,11 +70,7 @@ _showLogoutConfirmationDialog(BuildContext context) {
     // btnOkText: "Tutup",
     // btnOkColor: Colors.red,
     btnOkOnPress: () async {
-      final preference = await SharedPreferences.getInstance();
-      preference.clear();
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => SplashScreen()));
+      redirectLogout(context, "");
     },
     btnCancelOnPress: () {},
   ).show();

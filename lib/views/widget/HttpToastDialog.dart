@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:posumkm/views/widget/Redicrect.dart';
 
 import '../../models/HttpResponseModel.dart';
 
@@ -24,40 +25,44 @@ void httpToastDialog(
     _icon_color = Colors.white;
   }
 
-  fToast.showToast(
-      toastDuration: toastDuration,
-      gravity: gravity,
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        // padding: EdgeInsets.zero,
-        decoration: BoxDecoration(
-          color: _color,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                _icon,
-                size: 12,
-                color: _icon_color,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                res?.message ?? '',
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold),
-              )
-            ],
+fToast.showToast(
+  toastDuration: toastDuration,
+  gravity: gravity,
+  child: Container(
+    padding: const EdgeInsets.all(5),
+    // padding: EdgeInsets.zero,
+    decoration: BoxDecoration(
+      color: _color,
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: Material(
+      color: Colors.transparent,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            _icon,
+            size: 12,
+            color: _icon_color,
           ),
-        ),
-      ));
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            res?.message ?? '',
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+                fontSize: 12,
+                color: Colors.white,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
+    ),
+  ));
+
+  if(res?.code == 302){
+    redirectLogout(context, res!.message!);
+  }
 }

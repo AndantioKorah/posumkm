@@ -1,13 +1,20 @@
 import 'HttpResponseModel.dart';
 
 class JenisMenuModel extends HttpResponseModel {
-  String nama_jenis_menu = "", deskripsi = "", id = "", id_m_merchant = "";
-
+  String nama_jenis_menu = "",
+  deskripsi = "",
+  id = "",
+  id_m_merchant = "",
+  jumlah_kategori = "",
+  jumlah_menu = "";
+  
   JenisMenuModel({
     required this.id,
     required this.id_m_merchant,
     required this.nama_jenis_menu,
     required this.deskripsi,
+    required this.jumlah_kategori,
+    required this.jumlah_menu
   });
 
   Map<String, dynamic> toJson() {
@@ -16,6 +23,8 @@ class JenisMenuModel extends HttpResponseModel {
     result['id_m_merchant'] = id_m_merchant;
     result['nama_jenis_menu'] = nama_jenis_menu;
     result['deskripsi'] = deskripsi;
+    result['jumlah_kategori'] = jumlah_kategori;
+    result['jumlah_menu'] = jumlah_menu;
 
     return result;
   }
@@ -32,6 +41,14 @@ class JenisMenuModel extends HttpResponseModel {
     }
     if (json['deskripsi'] != null) {
       deskripsi = json['deskripsi'];
+    }
+
+    if (json['jumlah_kategori'] != null) {
+      jumlah_kategori = json['jumlah_kategori'];
+    }
+
+    if (json['jumlah_menu'] != null) {
+      jumlah_menu = json['jumlah_menu'];
     }
   }
 }

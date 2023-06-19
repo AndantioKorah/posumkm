@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:posumkm/config/constants.dart';
+import 'package:posumkm/main.dart';
 import 'package:posumkm/models/HttpResponseModel.dart';
 import 'package:posumkm/models/JenisMenuModel.dart';
 import 'package:posumkm/models/KategoriMenuModel.dart';
@@ -32,6 +33,7 @@ class MasterController {
         "username": userLoggedInApps?.username,
         "password": userLoggedInApps?.password,
         "id_m_merchant": userLoggedInApps?.id_m_merchant,
+        "device_id" : deviceData['deviceId']
       });
 
       var res = json.decode(req.body);
@@ -106,6 +108,8 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
+      "device_id" : deviceData['deviceId']
+
     };
 
     var req = await http.post(
@@ -134,6 +138,8 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
+      "device_id" : deviceData['deviceId']
+
     };
 
     var req = await http.post(
@@ -160,6 +166,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
+      "device_id" : deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -186,6 +193,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
+      "device_id" : deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -213,6 +221,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
+      "device_id" : deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -239,6 +248,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
+      "device_id" : deviceData['deviceId']
     };
 
     var req = await http.post(
