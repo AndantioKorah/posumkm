@@ -25,7 +25,6 @@ class MasterMenuModel extends HttpResponseModel {
   }
 
   MasterMenuModel.fromJson(Map<String, dynamic> json) {
-    print(json);
     if (json['jenis_menu'] != null) {
       listJenisMenu = json['jenis_menu'];
     }

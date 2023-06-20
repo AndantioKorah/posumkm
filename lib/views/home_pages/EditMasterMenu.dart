@@ -7,12 +7,14 @@ import 'package:posumkm/models/JenisMenuModel.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 import '../../models/KategoriMenuModel.dart';
+import '../../models/MenuMerchantModel.dart';
 import '../widget/HttpToastDialog.dart';
 
 class EditMasterMenu {
   final TextEditingController _namaJenisController = TextEditingController();
   final TextEditingController _namaKategoriController = TextEditingController();
   final TextEditingController _namaMenuController = TextEditingController();
+  final TextEditingController _hargaMenuController = TextEditingController();
   final RoundedLoadingButtonController _buttonSaveController =
       RoundedLoadingButtonController();
 
@@ -20,7 +22,7 @@ class EditMasterMenu {
       JenisMenuModel? item, BuildContext context, Function callbackFunction) {
     _namaJenisController.text = item != null ? item.nama_jenis_menu : '';
     String _title = item != null ? "EDIT MASTER JENIS" : "TAMBAH MASTER JENIS";
-    HttpResponseModel? res;
+    late HttpResponseModel res;
 
     showModalBottomSheet(
         isScrollControlled: true,
@@ -104,7 +106,7 @@ class EditMasterMenu {
                           const Duration(seconds: 3),
                           const Duration(seconds: 3),
                         );
-                        if (res!.code == 200 || res!.code == 201) {
+                        if (res.code == 200 || res.code == 201) {
                           callbackFunction("");
                           Navigator.of(context).pop();
                         }
@@ -306,6 +308,200 @@ class EditMasterMenu {
           );
         });
   }
+
+  void editDataMenuMerchant(
+    MenuMerchantModel? item,
+    List<KategoriMenuModel> listKategoriMenu,
+    BuildContext context,
+    Function callbackFunction) {
+      _namaMenuController.text = item != null ? item.nama_menu_merchant : '';
+      _hargaMenuController.text = item != null ? item.harga : '';
+      String _title =
+          item != null ? "EDIT MASTER MENU" : "TAMBAH MASTER MENU";
+      late HttpResponseModel res;
+      KategoriMenuModel? selectedKategoriMenu;
+      String selectedKategoriId = "0";
+
+      if (listKategoriMenu.isNotEmpty) {
+        for (var data in listKategoriMenu) {
+          if (item != null) {
+            if (data.id == item.id_m_kategori_menu) {
+              selectedKategoriMenu = data;
+              selectedKategoriId = selectedKategoriMenu.id;
+            }
+          } else {
+            selectedKategoriMenu = listKategoriMenu[0];
+            selectedKategoriId = selectedKategoriMenu.id;
+          }
+        }
+      }
+      showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (_) {
+          return Wrap(
+            children: [
+              Container(
+                padding: const EdgeInsets.only(
+                    top: 10, left: 15, right: 15, bottom: 30),
+                width: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        width: 100,
+                        height: 3,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[500],
+                            borderRadius: BorderRadius.circular(50)),
+                      ),
+                    ),
+                    Align(
+                      child: Text(
+                        _title,
+                        style: styleText.labelTitle,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    DropdownButtonFormField(
+                      focusColor: Colors.transparent,
+                      isExpanded: true,
+                      value:
+                          // selectedKategoriMenu != null ? selectedKategoriMenu : null,
+                          selectedKategoriMenu,
+                      icon: Icon(
+                        FontAwesomeIcons.chevronDown,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        size: 15,
+                      ),
+                      decoration: InputDecoration(
+                        labelText: "Pilih Kategori Menu",
+                        labelStyle: styleText.labelEditMaster,
+                        focusColor:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                        border: const OutlineInputBorder(),
+                      ),
+                      items: listKategoriMenu.map((var item) {
+                        return DropdownMenuItem(
+                          value: item,
+                          child: Text(item.nama_kategori_menu,
+                              style: styleText.labelDropDownItem),
+                        );
+                      }).toList(),
+                      onChanged: (KategoriMenuModel? selected) {
+                        if (selected != null) {
+                          selectedKategoriMenu = selected;
+                          selectedKategoriId = selectedKategoriMenu!.id;
+                        }
+                      },
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      autofocus: true,
+                      style: styleText.valueEditMaster,
+                      controller: _namaMenuController,
+                      decoration: InputDecoration(
+                        labelText: "Nama Menu",
+                        labelStyle: styleText.labelEditMaster,
+                        focusColor:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                        border: const OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      autofocus: true,
+                      style: styleText.valueEditMaster,
+                      controller: _hargaMenuController,
+                      decoration: InputDecoration(
+                        labelText: "Harga",
+                        labelStyle: styleText.labelEditMaster,
+                        focusColor:
+                            Theme.of(context).colorScheme.onPrimaryContainer,
+                        border: const OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    // InkWell(
+                    //   child: buttonSave(context)
+                    // ),
+                    RoundedLoadingButton(
+                      // resetAfterDuration: true,
+                      // resetDuration: const Duration(seconds: 3),
+                      borderRadius: 5,
+                      height: 45,
+                      controller: _buttonSaveController,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      onPressed: () async {
+                        if (item != null) {
+                          await MasterController.editMenuMerchant(
+                                  item.id,
+                                  _namaMenuController.text,
+                                  selectedKategoriId,
+                                  _hargaMenuController.text)
+                              .then((value) => {
+                                    res = value,
+                                  });
+                        } else {
+                          await MasterController.tambahMenuMerchant(
+                                  _namaMenuController.text,
+                                  selectedKategoriId,
+                                  _hargaMenuController.text)
+                              .then((value) => {
+                                    res = value,
+                                  });
+                        }
+                        _buttonSaveController.reset();
+                        // ignore: use_build_context_synchronously
+                        httpToastDialog(
+                          res,
+                          context,
+                          ToastGravity.BOTTOM,
+                          const Duration(seconds: 3),
+                          const Duration(seconds: 3),
+                        );
+                        if (res.code == 200 || res.code == 201) {
+                          callbackFunction("");
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.save_as_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Simpan",
+                              style: styleText.labelSaveButton,
+                            )
+                          ]),
+                    )
+                  ],
+                ),
+              )
+            ],
+          );
+        }
+      );
+      }
 }
 
 class styleText {

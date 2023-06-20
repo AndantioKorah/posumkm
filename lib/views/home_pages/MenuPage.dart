@@ -30,7 +30,7 @@ var sprf;
 List<JenisMenuModel> _listJenisMenu = [];
 List<KategoriMenuModel> _listKategoriMenu = [];
 List<MenuMerchantModel> _listMenuMerchant = [];
-MasterMenuModel? _masterMenuModel;
+late MasterMenuModel _masterMenuModel;
 TextEditingController searchMenu = TextEditingController();
 TextEditingController searchJenis = TextEditingController();
 TextEditingController searchKategori = TextEditingController();
@@ -95,17 +95,17 @@ class MenuPageState extends State<MenuPage>
     if (rs != null) {
       if (rs.code == 200) {
         _masterMenuModel = rs.data;
-        _listJenisMenu = _masterMenuModel!.listJenisMenu;
+        _listJenisMenu = _masterMenuModel.listJenisMenu;
         if (_listJenisMenu.isNotEmpty) {
           _jenisMenuEmpty = false;
         }
 
-        _listKategoriMenu = _masterMenuModel!.listKategoriMenu;
+        _listKategoriMenu = _masterMenuModel.listKategoriMenu;
         if (_listKategoriMenu.isNotEmpty) {
           _kategoriMenuEmpty = false;
         }
 
-        _listMenuMerchant = _masterMenuModel!.listMenuMerchant;
+        _listMenuMerchant = _masterMenuModel.listMenuMerchant;
         if (_listMenuMerchant.isNotEmpty) {
           _menuMerchantEmpty = false;
         }
@@ -213,6 +213,9 @@ class MenuPageState extends State<MenuPage>
                   } else if (tabIndex == 1) {
                     EditMasterMenu().editDataKategori(null, _listJenisMenu,
                         context, _callbackRefreshMasterMenu);
+                  } else if (tabIndex == 2) {
+                    EditMasterMenu().editDataMenuMerchant(null, _listKategoriMenu,
+                        context, _callbackRefreshMasterMenu);
                   }
                 },
                 child: const Icon(
@@ -285,7 +288,8 @@ class MenuPageState extends State<MenuPage>
                         children: [
                           _showLoader
                               ? loadingDataWidget(context)
-                              : showMenuMerchant(_listMenuMerchant, context)
+                              : showMenuMerchant(_listMenuMerchant, context,
+                                  _callbackRefreshMasterMenu)
                         ],
                       )
                     ],
@@ -345,7 +349,7 @@ class _SearchFieldState extends State<SearchField> {
                 if (widget.master == "jenis") {
                   List<JenisMenuModel> tempJenisMenu = [];
                   if (searchValue.isNotEmpty) {
-                    _masterMenuModel!.listJenisMenu.forEach((rs) {
+                    _masterMenuModel.listJenisMenu.forEach((rs) {
                       if (rs.nama_jenis_menu
                           .toLowerCase()
                           .contains(searchValue.toLowerCase().toString())) {
@@ -358,13 +362,13 @@ class _SearchFieldState extends State<SearchField> {
                       }
                     });
                   } else {
-                    widget.list = _masterMenuModel!.listJenisMenu;
+                    widget.list = _masterMenuModel.listJenisMenu;
                   }
                   widget.callback(widget.list);
                 } else if (widget.master == "kategori") {
                   List<KategoriMenuModel> tempKategoriMenu = [];
                   if (searchValue.isNotEmpty) {
-                    _masterMenuModel!.listKategoriMenu.forEach((rs) {
+                    _masterMenuModel.listKategoriMenu.forEach((rs) {
                       if (rs.nama_jenis_menu
                               .toLowerCase()
                               .contains(searchValue.toLowerCase().toString()) ||
@@ -380,13 +384,13 @@ class _SearchFieldState extends State<SearchField> {
                       }
                     });
                   } else {
-                    widget.list = _masterMenuModel!.listKategoriMenu;
+                    widget.list = _masterMenuModel.listKategoriMenu;
                   }
                   widget.callback(widget.list);
                 } else if (widget.master == "menu") {
                   List<MenuMerchantModel> tempMenuMerchant = [];
                   if (searchValue.isNotEmpty) {
-                    _masterMenuModel!.listMenuMerchant.forEach((rs) {
+                    _masterMenuModel.listMenuMerchant.forEach((rs) {
                       if (rs.nama_jenis_menu
                               .toLowerCase()
                               .contains(searchValue.toLowerCase().toString()) ||
@@ -408,7 +412,7 @@ class _SearchFieldState extends State<SearchField> {
                       }
                     });
                   } else {
-                    widget.list = _masterMenuModel!.listMenuMerchant;
+                    widget.list = _masterMenuModel.listMenuMerchant;
                   }
                   widget.callback(widget.list);
                 }
@@ -433,141 +437,185 @@ class _SearchFieldState extends State<SearchField> {
   }
 }
 
-Widget showMenuMerchant(List<MenuMerchantModel> data, BuildContext ctx) {
+Widget showMenuMerchant(List<MenuMerchantModel> data, BuildContext ctx, Function callbackFunction) {
   if (data.isNotEmpty) {
-    return Expanded(child: showMenuMerchantList(data));
+    return Expanded(child: showMenuMerchantList(data, callbackFunction));
   } else {
     return emptyDataWidget(ctx);
   }
 }
 
-Widget showMenuMerchantList(List<MenuMerchantModel> data) => ListView.builder(
-      shrinkWrap: true,
-      itemCount: data.length,
-      itemBuilder: (context, index) {
-        var jenisMenu = data[index].nama_jenis_menu != ""
-            ? data[index].nama_jenis_menu
-            : "-";
-        var kategoriMenu = data[index].nama_kategori_menu != ""
-            ? data[index].nama_kategori_menu
-            : "-";
-        var harga = data[index].harga != "" ? data[index].harga : "-";
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-          width: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                // width: double.infinity,
-                height: 88,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(
-                        color: const Color.fromARGB(255, 238, 238, 238)),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(.3),
-                        spreadRadius: 1,
-                        blurRadius: 4,
-                        offset: Offset(1, 4),
+Widget showMenuMerchantList(List<MenuMerchantModel> data, Function callbackFunction) => ListView.builder(
+  shrinkWrap: true,
+  itemCount: data.length,
+  itemBuilder: (context, index) {
+    RoundedLoadingButtonController _btnDeleteController = RoundedLoadingButtonController();
+    var jenisMenu = data[index].nama_jenis_menu != ""
+        ? data[index].nama_jenis_menu
+        : "-";
+    var kategoriMenu = data[index].nama_kategori_menu != ""
+        ? data[index].nama_kategori_menu
+        : "-";
+    var harga = data[index].harga != "" ? data[index].harga : "-";
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+      width: double.infinity,
+      child: Column(
+        children: [
+          Container(
+            // width: double.infinity,
+            height: 88,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                    color: const Color.fromARGB(255, 238, 238, 238)),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(.3),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: Offset(1, 4),
+                  )
+                ]),
+            child: Row(
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10, horizontal: 10),
+                  width: MediaQuery.of(context).size.width * .65,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data[index].nama_menu_merchant,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins"),
+                      ),
+                      Text(
+                        Utils().formatCurrency(harga, ""),
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Poppins"),
+                      ),
+                      Text(
+                        "Jenis: $jenisMenu",
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                            fontFamily: "Poppins"),
+                      ),
+                      Text(
+                        "Kategori: $kategoriMenu",
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 10,
+                            color: Colors.black,
+                            fontFamily: "Poppins"),
                       )
-                    ]),
-                child: Row(
-                  // crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      width: MediaQuery.of(context).size.width * .65,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            data[index].nama_menu_merchant,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Poppins"),
-                          ),
-                          Text(
-                            Utils().formatCurrency(harga, ""),
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: "Poppins"),
-                          ),
-                          Text(
-                            "Jenis: $jenisMenu",
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.black,
-                                fontFamily: "Poppins"),
-                          ),
-                          Text(
-                            "Kategori: $kategoriMenu",
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.black,
-                                fontFamily: "Poppins"),
-                          )
-                        ],
-                      ),
-                    ),
-                    VerticalDivider(
-                      width: 5,
-                      thickness: 1,
-                      endIndent: 0,
-                      color: Colors.grey[200],
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: InkWell(
-                          child: Icon(
-                            FontAwesomeIcons.penToSquare,
-                            size: 16,
-                            color: Colors.amber[700],
-                          ),
-                        ),
-                      ),
-                    ),
-                    VerticalDivider(
-                      width: 5,
-                      thickness: 1,
-                      endIndent: 0,
-                      color: Colors.grey[200],
-                    ),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: InkWell(
-                          child: Icon(
-                            Icons.delete_rounded,
-                            size: 20,
-                            color: Colors.red[800],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
-        );
-      },
+                VerticalDivider(
+                  width: 5,
+                  thickness: 1,
+                  endIndent: 0,
+                  color: Colors.grey[200],
+                ),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: InkWell(
+                      onTap: () {
+                        EditMasterMenu().editDataMenuMerchant(data[index],
+                            _listKategoriMenu, context, callbackFunction);
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.penToSquare,
+                        size: 16,
+                        color: Colors.amber[700],
+                      ),
+                    ),
+                  ),
+                ),
+                VerticalDivider(
+                  width: 5,
+                  thickness: 1,
+                  endIndent: 0,
+                  color: Colors.grey[200],
+                ),
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: InkWell(
+                      onTap: () {
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.TOPSLIDE,
+                          title: "Hapus Data",
+                          desc:
+                              "Apakah Anda yakin ingin menghapus data ini?",
+                          showCloseIcon: true,
+                          btnOk: RoundedLoadingButton(
+                          height: 40,
+                          color: Colors.red[900],
+                          controller: _btnDeleteController,
+                          onPressed: () {
+                            MasterController.deleteMenuMerchant(
+                                    data[index].id)
+                                .then((value) {
+                              httpToastDialog(
+                                  value,
+                                  context,
+                                  ToastGravity.BOTTOM,
+                                  const Duration(seconds: 3),
+                                  const Duration(seconds: 3));
+                              if (value.code == 200) {
+                                Navigator.pop(context);
+                                callbackFunction("");
+                              }
+                              _btnDeleteController.reset();
+                            });
+                          },
+                          child: const Text("Hapus",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white))),
+                      // btnOkText: "Tutup",
+                      // btnOkColor: Colors.red,
+                    ).show();
+                      },
+                      child: Icon(
+                        Icons.delete_rounded,
+                        size: 20,
+                        color: Colors.red[800],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
+  },
+);
 
 Widget showKategoriMenu(
     List<KategoriMenuModel> data, BuildContext ctx, Function callbackFunction) {

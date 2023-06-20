@@ -35,7 +35,6 @@ class MasterController {
         "id_m_merchant": userLoggedInApps?.id_m_merchant,
         "device_id" : deviceData['deviceId']
       });
-
       var res = json.decode(req.body);
       if (res['code'] == 200 && res['data'] != null) {
         // masterMenuModel = MasterMenuModel.fromJson(json.decode(res['data'].toString()));
@@ -48,7 +47,6 @@ class MasterController {
               convertToListKategoriMenu(res['data']['kategori_menu']);
         }
         if (res['data']['menu_merchant'] != null) {
-          // print(res['data']['menu_merchant']);
           listMenuMerchantModel =
               convertToListMenuMerchant(res['data']['menu_merchant']);
         }
@@ -60,7 +58,7 @@ class MasterController {
         res['message'] = "Data Sudah Terupdate";
       }
       return HttpResponseModel(
-          code: res['code'], message: res['message'], data: masterMenuModel);
+          code: res['code'], message: res['message'], data: res['code'] == 200 ? masterMenuModel : null);
     } catch (e) {
       return HttpResponseModel(
           code: 500, message: "Terjadi Kesalahan \n $e", data: null);
@@ -253,6 +251,90 @@ class MasterController {
 
     var req = await http.post(
         Uri.parse("${AppConstants.apiBaseUrl}master/menu/kategori/delete"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
+  static Future<HttpResponseModel> tambahMenuMerchant(
+      String nama_menu_merchant, String id_m_kategori_menu, String harga) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "nama_menu_merchant": nama_menu_merchant,
+      "id_m_kategori_menu": id_m_kategori_menu,
+      "harga": harga,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+      "device_id" : deviceData['deviceId']
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/merchant/menu/create"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
+  static Future<HttpResponseModel> editMenuMerchant(
+      String id, String nama_menu_merchant, String id_m_kategori_menu, String harga) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "id": id,
+      "nama_menu_merchant": nama_menu_merchant,
+      "id_m_kategori_menu": id_m_kategori_menu,
+      "harga": harga,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+      "device_id" : deviceData['deviceId']
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/merchant/menu/edit"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
+  static Future<HttpResponseModel> deleteMenuMerchant(
+    String id,
+  ) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "id": id,
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+      "device_id" : deviceData['deviceId']
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}master/merchant/menu/delete"),
         body: body);
     try {
       var res = json.decode(req.body);

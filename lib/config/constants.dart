@@ -1,3 +1,3 @@
 class AppConstants {
-  static const apiBaseUrl = "http://localhost/posumkmws/api/";
+  static const apiBaseUrl = "https://posumkmws.bkadyospan.com/api/";
 }

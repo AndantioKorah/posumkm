@@ -6,7 +6,7 @@ import 'package:posumkm/views/widget/Redicrect.dart';
 import '../../models/HttpResponseModel.dart';
 
 void httpToastDialog(
-  HttpResponseModel? res,
+  HttpResponseModel res,
   BuildContext context,
   ToastGravity gravity,
   Duration toastDuration,
@@ -19,7 +19,7 @@ void httpToastDialog(
   IconData _icon = Icons.close_rounded;
   Color? _icon_color = Colors.white;
 
-  if (res?.code == 200 || res?.code == 201) {
+  if (res.code == 200 || res.code == 201) {
     _color = Colors.green[900];
     _icon = FontAwesomeIcons.circleCheck;
     _icon_color = Colors.white;
@@ -49,7 +49,7 @@ fToast.showToast(
             width: 5,
           ),
           Text(
-            res?.message ?? '',
+            res.message ?? '',
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
                 fontSize: 12,
@@ -61,8 +61,8 @@ fToast.showToast(
       ),
     ),
   ));
-
-  if(res?.code == 302){
+  
+  if(res.code == 302){
     redirectLogout(context, "");
   }
 }
