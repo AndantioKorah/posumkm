@@ -15,7 +15,7 @@ import 'package:posumkm/main.dart';
 
 import '../models/UserModel.dart';
 import '../utils/ImageUtils.dart';
-import 'TransactionPage.dart';
+import 'transaction/TransactionPage.dart';
 
 UserModel? userLoggedIn;
 
