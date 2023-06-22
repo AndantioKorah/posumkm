@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:posumkm/views/transaction/InputTransactionPage.dart';
 
 import '../../main.dart';
 
@@ -29,7 +31,13 @@ class _TransactionPageState extends State<TransactionPage> {
             color: theme.colorScheme.onPrimaryContainer,
           ),
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+              context,
+              PageTransition(
+                  child: InputTransactionPage(),
+                  type: PageTransitionType.bottomToTop));
+            },
             child: Icon(
               FontAwesomeIcons.plus,
               color: Colors.white,
@@ -53,7 +61,8 @@ class _TransactionPageState extends State<TransactionPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                },
                 child: const Icon(
                   Icons.refresh_rounded,
                   size: 20,
