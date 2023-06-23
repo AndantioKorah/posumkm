@@ -10,6 +10,7 @@ class MenuMerchantModel extends HttpResponseModel {
   harga = "",
   nama_jenis_menu = "",
   nama_kategori_menu = "";
+  int? selectedCount = 0;
 
   MenuMerchantModel({
     required this.id,
@@ -21,6 +22,7 @@ class MenuMerchantModel extends HttpResponseModel {
     required this.deskripsi,
     required this.nama_jenis_menu,
     required this.nama_kategori_menu,
+    this.selectedCount
   });
 
   Map<String, dynamic> toJson() {

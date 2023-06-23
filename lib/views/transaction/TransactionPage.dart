@@ -24,20 +24,20 @@ class _TransactionPageState extends State<TransactionPage> {
 
     return Expanded(
       child: Scaffold(
-        floatingActionButton: Container(
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: theme.colorScheme.onPrimaryContainer,
-          ),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
+        floatingActionButton: InkWell(
+          onTap: (){
+            Navigator.push(
               context,
               PageTransition(
                   child: InputTransactionPage(),
                   type: PageTransitionType.bottomToTop));
-            },
+          },
+          child: Container(
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: theme.colorScheme.onPrimaryContainer,
+            ),
             child: Icon(
               FontAwesomeIcons.plus,
               color: Colors.white,

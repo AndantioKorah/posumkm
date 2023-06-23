@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -69,6 +71,7 @@ class _InputTransactionState extends State<InputTransactionPage> {
         return true;
       },
       child: Scaffold(
+        backgroundColor: Colors.grey[100],
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(
@@ -107,59 +110,191 @@ class _InputTransactionState extends State<InputTransactionPage> {
         body: SafeArea(
           child: Row(
             children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                width: sizeScreen.width * .4,
-                decoration: BoxDecoration(
-                  // borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(.3),
-                      spreadRadius: 1,
-                      blurRadius: 4,
-                      offset: const Offset(4, 1),
-                    )
-                  ],
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.blueGrey,
-                      theme.colorScheme.onPrimaryContainer,
-                    ]
-                  )
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 40,
-                      child: TextField(
-                        // autofocus: true,
-                        style: TrxTxtStyle.valTxtField,
-                        cursorColor: Colors.white,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                          labelText: "Nama",
-                          labelStyle: TrxTxtStyle.lblTxtField,
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 1, color: Colors.white
-                            )                 
-                          ),
-                          border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 1, color: Color.fromARGB(100, 255, 255, 255)
-                            )                 
+              Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    width: sizeScreen.width * .4,
+                    decoration: BoxDecoration(
+                      // borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0),
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: const Offset(4, 0),
+                        )
+                      ],
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Colors.blueGrey,
+                          theme.colorScheme.onPrimaryContainer,
+                        ]
+                      )
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 40,
+                          child: TextField(
+                            // autofocus: true,
+                            style: TrxTxtStyle.valTxtField,
+                            cursorColor: Colors.white,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                              labelText: "Nama",
+                              labelStyle: TrxTxtStyle.lblTxtField,
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1, color: Colors.white
+                                )                 
+                              ),
+                              border: const OutlineInputBorder(),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1, color: Color.fromARGB(100, 255, 255, 255)
+                                )                 
+                              ),
+                            ),
                           ),
                         ),
+                        Container(
+                          height: 40,
+                          margin: const EdgeInsets.only(top: 10),
+                          child: TextField(
+                            // autofocus: true,
+                            style: TrxTxtStyle.valTxtField,
+                            cursorColor: Colors.white,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                              labelText: "Tgl. Transaksi",
+                              labelStyle: TrxTxtStyle.lblTxtField,
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1, color: Colors.white
+                                )                 
+                              ),
+                              border: const OutlineInputBorder(),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1, color: Color.fromARGB(100, 255, 255, 255)
+                                )                 
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 10),
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                              child: SingleChildScrollView(
+                                child: Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent.withOpacity(.5),
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(.3),
+                                        spreadRadius: 1,
+                                        blurRadius: 4,
+                                        offset: const Offset(1, 4),
+                                      )
+                                    ]
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      const Text("List Item:", style: TrxTxtStyle.totTagihanText,),
+                                      const SizedBox(height: 5,),
+                                      Table(
+                                        children: [
+                                          TableRow(
+                                            children: [
+                                              Column(
+                                                children: [
+                                                  for(var i = 0; i < 1; i ++)
+                                                  rowItemDetail(context,
+                                                    "Jus Manggasss",
+                                                    "20000",
+                                                    "2",
+                                                    "10000"
+                                                  ),
+                                                ],
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // ),
+                          ),
+                        ),
+                        const SizedBox(height: 40,)
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: InkWell(
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        width: sizeScreen.width * .4,
+                        child: Wrap(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+                              // height: 30,
+                              decoration: BoxDecoration(
+                                color: Colors.green[900],
+                                borderRadius: BorderRadius.circular(40),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(1),
+                                    offset: const Offset(0, 0),
+                                    spreadRadius: 1,
+                                    blurRadius: 100
+                                  )
+                                ]
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: const Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Total:", style: TrxTxtStyle.totTagihanText,),
+                                        Text("3.000.000", style: TrxTxtStyle.totTagihanVal,),
+                                      ],
+                                    ),
+                                  ),
+                                  const Icon(
+                                    FontAwesomeIcons.circleChevronRight,
+                                    color: Colors.white,
+                                    size: 14,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                ],
               ),
               Container(
-                color: Colors.grey[100],
+                color: Colors.transparent,
                 height: double.infinity,
                 width: sizeScreen.width * .6,
                 child: Stack(
@@ -416,6 +551,56 @@ class _InputTransactionState extends State<InputTransactionPage> {
   }
 }
 
+Widget rowItemDetail(
+  BuildContext context,
+  String namaMenu,
+  String totalHarga,
+  String qty,
+  String hargaSatuan,) => Container(
+    margin: const EdgeInsets.only(bottom: 5),
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                color: Colors.transparent,
+                width: constraints.maxWidth * .65,
+                child: Text(namaMenu, style: TrxTxtStyle.lblDetailItem,),
+              ),
+              Text(Utils().formatCurrency(totalHarga, "nonSymbol"),
+                style: TrxTxtStyle.lblTotDetailItem,)
+            ],
+          );
+        },
+      ),
+      const SizedBox(height: 3,),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("$qty x ${Utils().formatCurrency(hargaSatuan, "nonSymbol")}", style: TrxTxtStyle.lblHrgSatuanItem,),
+          InkWell(
+            onTap: (){},
+            child: const Icon(
+              FontAwesomeIcons.trashCan,
+              color: Colors.red,
+              size: 12,
+            ),
+          )
+        ],
+      ),
+      const SizedBox(height: 5,),
+      LineDividerWidget(
+        color: Colors.grey.withOpacity(.3),
+      )
+    ],
+  ),
+  );
+
 class TrxTxtStyle{
   static var lblTxtField = TextStyle(
     fontSize: 12,
@@ -473,7 +658,7 @@ class TrxTxtStyle{
   );
 
   static const lblBtnTotal = TextStyle(
-    fontSize: 12,
+    fontSize: 14,
     color: Colors.white,
     // fontWeight: FontWeight.bold,
     fontFamily: "Poppins"
@@ -484,5 +669,40 @@ class TrxTxtStyle{
     color: Colors.white,
     fontWeight: FontWeight.bold,
     fontFamily: "Poppins"
+  );
+
+  static const totTagihanText = TextStyle(
+    fontFamily: "Poppins",
+    fontSize: 10,
+    color: Colors.white,
+    // fontWeight: FontWeight.bold
+  );
+
+  static const lblDetailItem = TextStyle(
+    // fontFamily: "Poppins",
+    fontSize: 10,
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const lblHrgSatuanItem = TextStyle(
+    // fontFamily: "Poppins",
+    fontSize: 10,
+    color: Color.fromARGB(255, 154, 183, 198),
+    fontWeight: FontWeight.bold,
+  );
+
+  static const lblTotDetailItem = TextStyle(
+    // fontFamily: "Poppins",
+    fontSize: 10,
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+  );
+
+  static const totTagihanVal = TextStyle(
+    fontFamily: "Poppins",
+    fontSize: 16,
+    color: Colors.white,
+    fontWeight: FontWeight.bold
   );
 }
