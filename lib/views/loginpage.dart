@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:posumkm/controllers/api/UserController.dart';
+import 'package:posumkm/main.dart';
 import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -165,6 +166,10 @@ class _LoginPageState extends State<LoginPage> {
                                 animateOnTap: true,
                                 color: theme.colorScheme.onPrimaryContainer,
                                 controller: buttonSumbit,
+                                // onPressed: () {
+                                //   buttonSumbit.reset();
+                                //   print(deviceData['deviceId']);
+                                // },
                                 onPressed: () => UserController.loginFunction(
                                         userName.text, password.text)
                                     .then((value) {

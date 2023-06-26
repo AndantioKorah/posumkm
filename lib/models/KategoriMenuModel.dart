@@ -6,7 +6,8 @@ class KategoriMenuModel extends HttpResponseModel {
   id = "", 
   id_m_merchant = "", 
   id_m_jenis_menu = "",
-  nama_jenis_menu = "";
+  nama_jenis_menu = "",
+  jumlah_menu = "";
 
   KategoriMenuModel({
     required this.id,
@@ -15,6 +16,7 @@ class KategoriMenuModel extends HttpResponseModel {
     required this.nama_kategori_menu,
     required this.nama_jenis_menu,
     required this.deskripsi,
+    required this.jumlah_menu,
   });
 
   Map<String, dynamic> toJson() {
@@ -25,6 +27,7 @@ class KategoriMenuModel extends HttpResponseModel {
     result['nama_kategori_menu'] = nama_kategori_menu;
     result['nama_jenis_menu'] = nama_jenis_menu;
     result['deskripsi'] = deskripsi;
+    result['jumlah_menu'] = jumlah_menu;
 
     return result;
   }
@@ -47,6 +50,9 @@ class KategoriMenuModel extends HttpResponseModel {
     }
     if (json['deskripsi'] != null) {
       deskripsi = json['deskripsi'];
+    }
+    if (json['jumlah_menu'] != null) {
+      jumlah_menu = json['jumlah_menu'];
     }
   }
 }

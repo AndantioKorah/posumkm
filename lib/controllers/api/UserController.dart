@@ -16,6 +16,28 @@ class UserController {
         .post(Uri.parse("${AppConstants.apiBaseUrl}user/login"), body: {
       "username": username,
       "password": password,
+      "device_id": deviceData['deviceId']
+    });
+    
+    try {
+      var res = json.decode(req.body);
+      if (res['code'] == 200 && res['data'] != null) {
+        userModel = UserModel.fromJson(res['data']);
+      }
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: userModel);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
+  static Future<HttpResponseModel> logoutWs(
+      String username, String password) async {
+    var req = await http
+        .post(Uri.parse("${AppConstants.apiBaseUrl}user/logout"), body: {
+      "username": username,
+      "password": password,
     });
 
     try {

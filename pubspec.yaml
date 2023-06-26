@@ -54,6 +54,8 @@ dependencies:
   sqflite_common_ffi: ^2.2.5
   money_formatter: ^0.0.4
   dropdown_search: ^5.0.6
+  device_info_plus: ^9.0.2
+  floating_bottom_bar: ^0.0.2
 
 flutter_native_splash:
   android: true
