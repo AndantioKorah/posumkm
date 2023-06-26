@@ -19,7 +19,7 @@ class ToastDialog{
 
   void showDialog(){
     final fToast = FToast().init(context);
-    var theme = Theme.of(context);
+    // var theme = Theme.of(context);
 
     // color = theme.colorScheme.onPrimaryContainer;
 
