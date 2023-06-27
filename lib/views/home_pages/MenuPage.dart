@@ -246,7 +246,7 @@ class MenuPageState extends State<MenuPage>
                                       callbackFunction:
                                           _callbackRefreshMasterMenu,
                                     )
-                                  : emptyDataWidget(context),
+                                  : emptyDataWidget(context, null),
                           // FloatingActionButton(
                           //   onPressed: () => print("haii")
                           // )
@@ -441,7 +441,7 @@ Widget showMenuMerchant(List<MenuMerchantModel> data, BuildContext ctx, Function
   if (data.isNotEmpty) {
     return Expanded(child: showMenuMerchantList(data, callbackFunction));
   } else {
-    return emptyDataWidget(ctx);
+    return emptyDataWidget(ctx, null);
   }
 }
 
@@ -625,7 +625,7 @@ Widget showKategoriMenu(
     return Expanded(
         child: kategoriMenuItem(data, callbackFunction, _btnDeleteController));
   } else {
-    return emptyDataWidget(ctx);
+    return emptyDataWidget(ctx, null);
   }
 }
 
@@ -823,7 +823,7 @@ class _ShowJenisMenuItemState extends State<ShowJenisMenuItem> {
   @override
   Widget build(BuildContext context) {
     if (widget.data.isEmpty) {
-      return emptyDataWidget(context);
+      return emptyDataWidget(context, null);
     } else {
       return Expanded(
           child: ListView.builder(

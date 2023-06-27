@@ -57,6 +57,7 @@ dependencies:
   device_info_plus: ^9.0.2
   floating_bottom_bar: ^0.0.2
   searchable_listview: ^2.4.0
+  intl: ^0.18.1
 
 flutter_native_splash:
   android: true

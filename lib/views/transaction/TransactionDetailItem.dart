@@ -1,15 +1,72 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/views/transaction/InputTransactionPage.dart';
+import 'package:posumkm/views/widget/ToastDialog.dart';
 
 import '../../utils/Utils.dart';
 
-class TransactionDetailitem extends StatelessWidget {
+// ignore: must_be_immutable
+class TransactionDetailitem extends StatefulWidget {
   var listDataItem;
   var selectedDataItem;
 
   TransactionDetailitem(
       {super.key, required this.listDataItem, required this.selectedDataItem});
+
+  @override
+  State<TransactionDetailitem> createState() => _TransactionDetailitemState();
+}
+
+class _TransactionDetailitemState extends State<TransactionDetailitem> {
+  DateTime selectedDate = DateTime.now();
+  TextEditingController tglTransaksi = TextEditingController();
+  TextEditingController waktuTransaki = TextEditingController();
+  TextEditingController nama = TextEditingController();
+  DateTime? datePicked;
+  TimeOfDay? timePicked;
+  TimeOfDay selectedTime = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+
+  Future<void> _selectDate(BuildContext context) async {
+    datePicked = await showDatePicker(
+      confirmText: "Lanjut",
+      cancelText: "Batal",
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101)
+    );
+    if(datePicked != null && datePicked != selectedDate) {
+      setState(() {
+        selectedDate = datePicked!;
+      });
+      // ignore: use_build_context_synchronously
+      timePicked = await showTimePicker(
+        context: context, 
+        initialTime: selectedTime
+      );
+      if(timePicked != null){
+        setState(() {
+          selectedTime = timePicked!;
+          selectedDate = DateTime(
+            selectedDate.year,
+            selectedDate.month,
+            selectedDate.day,
+            timePicked!.hour,
+            timePicked!.minute
+          );
+          tglTransaksi.text = Utils().
+            formatDate(selectedDate.toString(), "/");
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    tglTransaksi.text = Utils().formatDate(selectedDate.toString(), "/");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,25 +117,37 @@ class TransactionDetailitem extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                height: 40,
-                margin: const EdgeInsets.only(top: 10),
-                child: TextField(
-                  // autofocus: true,
-                  style: TrxTxtStyle.valTxtField,
-                  cursorColor: Colors.white,
-                  decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    labelText: "Tgl. Transaksi",
-                    labelStyle: TrxTxtStyle.lblTxtField,
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
-                    border: const OutlineInputBorder(),
-                    enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 1,
-                            color: Color.fromARGB(100, 255, 255, 255))),
+              InkWell(
+                onTap: (){
+                  _selectDate(context);
+                },
+                child: Container(
+                  height: 40,
+                  margin: const EdgeInsets.only(top: 10),
+                  child: TextField(
+                    controller: tglTransaksi,
+                    enabled: false,
+                    // autofocus: true,
+                    style: TrxTxtStyle.valTxtField,
+                    cursorColor: Colors.white,
+                    decoration: InputDecoration(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      labelText: "Tgl. Transaksi",
+                      labelStyle: TrxTxtStyle.lblTxtField,
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.white)),
+                      border: const OutlineInputBorder(),
+                      disabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(100, 255, 255, 255))),
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(100, 255, 255, 255))),
+                              // color: Color.fromARGB(100, 255, 255, 255))),
+                    ),
                   ),
                 ),
               ),
@@ -118,14 +187,14 @@ class TransactionDetailitem extends StatelessWidget {
                                   Column(
                                     children: [
                                       for (var i = 0;
-                                          i < listDataItem.length;
+                                          i < widget.listDataItem.length;
                                           i++) ...{
-                                        if (selectedDataItem.containsKey(
-                                            listDataItem[i].id)) ...{
+                                        if (widget.selectedDataItem.containsKey(
+                                            widget.listDataItem[i].id)) ...{
                                           rowItemDetail(
                                               context,
-                                              selectedDataItem[
-                                                  listDataItem[i].id]!)
+                                              widget.selectedDataItem[
+                                                  widget.listDataItem[i].id]!)
                                         }
                                       }
                                     ],
@@ -150,6 +219,19 @@ class TransactionDetailitem extends StatelessWidget {
         Align(
           alignment: Alignment.bottomCenter,
           child: InkWell(
+            onTap: () {
+              if(selectedMenu.length == 0){
+                ToastDialog(
+                  context: context,
+                  color: const Color.fromARGB(255, 183, 28, 28),
+                  message: "Belum ada menu yang dipilih",
+                  icon: Icons.remove_circle_outline_sharp,
+                  gravity: ToastGravity.BOTTOM
+                ).showDialog();
+              } else {
+
+              }
+            },
             child: Container(
               padding: const EdgeInsets.all(5),
               width: sizeScreen.width * .4,

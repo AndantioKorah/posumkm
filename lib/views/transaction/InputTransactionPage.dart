@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // import 'package:page_transition/page_transition.dart';
 import 'package:posumkm/utils/Utils.dart';
@@ -18,7 +17,6 @@ import '../../models/KategoriMenuModel.dart';
 import '../../models/MasterMenuModel.dart';
 import '../../models/MenuMerchantModel.dart';
 import '../../providers/MenuMerchantProvider.dart';
-import '../widget/HttpToastDialog.dart';
 import '../widget/Redicrect.dart';
 
 var menuMerchantProvider;
@@ -54,21 +52,24 @@ class _InputTransactionState extends State<InputTransactionPage> {
               ),
               // onPressed: () => Navigator.of(context).pop()
               onPressed: () {
-                AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.QUESTION,
-                        animType: AnimType.TOPSLIDE,
-                        title: "Semua perubahan tidak akan tersimpan",
-                        desc: "Apakah Anda yakin ingin tetap melanjutkan?",
-                        showCloseIcon: true,
-                        // btnOkText: "Tutup",
-                        // btnOkColor: Colors.red,
-                        btnOkOnPress: () => Navigator.of(context).pop(),
-                        btnOkText: "Lanjutkan",
-                        btnOkColor: Colors.green[900],
-                        btnCancelOnPress: () {},
-                        btnCancelColor: Colors.red[900])
-                    .show();
+                if(selectedMenu.length == 0){
+                  Navigator.of(context).pop();
+                } else {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.TOPSLIDE,
+                    title: "Semua perubahan tidak akan tersimpan",
+                    desc: "Apakah Anda yakin ingin tetap melanjutkan?",
+                    showCloseIcon: true,
+                    // btnOkText: "Tutup",
+                    // btnOkColor: Colors.red,
+                    btnOkOnPress: () => Navigator.of(context).pop(),
+                    btnOkText: "Lanjutkan",
+                    btnOkColor: Colors.green[900],
+                    btnCancelOnPress: () {},
+                    btnCancelColor: Colors.red[900]).show();
+                }
               }),
           backgroundColor: theme.colorScheme.onPrimaryContainer,
           title: const Text("TRANSAKSI BARU", style: BaseTextStyle.appBarTitle),
@@ -105,105 +106,6 @@ class _InputTransactionState extends State<InputTransactionPage> {
   }
 }
 
-class SearchField extends StatefulWidget {
-  TextEditingController searchController;
-  List<dynamic> listData;
-  final Function callback;
-
-  SearchField(
-      {required this.listData,
-      required this.searchController,
-      required this.callback,
-      super.key});
-
-  @override
-  State<SearchField> createState() => _SearchFieldState();
-}
-
-class _SearchFieldState extends State<SearchField> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      width: double.infinity,
-      child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-        Expanded(
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(3),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(.3),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(1, 4),
-                  )
-                ]),
-            child: TextField(
-              controller: widget.searchController,
-              onChanged: (searchValue) {
-                print(searchValue);
-                List<MenuMerchantModel> tempMenuMerchant = [];
-                if (searchValue.isNotEmpty) {
-                  _masterMenuModel.listMenuMerchant.forEach((rs) {
-                    if (rs.nama_jenis_menu
-                            .toLowerCase()
-                            .contains(searchValue.toLowerCase().toString()) ||
-                        rs.nama_kategori_menu
-                            .toLowerCase()
-                            .contains(searchValue.toLowerCase().toString()) ||
-                        rs.nama_menu_merchant
-                            .toLowerCase()
-                            .contains(searchValue.toLowerCase().toString()) ||
-                        rs.harga
-                            .toLowerCase()
-                            .contains(searchValue.toLowerCase().toString())) {
-                      tempMenuMerchant.add(rs);
-                      widget.listData = tempMenuMerchant;
-                    }
-
-                    if (tempMenuMerchant.isEmpty) {
-                      widget.listData = [];
-                    }
-                  });
-                } else {
-                  widget.listData = _masterMenuModel.listMenuMerchant;
-                }
-                widget.callback(widget.listData);
-              },
-              style: const TextStyle(
-                  color: Colors.black, fontFamily: "Poppins", fontSize: 14),
-              decoration: InputDecoration(
-                  suffixIcon: InkWell(
-                    onTap: () {
-                      widget.searchController.clear();
-                    },
-                    child: const Icon(
-                      Icons.cancel_rounded,
-                      size: 15,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.only(right: 10, top: 8),
-                  border: InputBorder.none,
-                  hintText: "Cari Menu",
-                  hintStyle: const TextStyle(
-                    color: Colors.grey,
-                    fontFamily: "Poppins",
-                  ),
-                  prefixIcon: const Icon(Icons.search_rounded),
-                  prefixIconColor: Colors.grey),
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
-}
-
 // ignore: must_be_immutable
 class InputTransactionContent extends StatefulWidget {
   const InputTransactionContent({
@@ -216,19 +118,7 @@ class InputTransactionContent extends StatefulWidget {
 }
 
 class _InputTransactionContentState extends State<InputTransactionContent> {
-  bool _isRedirectLogout = false;
   String _messageRedirect = "";
-
-  void _callbackMenuMerchant(newList) {
-    setState(() {
-      if (newList.length > 0) {
-        _listMenuMerchant = newList;
-      } else {
-        _listMenuMerchant = [];
-      }
-    });
-  }
-
   Future<HttpResponseModel> _refreshMasterMenu() async {
     setState(() {});
     HttpResponseModel rs = await MasterController.getAllMasterMenu();
@@ -240,10 +130,9 @@ class _InputTransactionContentState extends State<InputTransactionContent> {
         _listJenisMenu = _masterMenuModel.listJenisMenu;
         _listKategoriMenu = _masterMenuModel.listKategoriMenu;
         _listMenuMerchant = _masterMenuModel.listMenuMerchant;
-        _isRedirectLogout = false;
       } else if (rs.code == 302) {
-        _isRedirectLogout = true;
         _messageRedirect = rs.message!;
+        // ignore: use_build_context_synchronously
         redirectLogout(context, _messageRedirect);
       }
     }
@@ -262,9 +151,7 @@ class _InputTransactionContentState extends State<InputTransactionContent> {
     menuMerchantProvider = Provider.of<MenuMerchantProvider>(context);
     selectedMenu = menuMerchantProvider.getListSelected;
     // menuMerchantProvider.setListMenu(listData);
-    var theme = Theme.of(context);
     var sizeScreen = MediaQuery.of(context).size;
-    TextEditingController searchController = TextEditingController();
     return SafeArea(
         child: Row(
       children: [

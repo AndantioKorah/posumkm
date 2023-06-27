@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// ignore: file_names
+import 'package:intl/intl.dart';
 import 'package:money_formatter/money_formatter.dart';
 
 class Utils{
@@ -24,6 +25,22 @@ class Utils{
       case "fractionDigitsOnly" : return result.fractionDigitsOnly;
       case "withoutFractionDigits" : return result.withoutFractionDigits;
       default: return result.symbolOnLeft;
+    }
+  }
+
+  String formatDateOnly(String date, String divider){
+    switch(divider){
+      case "-": return DateFormat("dd-MM-yyyy").format(DateTime.parse(date));
+      case "/": return DateFormat("dd/MM/yyyy").format(DateTime.parse(date));
+      default: return DateFormat("dd-MM-yyyy").format(DateTime.parse(date));
+    }
+  }
+
+  String formatDate(String date, String divider){
+    switch(divider){
+      case "-": return DateFormat("dd-MM-yyyy HH:mm").format(DateTime.parse(date));
+      case "/": return DateFormat("dd/MM/yyyy HH:mm").format(DateTime.parse(date));
+      default: return DateFormat("dd-MM-yyyy HH:mm").format(DateTime.parse(date));
     }
   }
 }
