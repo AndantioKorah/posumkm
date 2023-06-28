@@ -31,7 +31,7 @@ void main() async {
   runApp(const MyApp());
 }
 
-Future<Map<String, dynamic>> getDeviceInfo() async{
+Future<Map<String, dynamic>> getDeviceInfo() async {
   Map<String, dynamic> _deviceData = <String, dynamic>{};
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
@@ -224,10 +224,11 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'NiKita POS UMKM',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Varela-Round',
-          colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromRGBO(34, 46, 60, 1)),
+          colorScheme:
+              ColorScheme.fromSeed(seedColor: Color.fromRGBO(34, 46, 60, 1)),
           useMaterial3: true,
         ),
         home: const SplashScreen(),

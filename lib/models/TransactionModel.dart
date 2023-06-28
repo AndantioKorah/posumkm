@@ -8,7 +8,8 @@ class TransactionModel extends HttpResponseModel {
       tanggal_transaksi,
       nomor_transaksi,
       nama,
-      total_harga;
+      total_harga,
+      status_transaksi;
   List<TransactionDetailModel> detail = [];
 
   TransactionModel(
@@ -18,7 +19,8 @@ class TransactionModel extends HttpResponseModel {
       required this.nomor_transaksi,
       required this.nama,
       required this.total_harga,
-      required this.detail});
+      required this.detail,
+      required this.status_transaksi});
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = <String, dynamic>{};
@@ -29,6 +31,7 @@ class TransactionModel extends HttpResponseModel {
     result['nama'] = nama;
     result['total_harga'] = total_harga;
     result['detail'] = detail;
+    result['status_transaksi'] = status_transaksi;
 
     return result;
   }
@@ -54,6 +57,9 @@ class TransactionModel extends HttpResponseModel {
     }
     if (json['detail'] != null) {
       detail = convertToListTransactionDetail(json['detail']);
+    }
+    if (json['status_transaksi'] != null) {
+      status_transaksi = json['status_transaksi'];
     }
   }
 }
