@@ -33,7 +33,7 @@ class MasterController {
         "username": userLoggedInApps?.username,
         "password": userLoggedInApps?.password,
         "id_m_merchant": userLoggedInApps?.id_m_merchant,
-        "device_id" : deviceData['deviceId']
+        "device_id": deviceData['deviceId']
       });
       var res = json.decode(req.body);
       if (res['code'] == 200 && res['data'] != null) {
@@ -58,7 +58,9 @@ class MasterController {
         res['message'] = "Data Sudah Terupdate";
       }
       return HttpResponseModel(
-          code: res['code'], message: res['message'], data: res['code'] == 200 ? masterMenuModel : null);
+          code: res['code'],
+          message: res['message'],
+          data: res['code'] == 200 ? masterMenuModel : null);
     } catch (e) {
       return HttpResponseModel(
           code: 500, message: "Terjadi Kesalahan \n $e", data: null);
@@ -106,8 +108,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
-
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -136,8 +137,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
-
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -164,7 +164,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -191,7 +191,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -219,7 +219,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -246,7 +246,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -262,8 +262,8 @@ class MasterController {
     }
   }
 
-  static Future<HttpResponseModel> tambahMenuMerchant(
-      String nama_menu_merchant, String id_m_kategori_menu, String harga) async {
+  static Future<HttpResponseModel> tambahMenuMerchant(String nama_menu_merchant,
+      String id_m_kategori_menu, String harga) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
@@ -274,7 +274,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -291,7 +291,10 @@ class MasterController {
   }
 
   static Future<HttpResponseModel> editMenuMerchant(
-      String id, String nama_menu_merchant, String id_m_kategori_menu, String harga) async {
+      String id,
+      String nama_menu_merchant,
+      String id_m_kategori_menu,
+      String harga) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
@@ -303,7 +306,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(
@@ -330,7 +333,7 @@ class MasterController {
       "id_m_merchant": users.id_m_merchant,
       "password": users.password,
       "username": users.username,
-      "device_id" : deviceData['deviceId']
+      "device_id": deviceData['deviceId']
     };
 
     var req = await http.post(

@@ -25,12 +25,12 @@ class _TransactionPageState extends State<TransactionPage> {
     return Expanded(
       child: Scaffold(
         floatingActionButton: InkWell(
-          onTap: (){
+          onTap: () {
             Navigator.push(
-              context,
-              PageTransition(
-                  child: InputTransactionPage(),
-                  type: PageTransitionType.bottomToTop));
+                context,
+                PageTransition(
+                    child: InputTransactionPage(),
+                    type: PageTransitionType.bottomToTop));
           },
           child: Container(
             padding: EdgeInsets.all(10),
@@ -54,15 +54,13 @@ class _TransactionPageState extends State<TransactionPage> {
           //   ),
           //   onPressed: () => Navigator.of(context).pop()),
           backgroundColor: theme.colorScheme.onPrimaryContainer,
-          title: const Text("TRANSAKSI",
-              style: BaseTextStyle.appBarTitle),
+          title: const Text("TRANSAKSI", style: BaseTextStyle.appBarTitle),
           // centerTitle: true,
           actions: [
             Container(
               padding: const EdgeInsets.all(10),
               child: InkWell(
-                onTap: () {
-                },
+                onTap: () {},
                 child: const Icon(
                   Icons.refresh_rounded,
                   size: 20,

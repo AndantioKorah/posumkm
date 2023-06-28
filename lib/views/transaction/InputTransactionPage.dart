@@ -52,23 +52,24 @@ class _InputTransactionState extends State<InputTransactionPage> {
               ),
               // onPressed: () => Navigator.of(context).pop()
               onPressed: () {
-                if(selectedMenu.length == 0){
+                if (selectedMenu.length == 0) {
                   Navigator.of(context).pop();
                 } else {
                   AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.QUESTION,
-                    animType: AnimType.TOPSLIDE,
-                    title: "Semua perubahan tidak akan tersimpan",
-                    desc: "Apakah Anda yakin ingin tetap melanjutkan?",
-                    showCloseIcon: true,
-                    // btnOkText: "Tutup",
-                    // btnOkColor: Colors.red,
-                    btnOkOnPress: () => Navigator.of(context).pop(),
-                    btnOkText: "Lanjutkan",
-                    btnOkColor: Colors.green[900],
-                    btnCancelOnPress: () {},
-                    btnCancelColor: Colors.red[900]).show();
+                          context: context,
+                          dialogType: DialogType.QUESTION,
+                          animType: AnimType.TOPSLIDE,
+                          title: "Semua perubahan tidak akan tersimpan",
+                          desc: "Apakah Anda yakin ingin tetap melanjutkan?",
+                          showCloseIcon: true,
+                          // btnOkText: "Tutup",
+                          // btnOkColor: Colors.red,
+                          btnOkOnPress: () => Navigator.of(context).pop(),
+                          btnOkText: "Lanjutkan",
+                          btnOkColor: Colors.green[900],
+                          btnCancelOnPress: () {},
+                          btnCancelColor: Colors.red[900])
+                      .show();
                 }
               }),
           backgroundColor: theme.colorScheme.onPrimaryContainer,

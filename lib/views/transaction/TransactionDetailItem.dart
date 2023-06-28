@@ -1,7 +1,13 @@
+import 'dart:convert';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:posumkm/controllers/api/TransactionController.dart';
 import 'package:posumkm/views/transaction/InputTransactionPage.dart';
+import 'package:posumkm/views/transaction/PaymentPage.dart';
 import 'package:posumkm/views/widget/ToastDialog.dart';
 
 import '../../utils/Utils.dart';
@@ -20,43 +26,35 @@ class TransactionDetailitem extends StatefulWidget {
 
 class _TransactionDetailitemState extends State<TransactionDetailitem> {
   DateTime selectedDate = DateTime.now();
-  TextEditingController tglTransaksi = TextEditingController();
-  TextEditingController waktuTransaki = TextEditingController();
-  TextEditingController nama = TextEditingController();
+  TextEditingController tglTransaksiController = TextEditingController();
+  TextEditingController namaController = TextEditingController();
   DateTime? datePicked;
   TimeOfDay? timePicked;
-  TimeOfDay selectedTime = TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
+  TimeOfDay selectedTime =
+      TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
 
   Future<void> _selectDate(BuildContext context) async {
     datePicked = await showDatePicker(
-      confirmText: "Lanjut",
-      cancelText: "Batal",
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101)
-    );
-    if(datePicked != null && datePicked != selectedDate) {
+        confirmText: "Lanjut",
+        cancelText: "Batal",
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2101));
+    if (datePicked != null && datePicked != selectedDate) {
       setState(() {
         selectedDate = datePicked!;
       });
       // ignore: use_build_context_synchronously
-      timePicked = await showTimePicker(
-        context: context, 
-        initialTime: selectedTime
-      );
-      if(timePicked != null){
+      timePicked =
+          await showTimePicker(context: context, initialTime: selectedTime);
+      if (timePicked != null) {
         setState(() {
           selectedTime = timePicked!;
-          selectedDate = DateTime(
-            selectedDate.year,
-            selectedDate.month,
-            selectedDate.day,
-            timePicked!.hour,
-            timePicked!.minute
-          );
-          tglTransaksi.text = Utils().
-            formatDate(selectedDate.toString(), "/");
+          selectedDate = DateTime(selectedDate.year, selectedDate.month,
+              selectedDate.day, timePicked!.hour, timePicked!.minute);
+          tglTransaksiController.text =
+              Utils().formatDate(selectedDate.toString(), "/");
         });
       }
     }
@@ -65,7 +63,8 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
   @override
   void initState() {
     super.initState();
-    tglTransaksi.text = Utils().formatDate(selectedDate.toString(), "/");
+    tglTransaksiController.text =
+        Utils().formatDate(selectedDate.toString(), "/");
   }
 
   @override
@@ -99,6 +98,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
               SizedBox(
                 height: 40,
                 child: TextField(
+                  controller: namaController,
                   // autofocus: true,
                   style: TrxTxtStyle.valTxtField,
                   cursorColor: Colors.white,
@@ -118,25 +118,26 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                 ),
               ),
               InkWell(
-                onTap: (){
+                onTap: () {
                   _selectDate(context);
                 },
                 child: Container(
                   height: 40,
                   margin: const EdgeInsets.only(top: 10),
                   child: TextField(
-                    controller: tglTransaksi,
+                    controller: tglTransaksiController,
                     enabled: false,
                     // autofocus: true,
                     style: TrxTxtStyle.valTxtField,
                     cursorColor: Colors.white,
                     decoration: InputDecoration(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 0),
                       labelText: "Tgl. Transaksi",
                       labelStyle: TrxTxtStyle.lblTxtField,
                       focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.white)),
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.white)),
                       border: const OutlineInputBorder(),
                       disabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
@@ -146,7 +147,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                           borderSide: BorderSide(
                               width: 1,
                               color: Color.fromARGB(100, 255, 255, 255))),
-                              // color: Color.fromARGB(100, 255, 255, 255))),
+                      // color: Color.fromARGB(100, 255, 255, 255))),
                     ),
                   ),
                 ),
@@ -220,16 +221,41 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
           alignment: Alignment.bottomCenter,
           child: InkWell(
             onTap: () {
-              if(selectedMenu.length == 0){
+              if (selectedMenu.length == 0) {
                 ToastDialog(
-                  context: context,
-                  color: const Color.fromARGB(255, 183, 28, 28),
-                  message: "Belum ada menu yang dipilih",
-                  icon: Icons.remove_circle_outline_sharp,
-                  gravity: ToastGravity.BOTTOM
-                ).showDialog();
+                        context: context,
+                        color: const Color.fromARGB(255, 183, 28, 28),
+                        message: "Belum ada menu yang dipilih",
+                        icon: FontAwesomeIcons.exclamation,
+                        gravity: ToastGravity.BOTTOM)
+                    .showDialog();
               } else {
-
+                // TransactionController.createTransaksi(json.encode(selectedMenu),
+                //         tglTransaksiController.text, namaController.text)
+                //     .then((value) {
+                //   if (value.code != 200 || value.code != 201) {
+                //     AwesomeDialog(
+                //             context: context,
+                //             dialogType: DialogType.ERROR,
+                //             animType: AnimType.SCALE,
+                //             title: "Error",
+                //             desc: value.message,
+                //             showCloseIcon: true,
+                //             btnOkText: "Tutup",
+                //             btnOkColor: Colors.red,
+                //             btnOkOnPress: () {})
+                //         .show();
+                //   } else {
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        // child: PaymentPage(id: value.data,),
+                        child: PaymentPage(
+                          id: "10",
+                        ),
+                        type: PageTransitionType.rightToLeft));
+                //   }
+                // });
               }
             },
             child: Container(
