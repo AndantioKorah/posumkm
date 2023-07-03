@@ -40,7 +40,7 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
             child: Icon(
               FontAwesomeIcons.plus,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
               size: 20,
             ),
           ),
@@ -50,7 +50,7 @@ class _TransactionPageState extends State<TransactionPage> {
           //   icon: const Icon(
           //     Icons.chevron_left_rounded,
           //     size: 30,
-          //     color: Colors.white,
+          //     color: AppsColor.alternativeWhite,
           //   ),
           //   onPressed: () => Navigator.of(context).pop()),
           backgroundColor: theme.colorScheme.onPrimaryContainer,
@@ -64,7 +64,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 child: const Icon(
                   Icons.refresh_rounded,
                   size: 20,
-                  color: Colors.white,
+                  color: AppsColor.alternativeWhite,
                 ),
               ),
             )

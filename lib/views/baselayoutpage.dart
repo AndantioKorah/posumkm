@@ -67,7 +67,7 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
     return Scaffold(
         bottomNavigationBar: CurvedNavigationBar(
           height: 55,
-          backgroundColor: Colors.white,
+          backgroundColor: AppsColor.alternativeWhite,
           buttonBackgroundColor: theme.colorScheme.onPrimaryContainer,
           color: theme.colorScheme.onPrimaryContainer,
           animationCurve: Curves.easeInOut,
@@ -78,17 +78,17 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
             Icon(
               Icons.home,
               size: 20,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
             ),
             Icon(
               FontAwesomeIcons.cashRegister,
               size: 20,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
             ),
             Icon(
               FontAwesomeIcons.user,
               size: 20,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
             ),
           ],
         ),
@@ -243,7 +243,7 @@ class _HistoryTransactionWidgetState extends State<HistoryTransactionWidget> {
                         Icon(
                           Icons.autorenew_rounded,
                           size: 13,
-                          color: Colors.white,
+                          color: AppsColor.alternativeWhite,
                         ),
                       ],
                     ),
@@ -297,7 +297,7 @@ class TopWidget extends StatelessWidget {
             padding: EdgeInsets.all(20),
 
             // margin: EdgeInsets.symmetric(vertical: 20),
-            // decoration: BoxDecoration(color: Colors.white),
+            // decoration: BoxDecoration(color: AppsColor.alternativeWhite),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,7 +314,7 @@ class TopWidget extends StatelessWidget {
                 DefaultTextStyle(
                   style: TextStyle(
                       fontSize: 25,
-                      color: Colors.white,
+                      color: AppsColor.alternativeWhite,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'PT-Sans'),
                   child: Text(userLoggedIn?.nama_user ?? ''),
@@ -355,7 +355,7 @@ class CardContentWidget extends StatelessWidget {
               ),
               borderRadius: BorderRadius.all(Radius.circular(90.0)),
               border: Border.all(
-                color: Colors.white,
+                color: AppsColor.alternativeWhite,
                 width: .5,
               ),
             ),
@@ -370,7 +370,7 @@ class CardContentWidget extends StatelessWidget {
                 DefaultTextStyle(
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white,
+                    color: AppsColor.alternativeWhite,
                     fontWeight: FontWeight.bold,
                     // fontFamily: 'PT-Sans',
                   ),
@@ -379,7 +379,7 @@ class CardContentWidget extends StatelessWidget {
                 DefaultTextStyle(
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.white,
+                    color: AppsColor.alternativeWhite,
                     fontWeight: FontWeight.w500,
                     // fontFamily: 'PT-Sans',
                   ),

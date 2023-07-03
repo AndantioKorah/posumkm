@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/controllers/api/MasterController.dart';
+import 'package:posumkm/main.dart';
 import 'package:posumkm/models/HttpResponseModel.dart';
 import 'package:posumkm/models/JenisMenuModel.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -26,7 +27,7 @@ class EditMasterMenu {
 
     showModalBottomSheet(
         isScrollControlled: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppsColor.alternativeWhite,
         context: context,
         builder: (_) {
           return Wrap(
@@ -116,7 +117,7 @@ class EditMasterMenu {
                           children: [
                             Icon(
                               Icons.save_as_rounded,
-                              color: Colors.white,
+                              color: AppsColor.alternativeWhite,
                               size: 20,
                             ),
                             SizedBox(
@@ -163,7 +164,7 @@ class EditMasterMenu {
 
     showModalBottomSheet(
         isScrollControlled: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppsColor.alternativeWhite,
         context: context,
         builder: (_) {
           return Wrap(
@@ -289,7 +290,7 @@ class EditMasterMenu {
                           children: [
                             Icon(
                               Icons.save_as_rounded,
-                              color: Colors.white,
+                              color: AppsColor.alternativeWhite,
                               size: 20,
                             ),
                             SizedBox(
@@ -310,34 +311,33 @@ class EditMasterMenu {
   }
 
   void editDataMenuMerchant(
-    MenuMerchantModel? item,
-    List<KategoriMenuModel> listKategoriMenu,
-    BuildContext context,
-    Function callbackFunction) {
-      _namaMenuController.text = item != null ? item.nama_menu_merchant : '';
-      _hargaMenuController.text = item != null ? item.harga : '';
-      String _title =
-          item != null ? "EDIT MASTER MENU" : "TAMBAH MASTER MENU";
-      late HttpResponseModel res;
-      KategoriMenuModel? selectedKategoriMenu;
-      String selectedKategoriId = "0";
+      MenuMerchantModel? item,
+      List<KategoriMenuModel> listKategoriMenu,
+      BuildContext context,
+      Function callbackFunction) {
+    _namaMenuController.text = item != null ? item.nama_menu_merchant : '';
+    _hargaMenuController.text = item != null ? item.harga : '';
+    String _title = item != null ? "EDIT MASTER MENU" : "TAMBAH MASTER MENU";
+    late HttpResponseModel res;
+    KategoriMenuModel? selectedKategoriMenu;
+    String selectedKategoriId = "0";
 
-      if (listKategoriMenu.isNotEmpty) {
-        for (var data in listKategoriMenu) {
-          if (item != null) {
-            if (data.id == item.id_m_kategori_menu) {
-              selectedKategoriMenu = data;
-              selectedKategoriId = selectedKategoriMenu.id;
-            }
-          } else {
-            selectedKategoriMenu = listKategoriMenu[0];
+    if (listKategoriMenu.isNotEmpty) {
+      for (var data in listKategoriMenu) {
+        if (item != null) {
+          if (data.id == item.id_m_kategori_menu) {
+            selectedKategoriMenu = data;
             selectedKategoriId = selectedKategoriMenu.id;
           }
+        } else {
+          selectedKategoriMenu = listKategoriMenu[0];
+          selectedKategoriId = selectedKategoriMenu.id;
         }
       }
-      showModalBottomSheet(
+    }
+    showModalBottomSheet(
         isScrollControlled: true,
-        backgroundColor: Colors.white,
+        backgroundColor: AppsColor.alternativeWhite,
         context: context,
         builder: (_) {
           return Wrap(
@@ -482,7 +482,7 @@ class EditMasterMenu {
                           children: [
                             Icon(
                               Icons.save_as_rounded,
-                              color: Colors.white,
+                              color: AppsColor.alternativeWhite,
                               size: 20,
                             ),
                             SizedBox(
@@ -499,9 +499,8 @@ class EditMasterMenu {
               )
             ],
           );
-        }
-      );
-      }
+        });
+  }
 }
 
 class styleText {
@@ -525,7 +524,7 @@ class styleText {
 
   static const labelSaveButton = TextStyle(
       fontSize: 14,
-      color: Colors.white,
+      color: AppsColor.alternativeWhite,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
 
@@ -549,7 +548,7 @@ Widget buttonSave(BuildContext ctx) {
           children: [
             Icon(
               Icons.save_as_rounded,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
               size: 20,
             ),
             SizedBox(

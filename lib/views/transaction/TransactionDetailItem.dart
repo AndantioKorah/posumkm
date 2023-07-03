@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:posumkm/controllers/api/TransactionController.dart';
+import 'package:posumkm/main.dart';
 import 'package:posumkm/views/transaction/InputTransactionPage.dart';
 import 'package:posumkm/views/transaction/PaymentPage.dart';
 import 'package:posumkm/views/widget/ToastDialog.dart';
@@ -80,7 +81,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
               // borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0),
+                  color: AppsColor.alternativeBlack.withOpacity(0),
                   spreadRadius: 1,
                   blurRadius: 10,
                   offset: const Offset(4, 0),
@@ -101,14 +102,15 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                   controller: namaController,
                   // autofocus: true,
                   style: TrxTxtStyle.valTxtField,
-                  cursorColor: Colors.white,
+                  cursorColor: AppsColor.alternativeWhite,
                   decoration: InputDecoration(
                     contentPadding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                     labelText: "Nama",
                     labelStyle: TrxTxtStyle.lblTxtField,
                     focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(width: 1, color: Colors.white)),
+                        borderSide: BorderSide(
+                            width: 1, color: AppsColor.alternativeWhite)),
                     border: const OutlineInputBorder(),
                     enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
@@ -129,15 +131,15 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                     enabled: false,
                     // autofocus: true,
                     style: TrxTxtStyle.valTxtField,
-                    cursorColor: Colors.white,
+                    cursorColor: AppsColor.alternativeWhite,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 0),
                       labelText: "Tgl. Transaksi",
                       labelStyle: TrxTxtStyle.lblTxtField,
                       focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 1, color: Colors.white)),
+                          borderSide: BorderSide(
+                              width: 1, color: AppsColor.alternativeWhite)),
                       border: const OutlineInputBorder(),
                       disabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
@@ -167,7 +169,8 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(.3),
+                                color:
+                                    AppsColor.alternativeBlack.withOpacity(.3),
                                 spreadRadius: 1,
                                 blurRadius: 4,
                                 offset: const Offset(1, 4),
@@ -272,7 +275,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                         borderRadius: BorderRadius.circular(40),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withOpacity(1),
+                              color: AppsColor.alternativeBlack.withOpacity(1),
                               offset: const Offset(0, 0),
                               spreadRadius: 1,
                               blurRadius: 100)
@@ -304,9 +307,9 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                           ),
                         ),
                         const Icon(
-                          FontAwesomeIcons.circleChevronRight,
-                          color: Colors.white,
-                          size: 14,
+                          FontAwesomeIcons.chevronRight,
+                          color: AppsColor.alternativeWhite,
+                          size: 20,
                         )
                       ],
                     ),

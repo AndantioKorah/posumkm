@@ -227,14 +227,20 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Varela-Round',
-          colorScheme:
-              ColorScheme.fromSeed(seedColor: Color.fromRGBO(34, 46, 60, 1)),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: const Color.fromRGBO(75, 101, 131, 1)),
+          // ColorScheme.fromSeed(seedColor: Color.fromRGBO(24, 31, 50, 1)),
           useMaterial3: true,
         ),
         home: const SplashScreen(),
       ),
     );
   }
+}
+
+class AppsColor {
+  static const Color alternativeBlack = Color.fromRGBO(49, 54, 56, 1);
+  static const Color alternativeWhite = Color.fromRGBO(253, 253, 253, 1);
 }
 
 class BaseTextStyle {

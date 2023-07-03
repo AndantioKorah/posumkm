@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:posumkm/controllers/api/UserController.dart';
+import 'package:posumkm/main.dart';
 import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -20,7 +21,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController userName = TextEditingController();
   final TextEditingController password = TextEditingController();
-  final RoundedLoadingButtonController buttonSumbit = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController buttonSumbit =
+      RoundedLoadingButtonController();
 
   // @override
   // void initState() {
@@ -56,31 +58,28 @@ class _LoginPageState extends State<LoginPage> {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.all(40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: sizeScreen.height * .3,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Container(
+                height: sizeScreen.height * .3,
+              ),
+              DefaultTextStyle(
+                style: TextStyle(
+                  fontSize: 20,
+                  color: AppsColor.alternativeWhite,
+                  // fontWeight: FontWeight.bold
                 ),
-                DefaultTextStyle(
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                    // fontWeight: FontWeight.bold
-                  ),
-                  child: Text("Welcome to,"),
-                ),
-                DefaultTextStyle(
-                  style: TextStyle(
+                child: Text("Welcome to,"),
+              ),
+              DefaultTextStyle(
+                style: TextStyle(
                     fontSize: 40,
-                    color: Colors.white,
+                    color: AppsColor.alternativeWhite,
                     fontWeight: FontWeight.bold,
-                    fontFamily: "Poppins"
-                  ),
-                  child: Text("NiKita POS"),
-                ),
-              ]
-            ),
+                    fontFamily: "Poppins"),
+                child: Text("NiKita POS"),
+              ),
+            ]),
           ),
         ),
         Scaffold(
@@ -102,12 +101,10 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: sizeScreen.height * .5,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      // topLeft: Radius.circular(10),
-                      topRight: Radius.circular(50)
-                    )
-                  ),
+                      color: AppsColor.alternativeWhite,
+                      borderRadius: BorderRadius.only(
+                          // topLeft: Radius.circular(10),
+                          topRight: Radius.circular(50))),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -134,26 +131,24 @@ class _LoginPageState extends State<LoginPage> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             loginTextField(
-                              context,
-                              userName,
-                              "Username",
-                              TextInputAction.next,
-                              TextInputType.name,
-                              false,
-                              FontAwesomeIcons.solidUser
-                            ),
+                                context,
+                                userName,
+                                "Username",
+                                TextInputAction.next,
+                                TextInputType.name,
+                                false,
+                                FontAwesomeIcons.solidUser),
                             SizedBox(
                               height: 10,
                             ),
                             loginTextField(
-                              context, 
-                              password,
-                              "Password",
-                              TextInputAction.done,
-                              TextInputType.name,
-                              true,
-                              FontAwesomeIcons.key
-                            ),
+                                context,
+                                password,
+                                "Password",
+                                TextInputAction.done,
+                                TextInputType.name,
+                                true,
+                                FontAwesomeIcons.key),
                             SizedBox(
                               height: 30,
                             ),
@@ -161,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
                               width: double.infinity,
                               height: 40,
                               child: RoundedLoadingButton(
-                                valueColor: Colors.white,
+                                valueColor: AppsColor.alternativeWhite,
                                 animateOnTap: true,
                                 color: theme.colorScheme.onPrimaryContainer,
                                 controller: buttonSumbit,
@@ -178,7 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => BaseLayoutPage()));
+                                            builder: (context) =>
+                                                BaseLayoutPage()));
                                   } else {
                                     AwesomeDialog(
                                             context: context,
@@ -188,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                                             desc: value.message,
                                             showCloseIcon: true,
                                             btnOkText: "Tutup",
-                                            btnOkColor: Colors.red,
+                                            btnOkColor: Colors.red[900],
                                             btnOkOnPress: () {})
                                         .show();
                                   }
@@ -198,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white),
+                                      color: AppsColor.alternativeWhite),
                                 ),
                               ),
                             )
@@ -219,27 +215,24 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 Widget loginTextField(
-  BuildContext ctx,
-  TextEditingController controller,
-  String hinText,
-  TextInputAction action,
-  TextInputType type,
-  bool obscureText,
-  IconData icon
-){
+    BuildContext ctx,
+    TextEditingController controller,
+    String hinText,
+    TextInputAction action,
+    TextInputType type,
+    bool obscureText,
+    IconData icon) {
   return Container(
     decoration: BoxDecoration(
-      color: Colors.transparent,
-      border: Border(
-        bottom: BorderSide(
-          color: Theme.of(ctx).colorScheme.onPrimaryContainer
-        )
-      )
-      // border: Border.all(
-      //     color: Theme.of(ctx).colorScheme.onPrimaryContainer.withOpacity(.5)
-      //   ),
-      // borderRadius: BorderRadius.circular(0)
-    ),
+        color: Colors.transparent,
+        border: Border(
+            bottom:
+                BorderSide(color: Theme.of(ctx).colorScheme.onPrimaryContainer))
+        // border: Border.all(
+        //     color: Theme.of(ctx).colorScheme.onPrimaryContainer.withOpacity(.5)
+        //   ),
+        // borderRadius: BorderRadius.circular(0)
+        ),
     child: TextField(
       decoration: InputDecoration(
           border: InputBorder.none,
@@ -251,12 +244,14 @@ Widget loginTextField(
           ),
           hintStyle: TextStyle(
               fontSize: 15,
-              color: Theme.of(ctx).colorScheme.onPrimaryContainer.withOpacity(.5),
+              color:
+                  Theme.of(ctx).colorScheme.onPrimaryContainer.withOpacity(.5),
               fontWeight: FontWeight.w400)),
       style: TextStyle(
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          color: Theme.of(ctx).colorScheme.onPrimaryContainer,),
+        fontSize: 15,
+        fontWeight: FontWeight.bold,
+        color: Theme.of(ctx).colorScheme.onPrimaryContainer,
+      ),
       keyboardType: type,
       textInputAction: action,
       controller: controller,

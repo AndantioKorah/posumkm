@@ -7,8 +7,12 @@ class PembayaranModel extends HttpResponseModel {
       id_m_merchant,
       tanggal_pembayaran,
       total_pembayaran,
-      nomor_referensi_pembayaran,
-      keterangan;
+      nomor_referensi_pembayaran = "-",
+      keterangan,
+      nomor_pembayaran,
+      nama_jenis_pembayaran,
+      nama_pembayar,
+      kembalian;
 
   PembayaranModel({
     required this.id,
@@ -19,6 +23,10 @@ class PembayaranModel extends HttpResponseModel {
     required this.total_pembayaran,
     required this.nomor_referensi_pembayaran,
     required this.keterangan,
+    required this.nomor_pembayaran,
+    required this.nama_jenis_pembayaran,
+    required this.nama_pembayar,
+    required this.kembalian,
   });
 
   Map<String, dynamic> toJson() {
@@ -31,6 +39,10 @@ class PembayaranModel extends HttpResponseModel {
     result['total_pembayaran'] = total_pembayaran;
     result['nomor_referensi_pembayaran'] = nomor_referensi_pembayaran;
     result['keterangan'] = keterangan;
+    result['nomor_pembayaran'] = nomor_pembayaran;
+    result['nama_jenis_pembayaran'] = nama_jenis_pembayaran;
+    result['nama_pembayar'] = nama_pembayar;
+    result['kembalian'] = kembalian;
 
     return result;
   }
@@ -56,9 +68,23 @@ class PembayaranModel extends HttpResponseModel {
     }
     if (json['nomor_referensi_pembayaran'] != null) {
       nomor_referensi_pembayaran = json['nomor_referensi_pembayaran'];
+    } else {
+      nomor_referensi_pembayaran = "-";
     }
     if (json['keterangan'] != null) {
       keterangan = json['keterangan'];
+    }
+    if (json['nomor_pembayaran'] != null) {
+      nomor_pembayaran = json['nomor_pembayaran'];
+    }
+    if (json['nama_jenis_pembayaran'] != null) {
+      nama_jenis_pembayaran = json['nama_jenis_pembayaran'];
+    }
+    if (json['nama_pembayar'] != null) {
+      nama_pembayar = json['nama_pembayar'];
+    }
+    if (json['kembalian'] != null) {
+      kembalian = json['kembalian'];
     }
   }
 }

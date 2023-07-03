@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/controllers/api/TransactionController.dart';
@@ -13,14 +14,13 @@ import 'package:posumkm/views/widget/LoadingImageWidget.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 // import 'package:toast/toast.dart';
 
-import '../../controllers/api/UserController.dart';
 import '../../main.dart';
 import '../../models/HttpResponseModel.dart';
 import '../widget/HttpToastDialog.dart';
 import '../widget/Redicrect.dart';
 import 'InputTransactionPage.dart';
 
-late PembayaranModel pembayaranModel;
+PembayaranModel? pembayaranModel;
 late TransactionModel transactionModel;
 List<TransactionDetailModel> transactionDetailModel = [];
 
@@ -40,7 +40,9 @@ class _PaymentPageState extends State<PaymentPage> {
   int selectedJenisPembayaran = 1;
   TextEditingController namaPembayarController = TextEditingController();
   TextEditingController totalPembayaranController = TextEditingController();
+  TextEditingController kembalianController = TextEditingController();
   TextEditingController tanggalPembayaranController = TextEditingController();
+  TextEditingController noRefController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   DateTime? datePicked;
   TimeOfDay? timePicked;
@@ -48,6 +50,7 @@ class _PaymentPageState extends State<PaymentPage> {
       TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
   RoundedLoadingButtonController btnPayController =
       RoundedLoadingButtonController();
+  bool _showLoaderButton = false;
 
   Future<void> _selectDate(BuildContext context) async {
     datePicked = await showDatePicker(
@@ -76,14 +79,22 @@ class _PaymentPageState extends State<PaymentPage> {
     }
   }
 
-  Future<HttpResponseModel> _getPembayaranDetail() async {
-    setState(() {});
-    HttpResponseModel rs =
-        await TransactionController.getPembayaranDetail(widget.id);
+  Future<HttpResponseModel> _getPembayaranDetail(var result) async {
+    setState(() {
+      _showLoader = true;
+      pembayaranModel = null;
+    });
 
+    HttpResponseModel rs;
+
+    if (result != null) {
+      rs = result;
+    } else {
+      rs = await TransactionController.getPembayaranDetail(widget.id);
+    }
     // ignore: unnecessary_null_comparison
     if (rs != null) {
-      if (rs.code == 200) {
+      if (rs.code == 200 || rs.code == 201 || rs.code == 409) {
         if (rs.data['pembayaran'] != null) {
           pembayaranModel = PembayaranModel.fromJson(rs.data['pembayaran']);
         }
@@ -91,6 +102,11 @@ class _PaymentPageState extends State<PaymentPage> {
         transactionDetailModel = transactionModel.detail;
         namaPembayarController.text = transactionModel.nama;
         totalPembayaranController.text = transactionModel.total_harga;
+        kembalianController.text = "0";
+
+        selectedDate = DateTime.parse(transactionModel.tanggal_transaksi);
+        tanggalPembayaranController.text =
+            Utils().formatDate(selectedDate.toString(), "/");
       } else if (rs.code == 302) {
         _messageRedirect = rs.message!;
         // ignore: use_build_context_synchronously
@@ -106,10 +122,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   void initState() {
     super.initState();
-    _getPembayaranDetail();
-    selectedDate = DateTime.parse(transactionModel.tanggal_transaksi);
-    tanggalPembayaranController.text =
-        Utils().formatDate(selectedDate.toString(), "/");
+    _getPembayaranDetail(null);
   }
 
   @override
@@ -128,7 +141,7 @@ class _PaymentPageState extends State<PaymentPage> {
               icon: const Icon(
                 Icons.chevron_left_rounded,
                 size: 30,
-                color: Colors.white,
+                color: AppsColor.alternativeWhite,
               ),
               // onPressed: () => Navigator.of(context).pop()
               onPressed: () {
@@ -163,7 +176,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               width: sizeScreen.size.width * .8,
                               // height: 100,
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: AppsColor.alternativeWhite,
                                   borderRadius: BorderRadius.circular(5),
                                   boxShadow: [
                                     BoxShadow(
@@ -200,7 +213,8 @@ class _PaymentPageState extends State<PaymentPage> {
                                                     style: const TextStyle(
                                                         fontFamily: "Poppins",
                                                         fontSize: 20,
-                                                        color: Colors.black,
+                                                        color: AppsColor
+                                                            .alternativeBlack,
                                                         fontWeight:
                                                             FontWeight.bold),
                                                   ),
@@ -243,7 +257,8 @@ class _PaymentPageState extends State<PaymentPage> {
                                                 transactionModel
                                                     .status_transaksi,
                                                 style: const TextStyle(
-                                                    color: Colors.white,
+                                                    color: AppsColor
+                                                        .alternativeWhite,
                                                     fontSize: 15,
                                                     fontFamily: "Poppins",
                                                     fontWeight:
@@ -258,6 +273,305 @@ class _PaymentPageState extends State<PaymentPage> {
                                         thickness: 1,
                                         height: 1,
                                       ),
+                                      // ignore: unnecessary_null_comparison
+                                      if (pembayaranModel != null) ...{
+                                        Container(
+                                          color: Colors.green[100],
+                                          padding: const EdgeInsets.all(10),
+                                          child: LayoutBuilder(
+                                            builder: (BuildContext context,
+                                                BoxConstraints constraints) {
+                                              return Column(
+                                                children: [
+                                                  const Center(
+                                                    child: Text(
+                                                      "Data Pembayaran",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.blueGrey,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: const Text(
+                                                            "Tanggal Pembayaran",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    "Poppins"),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: Text(
+                                                            Utils().formatDate(
+                                                                pembayaranModel!
+                                                                    .tanggal_pembayaran,
+                                                                "/"),
+                                                            style: PaymentTextStyle
+                                                                .valDataPembayaran,
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                          ),
+                                                        )
+                                                      ]),
+                                                  Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: const Text(
+                                                            "Jenis Pembayaran",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    "Poppins"),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: Text(
+                                                            pembayaranModel!
+                                                                .nama_jenis_pembayaran,
+                                                            style: PaymentTextStyle
+                                                                .valDataPembayaran,
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                          ),
+                                                        )
+                                                      ]),
+                                                  Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: const Text(
+                                                            "Nomor Referensi",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    "Poppins"),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: Text(
+                                                            pembayaranModel!
+                                                                .nomor_referensi_pembayaran,
+                                                            style: PaymentTextStyle
+                                                                .valDataPembayaran,
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                          ),
+                                                        )
+                                                      ]),
+                                                  Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: const Text(
+                                                            "Nama Pembayar",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    "Poppins"),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: Text(
+                                                            pembayaranModel!
+                                                                .nama_pembayar,
+                                                            style: PaymentTextStyle
+                                                                .valDataPembayaran,
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                          ),
+                                                        )
+                                                      ]),
+                                                  Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: const Text(
+                                                            "Jumlah Pembayaran",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    "Poppins"),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: Text(
+                                                            Utils().formatCurrency(
+                                                                pembayaranModel!
+                                                                    .total_pembayaran,
+                                                                ""),
+                                                            style: PaymentTextStyle
+                                                                .valDataPembayaran,
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                          ),
+                                                        )
+                                                      ]),
+                                                  Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: const Text(
+                                                            "Kembalian",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blueGrey,
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    "Poppins"),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          width: constraints
+                                                                  .maxWidth *
+                                                              .45,
+                                                          child: Text(
+                                                            Utils().formatCurrency(
+                                                                pembayaranModel!
+                                                                    .kembalian,
+                                                                ""),
+                                                            style: PaymentTextStyle
+                                                                .valDataPembayaran,
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                          ),
+                                                        )
+                                                      ])
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        Divider(
+                                          color: Colors.grey.withOpacity(.3),
+                                          thickness: 1,
+                                          height: 1,
+                                        ),
+                                      },
                                       Container(
                                         padding: const EdgeInsets.all(10),
                                         child: LayoutBuilder(
@@ -300,33 +614,790 @@ class _PaymentPageState extends State<PaymentPage> {
                                       ),
                                       Container(
                                         padding: const EdgeInsets.all(15),
-                                        child: Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(
-                                                "Total",
-                                                style: TextStyle(
-                                                    color: Colors.blueGrey,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: "Poppins"),
-                                              ),
-                                              Text(
-                                                  Utils().formatCurrency(
-                                                      transactionModel
-                                                          .total_harga,
-                                                      "symbolOnLeft"),
-                                                  style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 25,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily: "Poppins"))
-                                            ]),
-                                      )
+                                        child: Column(
+                                          children: [
+                                            Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    width:
+                                                        constraints.maxWidth *
+                                                            .45,
+                                                    child: const Text(
+                                                      "Total",
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.blueGrey,
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              "Poppins"),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    color: Colors.transparent,
+                                                    width:
+                                                        constraints.maxWidth *
+                                                            .45,
+                                                    child: Text(
+                                                      Utils().formatCurrency(
+                                                          transactionModel
+                                                              .total_harga,
+                                                          "symbolOnLeft"),
+                                                      style: const TextStyle(
+                                                          color: AppsColor
+                                                              .alternativeBlack,
+                                                          fontSize: 25,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              "Poppins"),
+                                                      textAlign:
+                                                          TextAlign.right,
+                                                    ),
+                                                  )
+                                                ]),
+                                            // ignore: unnecessary_null_comparison
+                                            if (pembayaranModel == null) ...{
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: const Text(
+                                                        "Tgl. Pembayaran",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                "Poppins"),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          _selectDate(context);
+                                                        },
+                                                        child: SizedBox(
+                                                          height: 40,
+                                                          child: TextField(
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            controller:
+                                                                tanggalPembayaranController,
+                                                            enabled: false,
+                                                            // autofocus: true,
+                                                            style:
+                                                                PaymentTextStyle
+                                                                    .valTxtField,
+                                                            cursorColor: AppsColor
+                                                                .alternativeWhite,
+                                                            decoration: InputDecoration(
+                                                                contentPadding:
+                                                                    const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            10,
+                                                                        vertical:
+                                                                            0),
+                                                                labelStyle:
+                                                                    PaymentTextStyle
+                                                                        .lblTxtField,
+                                                                disabledBorder:
+                                                                    const UnderlineInputBorder(
+                                                                        borderSide:
+                                                                            BorderSide(color: Colors.grey))),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ]),
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: const Text(
+                                                        "Jenis Pembayaran",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                "Poppins"),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        child:
+                                                            DropdownButtonFormField(
+                                                          focusColor:
+                                                              Colors.blueGrey,
+                                                          isExpanded: true,
+                                                          value:
+                                                              selectedJenisPembayaran,
+                                                          icon: Icon(
+                                                            FontAwesomeIcons
+                                                                .chevronDown,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .colorScheme
+                                                                .onPrimaryContainer,
+                                                            size: 12,
+                                                          ),
+                                                          decoration:
+                                                              InputDecoration(
+                                                            labelStyle:
+                                                                PaymentTextStyle
+                                                                    .lblTxtField,
+                                                            focusColor: Theme
+                                                                    .of(context)
+                                                                .colorScheme
+                                                                .onPrimaryContainer,
+                                                          ),
+                                                          items: const [
+                                                            DropdownMenuItem(
+                                                                value: 1,
+                                                                child: Text(
+                                                                  "Tunai",
+                                                                  style: PaymentTextStyle
+                                                                      .itemDropDown,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .right,
+                                                                )),
+                                                            DropdownMenuItem(
+                                                                value: 2,
+                                                                child: Text(
+                                                                  "Transfer",
+                                                                  style: PaymentTextStyle
+                                                                      .itemDropDown,
+                                                                )),
+                                                            DropdownMenuItem(
+                                                                value: 3,
+                                                                child: Text(
+                                                                  "QRIS",
+                                                                  style: PaymentTextStyle
+                                                                      .itemDropDown,
+                                                                )),
+                                                            DropdownMenuItem(
+                                                                value: 4,
+                                                                child: Text(
+                                                                  "Credit / Debit Card",
+                                                                  style: PaymentTextStyle
+                                                                      .itemDropDown,
+                                                                )),
+                                                            DropdownMenuItem(
+                                                                value: 5,
+                                                                child: Text(
+                                                                  "ShopeePay",
+                                                                  style: PaymentTextStyle
+                                                                      .itemDropDown,
+                                                                )),
+                                                            DropdownMenuItem(
+                                                                value: 6,
+                                                                child: Text(
+                                                                  "Lainnya",
+                                                                  style: PaymentTextStyle
+                                                                      .itemDropDown,
+                                                                )),
+                                                          ],
+                                                          onChanged:
+                                                              (selected) {
+                                                            setState(() {
+                                                              selectedJenisPembayaran =
+                                                                  selected!;
+                                                            });
+                                                          },
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ]),
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: const Text(
+                                                        "No. Referensi (optional)",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                "Poppins"),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        child: TextField(
+                                                          controller:
+                                                              noRefController,
+                                                          textInputAction:
+                                                              TextInputAction
+                                                                  .next,
+                                                          // autofocus: true,
+                                                          style:
+                                                              PaymentTextStyle
+                                                                  .valTxtField,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          cursorColor: theme
+                                                              .colorScheme
+                                                              .onPrimaryContainer,
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            10,
+                                                                        vertical:
+                                                                            0),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ]),
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: const Text(
+                                                        "Nama Pembayar",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                "Poppins"),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        child: TextField(
+                                                          controller:
+                                                              namaPembayarController,
+                                                          textInputAction:
+                                                              TextInputAction
+                                                                  .next,
+                                                          // autofocus: true,
+                                                          style:
+                                                              PaymentTextStyle
+                                                                  .valTxtField,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          cursorColor: theme
+                                                              .colorScheme
+                                                              .onPrimaryContainer,
+                                                          decoration:
+                                                              const InputDecoration(
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            10,
+                                                                        vertical:
+                                                                            0),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ]),
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: const Text(
+                                                        "Jumlah Pembayaran",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                "Poppins"),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        child: TextField(
+                                                          controller:
+                                                              totalPembayaranController,
+                                                          onChanged: (value) {
+                                                            // if (value.length >
+                                                            //     3) {
+                                                            //   totalPembayaranController
+                                                            //           .text =
+                                                            //       Utils().formatCurrency(
+                                                            //           totalPembayaranController
+                                                            //               .text,
+                                                            //           "nonSymbol");
+                                                            // }
+                                                            var kembalian = (int.parse(
+                                                                    totalPembayaranController
+                                                                        .text) -
+                                                                int.parse(
+                                                                    transactionModel
+                                                                        .total_harga));
+                                                            kembalianController
+                                                                .text = kembalian >=
+                                                                    0
+                                                                ? Utils().formatCurrency(
+                                                                    kembalian
+                                                                        .toString(),
+                                                                    "nonSymbol")
+                                                                : "0";
+                                                          },
+                                                          textInputAction:
+                                                              TextInputAction
+                                                                  .done,
+                                                          // autofocus: true,
+                                                          style: PaymentTextStyle
+                                                              .valTxtFieldJumlahPembayaran,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          cursorColor: theme
+                                                              .colorScheme
+                                                              .onPrimaryContainer,
+                                                          decoration:
+                                                              InputDecoration(
+                                                            contentPadding:
+                                                                const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        10,
+                                                                    vertical:
+                                                                        0),
+                                                            labelStyle:
+                                                                PaymentTextStyle
+                                                                    .lblTxtField,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ]),
+                                              Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: const Text(
+                                                        "Kembalian",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.blueGrey,
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                "Poppins"),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      color: Colors.transparent,
+                                                      width:
+                                                          constraints.maxWidth *
+                                                              .45,
+                                                      child: SizedBox(
+                                                        height: 40,
+                                                        child: TextField(
+                                                          enabled: false,
+                                                          controller:
+                                                              kembalianController,
+                                                          textInputAction:
+                                                              TextInputAction
+                                                                  .done,
+                                                          // autofocus: true,
+                                                          style:
+                                                              PaymentTextStyle
+                                                                  .valTxtField,
+                                                          textAlign:
+                                                              TextAlign.right,
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          cursorColor: theme
+                                                              .colorScheme
+                                                              .onPrimaryContainer,
+                                                          decoration: InputDecoration(
+                                                              contentPadding:
+                                                                  const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          10,
+                                                                      vertical:
+                                                                          0),
+                                                              labelStyle:
+                                                                  PaymentTextStyle
+                                                                      .lblTxtField,
+                                                              disabledBorder:
+                                                                  const UnderlineInputBorder(
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                              color: Colors.grey))),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ]),
+                                            }
+                                          ],
+                                        ),
+                                      ),
+                                      _showLoaderButton
+                                          ? InkWell(
+                                              child: Container(
+                                                  width: double.infinity,
+                                                  padding: const EdgeInsets.all(
+                                                      10),
+                                                  decoration: BoxDecoration(
+                                                      // ignore: unnecessary_null_comparison
+                                                      color: pembayaranModel !=
+                                                              null
+                                                          ? Colors.red[900]
+                                                          : Colors.green[100],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              bottomLeft: Radius
+                                                                  .circular(5),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          5))),
+                                                  height: 50,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      const SpinKitSpinningLines(
+                                                        color: Color.fromARGB(
+                                                            255, 27, 94, 32),
+                                                        size: 25,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Text("Please Wait",
+                                                          style: TextStyle(
+                                                              // ignore: unnecessary_null_comparison
+                                                              color: pembayaranModel !=
+                                                                      null
+                                                                  ? Colors
+                                                                      .red[900]
+                                                                  : Colors.green[
+                                                                      900],
+                                                              fontFamily:
+                                                                  "Poppins",
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold))
+                                                    ],
+                                                  )),
+                                            )
+                                          :
+                                          // ignore: unnecessary_null_comparison
+                                          pembayaranModel != null
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    AwesomeDialog(
+                                                      context: context,
+                                                      dialogType:
+                                                          DialogType.QUESTION,
+                                                      animType:
+                                                          AnimType.TOPSLIDE,
+                                                      title:
+                                                          "Hapus Data Pembayaran",
+                                                      desc:
+                                                          "Apakah Anda yakin?",
+                                                      showCloseIcon: true,
+                                                      // btnOkText: "Tutup",
+                                                      // btnOkColor: Colors.red,
+                                                      btnOkOnPress: () {
+                                                        TransactionController
+                                                                .deletePembayaran(
+                                                                    pembayaranModel!
+                                                                        .id)
+                                                            .then((value) {
+                                                          httpToastDialog(
+                                                              value,
+                                                              context,
+                                                              ToastGravity
+                                                                  .BOTTOM,
+                                                              const Duration(
+                                                                  seconds: 2),
+                                                              const Duration(
+                                                                  seconds: 2));
+                                                          if (value.code ==
+                                                              200) {
+                                                            _getPembayaranDetail(
+                                                                value);
+                                                          }
+                                                        });
+                                                      },
+                                                      btnCancelColor:
+                                                          Colors.red[900],
+                                                      btnOkText: "Hapus",
+                                                      btnOkColor:
+                                                          Colors.green[900],
+                                                      btnCancelOnPress: () {},
+                                                    ).show();
+                                                  },
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: const BoxDecoration(
+                                                        color: Color.fromARGB(
+                                                            255, 250, 230, 228),
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        5),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            5))),
+                                                    height: 50,
+                                                    child: Center(
+                                                        child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          "Hapus Pembayaran",
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .red[900],
+                                                              fontFamily:
+                                                                  "Poppins",
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Icon(
+                                                          FontAwesomeIcons
+                                                              .trash,
+                                                          color:
+                                                              Colors.red[900],
+                                                          size: 20,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                  ),
+                                                )
+                                              : InkWell(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      _showLoaderButton = true;
+                                                    });
+
+                                                    TransactionController.createPembayaran(
+                                                            transactionModel.id,
+                                                            tanggalPembayaranController
+                                                                .text,
+                                                            selectedJenisPembayaran
+                                                                .toString(),
+                                                            namaPembayarController
+                                                                .text,
+                                                            totalPembayaranController
+                                                                .text,
+                                                            kembalianController
+                                                                .text)
+                                                        .then((value) {
+                                                      if (value.code != 200 &&
+                                                          value.code != 201 &&
+                                                          value.code != 409) {
+                                                        AwesomeDialog(
+                                                                context:
+                                                                    context,
+                                                                dialogType:
+                                                                    DialogType
+                                                                        .ERROR,
+                                                                animType:
+                                                                    AnimType
+                                                                        .SCALE,
+                                                                title: "Error",
+                                                                desc: value
+                                                                    .message,
+                                                                showCloseIcon:
+                                                                    true,
+                                                                btnOkText:
+                                                                    "Tutup",
+                                                                btnOkColor:
+                                                                    Colors.red,
+                                                                btnOkOnPress:
+                                                                    () {})
+                                                            .show();
+                                                        setState(() {
+                                                          _showLoaderButton =
+                                                              false;
+                                                        });
+                                                      } else {
+                                                        _getPembayaranDetail(
+                                                            value);
+                                                        httpToastDialog(
+                                                            value,
+                                                            context,
+                                                            ToastGravity.BOTTOM,
+                                                            const Duration(
+                                                                seconds: 2),
+                                                            const Duration(
+                                                                seconds: 2));
+                                                        setState(() {
+                                                          _showLoaderButton =
+                                                              false;
+                                                        });
+                                                      }
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: double.infinity,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                        color: Colors
+                                                            .green[900],
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                    .only(
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        5),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            5))),
+                                                    height: 50,
+                                                    child: const Center(
+                                                        child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          "Sumbit Pembayaran",
+                                                          style: TextStyle(
+                                                              color: AppsColor
+                                                                  .alternativeWhite,
+                                                              fontFamily:
+                                                                  "Poppins",
+                                                              fontSize: 15,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Icon(
+                                                          FontAwesomeIcons
+                                                              .arrowUpRightFromSquare,
+                                                          color: AppsColor
+                                                              .alternativeWhite,
+                                                          size: 20,
+                                                        ),
+                                                      ],
+                                                    )),
+                                                  ),
+                                                )
                                     ],
                                   );
                                 },
@@ -335,228 +1406,6 @@ class _PaymentPageState extends State<PaymentPage> {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 30),
-                        // width: sizeScreen.size.width * .8,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            // borderRadius: BorderRadius.circular(5),
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: const Offset(1, 4),
-                                  blurRadius: 4,
-                                  spreadRadius: 1,
-                                  color: Colors.grey.withOpacity(.5))
-                            ]),
-                        child: Container(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            children: [
-                              const Text("Detail Pembayaran",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: "Poppins",
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold)),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              DropdownButtonFormField(
-                                focusColor: Colors.blueGrey,
-                                isExpanded: true,
-                                value: selectedJenisPembayaran,
-                                icon: Icon(
-                                  FontAwesomeIcons.chevronDown,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                  size: 12,
-                                ),
-                                decoration: InputDecoration(
-                                  labelText: "Jenis Pembayaran",
-                                  labelStyle: PaymentTextStyle.lblTxtField,
-                                  focusColor: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                  border: const OutlineInputBorder(),
-                                ),
-                                // items: listKategoriMenu.map((var item) {
-                                //   return DropdownMenuItem(
-                                //     value: item,
-                                //     child: Text(item.nama_kategori_menu,
-                                //         style: styleText.labelDropDownItem),
-                                //   );
-                                // }).toList(),
-                                items: const [
-                                  DropdownMenuItem(
-                                      value: 1,
-                                      child: Text(
-                                        "Tunai",
-                                        style: PaymentTextStyle.itemDropDown,
-                                      )),
-                                  DropdownMenuItem(
-                                      value: 2,
-                                      child: Text(
-                                        "Transfer",
-                                        style: PaymentTextStyle.itemDropDown,
-                                      )),
-                                  DropdownMenuItem(
-                                      value: 3,
-                                      child: Text(
-                                        "QRIS",
-                                        style: PaymentTextStyle.itemDropDown,
-                                      )),
-                                  DropdownMenuItem(
-                                      value: 4,
-                                      child: Text(
-                                        "Credit / Debit Card",
-                                        style: PaymentTextStyle.itemDropDown,
-                                      )),
-                                  DropdownMenuItem(
-                                      value: 5,
-                                      child: Text(
-                                        "ShopeePay",
-                                        style: PaymentTextStyle.itemDropDown,
-                                      )),
-                                  DropdownMenuItem(
-                                      value: 6,
-                                      child: Text(
-                                        "Lainnya",
-                                        style: PaymentTextStyle.itemDropDown,
-                                      )),
-                                ],
-                                onChanged: (selected) {
-                                  setState(() {
-                                    selectedJenisPembayaran = selected!;
-                                  });
-                                  print(selectedJenisPembayaran);
-                                },
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextField(
-                                controller: namaPembayarController,
-                                // autofocus: true,
-                                style: PaymentTextStyle.valTxtField,
-                                cursorColor:
-                                    theme.colorScheme.onPrimaryContainer,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  labelText: "Nama Pembayar",
-                                  labelStyle: PaymentTextStyle.lblTxtField,
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: theme
-                                              .colorScheme.onPrimaryContainer)),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: theme
-                                              .colorScheme.onPrimaryContainer)),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              TextField(
-                                controller: totalPembayaranController,
-                                // autofocus: true,
-                                style: PaymentTextStyle.valTxtField,
-                                keyboardType: TextInputType.number,
-                                cursorColor:
-                                    theme.colorScheme.onPrimaryContainer,
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 0),
-                                  labelText: "Total Pembayaran",
-                                  labelStyle: PaymentTextStyle.lblTxtField,
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: theme
-                                              .colorScheme.onPrimaryContainer)),
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: theme
-                                              .colorScheme.onPrimaryContainer)),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  _selectDate(context);
-                                },
-                                child: Container(
-                                  // height: 40,
-                                  // margin: const EdgeInsets.only(top: 10),
-                                  child: TextField(
-                                    controller: tanggalPembayaranController,
-                                    enabled: false,
-                                    // autofocus: true,
-                                    style: PaymentTextStyle.valTxtField,
-                                    cursorColor: Colors.white,
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              horizontal: 10, vertical: 0),
-                                      labelText: "Tanggal Pembayaran",
-                                      labelStyle: PaymentTextStyle.lblTxtField,
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: theme.colorScheme
-                                                  .onPrimaryContainer)),
-                                      border: const OutlineInputBorder(),
-                                      disabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: theme.colorScheme
-                                                  .onPrimaryContainer)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: theme.colorScheme
-                                                  .onPrimaryContainer)),
-                                      // color: Color.fromARGB(100, 255, 255, 255))),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              RoundedLoadingButton(
-                                controller: btnPayController,
-                                onPressed: () async {
-                                  await Future.delayed(
-                                      const Duration(seconds: 3));
-                                  btnPayController.reset();
-                                },
-                                color: theme.colorScheme.onPrimaryContainer,
-                                borderRadius: 5,
-                                child: Container(
-                                  width: double.infinity,
-                                  child: const Text(
-                                    "Submit",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 15,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
                     ]),
                   ),
                 )
@@ -610,7 +1459,7 @@ class PaymentTextStyle {
       color: Colors.grey[700], fontSize: 12, fontWeight: FontWeight.normal);
 
   static const tableItem = TextStyle(
-      color: Colors.black,
+      color: AppsColor.alternativeBlack,
       fontSize: 16,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
@@ -622,217 +1471,32 @@ class PaymentTextStyle {
       fontFamily: "Poppins");
 
   static const itemDropDown = TextStyle(
-      color: Colors.black,
+      color: AppsColor.alternativeBlack,
       fontSize: 12,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
 
-  static const lblTxtField = TextStyle(
-      color: Colors.black,
+  static var lblTxtField = TextStyle(
+      color: Colors.grey[400],
       fontSize: 14,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
 
   static const valTxtField = TextStyle(
-      color: Colors.black,
-      fontSize: 14,
+      color: AppsColor.alternativeBlack,
+      fontSize: 15,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
-}
 
-void showPaymentDialog(BuildContext context) {
-  var theme = Theme.of(context);
+  static const valTxtFieldJumlahPembayaran = TextStyle(
+      color: AppsColor.alternativeBlack,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      fontFamily: "Poppins");
 
-  final TextEditingController oldPassword = TextEditingController();
-  final TextEditingController newPassword = TextEditingController();
-  final TextEditingController confirmNewPassword = TextEditingController();
-  final RoundedLoadingButtonController buttonSumbit =
-      RoundedLoadingButtonController();
-
-  AwesomeDialog(
-    context: context,
-    animType: AnimType.BOTTOMSLIDE,
-    dialogType: DialogType.NO_HEADER,
-    // showCloseIcon: true,
-    autoDismiss: false,
-    onDissmissCallback: (_) {},
-    body: Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-                child: Stack(
-              children: [
-                Center(
-                  child: DefaultTextStyle(
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: theme.colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold),
-                    child: Text("GANTI PASSWORD"),
-                  ),
-                ),
-                Positioned(
-                    right: 15,
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(
-                        Icons.close_rounded,
-                        size: 15,
-                        color: Colors.black,
-                      ),
-                    ))
-              ],
-            )),
-          ],
-        ),
-        Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(40),
-                    border: Border.all(color: Colors.grey, width: 1)),
-                child: TextField(
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 15),
-                      border: InputBorder.none,
-                      hintText: 'Password Lama',
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Icon(
-                          Icons.lock_clock_rounded,
-                          color: Colors.black,
-                          size: 15,
-                        ),
-                      ),
-                      hintStyle: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w400)),
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                  keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.next,
-                  obscureText: true,
-                  controller: oldPassword,
-                ),
-              ),
-            ),
-            Divider(),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(40),
-                    border: Border.all(color: Colors.grey, width: 1)),
-                child: TextField(
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 15),
-                      border: InputBorder.none,
-                      hintText: 'Password Baru',
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Icon(
-                          Icons.lock_rounded,
-                          color: Colors.black,
-                          size: 15,
-                        ),
-                      ),
-                      hintStyle: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w400)),
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                  keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.next,
-                  obscureText: true,
-                  controller: newPassword,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(40),
-                    border: Border.all(color: Colors.grey, width: 1)),
-                child: TextField(
-                  decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(vertical: 15),
-                      border: InputBorder.none,
-                      hintText: 'Konfirmasi Password Baru',
-                      prefixIcon: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 15),
-                        child: Icon(
-                          Icons.lock_rounded,
-                          color: Colors.black,
-                          size: 15,
-                        ),
-                      ),
-                      hintStyle: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w400)),
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                  keyboardType: TextInputType.name,
-                  textInputAction: TextInputAction.next,
-                  obscureText: true,
-                  controller: confirmNewPassword,
-                ),
-              ),
-            ),
-          ],
-        )
-      ],
-    ),
-    btnOk: SizedBox(
-      width: double.infinity,
-      child: RoundedLoadingButton(
-          height: 45,
-          color: theme.colorScheme.onPrimaryContainer,
-          controller: buttonSumbit,
-          resetDuration: const Duration(seconds: 3),
-          resetAfterDuration: true,
-          child: const Text(
-            "Submit",
-            style: TextStyle(color: Colors.white),
-          ),
-          onPressed: () => {
-                UserController.changePasswordFunction(oldPassword.text,
-                        newPassword.text, confirmNewPassword.text)
-                    .then((value) => {
-                          oldPassword.clear(),
-                          newPassword.clear(),
-                          confirmNewPassword.clear(),
-                          httpToastDialog(
-                              value,
-                              context,
-                              ToastGravity.BOTTOM,
-                              const Duration(seconds: 2),
-                              const Duration(milliseconds: 100)),
-                          if (value.code == 200) {Navigator.pop(context)}
-                        })
-              }),
-    ),
-    // btnOkOnPress: () => _attemptChangePassword(
-    //   oldPassword.text,
-    //   newPassword.text,
-    //   confirmNewPassword.text,
-    //   context),
-    // onDissmissCallback: ,
-    btnOkText: "SUBMIT",
-  ).show();
+  static const valDataPembayaran = TextStyle(
+      color: AppsColor.alternativeBlack,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      fontFamily: "Poppins");
 }

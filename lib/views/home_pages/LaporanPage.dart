@@ -20,24 +20,22 @@ class _LaporanPageState extends State<LaporanPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: const Icon(
-              Icons.chevron_left_rounded,
-              size: 30,
-              color: Colors.white,
-            ),
-            onPressed: () => Navigator.of(context).pop()
-          ),
+              icon: const Icon(
+                Icons.chevron_left_rounded,
+                size: 30,
+                color: AppsColor.alternativeWhite,
+              ),
+              onPressed: () => Navigator.of(context).pop()),
           backgroundColor: theme.colorScheme.onPrimaryContainer,
           title: const Text("LAPORAN", style: BaseTextStyle.appBarTitle),
           centerTitle: true,
         ),
         body: SafeArea(
-          child: Container(
-            color: Colors.white,
-            height: double.infinity,
-            width: double.infinity,
-          ) 
-        ),
+            child: Container(
+          color: AppsColor.alternativeWhite,
+          height: double.infinity,
+          width: double.infinity,
+        )),
       ),
     );
   }

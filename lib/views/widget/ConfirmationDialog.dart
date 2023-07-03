@@ -26,6 +26,7 @@ ConfirmationDialogRest(
         Navigator.of(context).pop();
       }
     }),
+    btnCancelColor: Colors.red[100],
     btnCancelOnPress: () {},
   ).show();
 }

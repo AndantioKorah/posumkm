@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:posumkm/main.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 // import 'package:toast/toast.dart';
 
@@ -46,7 +47,7 @@ void showChangePasswordDialog(BuildContext context) {
                       child: const Icon(
                         Icons.close_rounded,
                         size: 15,
-                        color: Colors.black,
+                        color: AppsColor.alternativeBlack,
                       ),
                     ))
               ],
@@ -71,7 +72,7 @@ void showChangePasswordDialog(BuildContext context) {
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Icon(
                           Icons.lock_clock_rounded,
-                          color: Colors.black,
+                          color: AppsColor.alternativeBlack,
                           size: 15,
                         ),
                       ),
@@ -82,7 +83,7 @@ void showChangePasswordDialog(BuildContext context) {
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                      color: AppsColor.alternativeBlack),
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
                   obscureText: true,
@@ -107,7 +108,7 @@ void showChangePasswordDialog(BuildContext context) {
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Icon(
                           Icons.lock_rounded,
-                          color: Colors.black,
+                          color: AppsColor.alternativeBlack,
                           size: 15,
                         ),
                       ),
@@ -118,7 +119,7 @@ void showChangePasswordDialog(BuildContext context) {
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                      color: AppsColor.alternativeBlack),
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
                   obscureText: true,
@@ -142,7 +143,7 @@ void showChangePasswordDialog(BuildContext context) {
                         padding: EdgeInsets.symmetric(horizontal: 15),
                         child: Icon(
                           Icons.lock_rounded,
-                          color: Colors.black,
+                          color: AppsColor.alternativeBlack,
                           size: 15,
                         ),
                       ),
@@ -153,7 +154,7 @@ void showChangePasswordDialog(BuildContext context) {
                   style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                      color: AppsColor.alternativeBlack),
                   keyboardType: TextInputType.name,
                   textInputAction: TextInputAction.next,
                   obscureText: true,
@@ -175,7 +176,7 @@ void showChangePasswordDialog(BuildContext context) {
           resetAfterDuration: true,
           child: const Text(
             "Submit",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: AppsColor.alternativeWhite),
           ),
           onPressed: () => {
                 UserController.changePasswordFunction(oldPassword.text,

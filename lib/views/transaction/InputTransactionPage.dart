@@ -48,7 +48,7 @@ class _InputTransactionState extends State<InputTransactionPage> {
               icon: const Icon(
                 Icons.chevron_left_rounded,
                 size: 30,
-                color: Colors.white,
+                color: AppsColor.alternativeWhite,
               ),
               // onPressed: () => Navigator.of(context).pop()
               onPressed: () {
@@ -56,48 +56,25 @@ class _InputTransactionState extends State<InputTransactionPage> {
                   Navigator.of(context).pop();
                 } else {
                   AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.QUESTION,
-                          animType: AnimType.TOPSLIDE,
-                          title: "Semua perubahan tidak akan tersimpan",
-                          desc: "Apakah Anda yakin ingin tetap melanjutkan?",
-                          showCloseIcon: true,
-                          // btnOkText: "Tutup",
-                          // btnOkColor: Colors.red,
-                          btnOkOnPress: () => Navigator.of(context).pop(),
-                          btnOkText: "Lanjutkan",
-                          btnOkColor: Colors.green[900],
-                          btnCancelOnPress: () {},
-                          btnCancelColor: Colors.red[900])
-                      .show();
+                    context: context,
+                    dialogType: DialogType.QUESTION,
+                    animType: AnimType.TOPSLIDE,
+                    title: "Semua perubahan tidak akan tersimpan",
+                    desc: "Apakah Anda yakin ingin tetap melanjutkan?",
+                    showCloseIcon: true,
+                    // btnOkText: "Tutup",
+                    // btnOkColor: Colors.red,
+                    btnOkOnPress: () => Navigator.of(context).pop(),
+                    btnOkText: "Lanjutkan",
+                    btnOkColor: Colors.green[900],
+                    btnCancelOnPress: () {},
+                    btnCancelColor: Colors.red[900],
+                  ).show();
                 }
               }),
           backgroundColor: theme.colorScheme.onPrimaryContainer,
           title: const Text("TRANSAKSI BARU", style: BaseTextStyle.appBarTitle),
           centerTitle: true,
-          // actions: [
-          //   Container(
-          //     padding: const EdgeInsets.all(10),
-          //     child: InkWell(
-          //       onTap: () => _refreshMasterMenu().then((value) => {
-          //             if (value.code != 200)
-          //               {
-          //                 httpToastDialog(
-          //                     value,
-          //                     context,
-          //                     ToastGravity.BOTTOM,
-          //                     const Duration(seconds: 2),
-          //                     const Duration(milliseconds: 100))
-          //               }
-          //           }),
-          //       child: const Icon(
-          //         Icons.refresh_rounded,
-          //         size: 20,
-          //         color: Colors.white,
-          //       ),
-          //     ),
-          //   )
-          // ]
         ),
         body: ChangeNotifierProvider(
             create: (context) => MenuMerchantProvider(),
@@ -257,14 +234,14 @@ class TrxTxtStyle {
 
   static const valTxtField = TextStyle(
     fontSize: 12,
-    color: Colors.white,
+    color: AppsColor.alternativeWhite,
     fontWeight: FontWeight.bold,
     fontFamily: "Poppins",
   );
 
   static const nmMenuText = TextStyle(
       fontSize: 15,
-      color: Colors.black,
+      color: AppsColor.alternativeBlack,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins",
       overflow: TextOverflow.ellipsis);
@@ -272,21 +249,25 @@ class TrxTxtStyle {
   static const hargaText = TextStyle(
     fontFamily: "Poppins",
     fontSize: 13,
-    color: Colors.black,
+    color: AppsColor.alternativeBlack,
     // fontWeight: FontWeight.bold
   );
 
   static var qtyTextZero = TextStyle(
       fontSize: 14,
-      // color: Colors.black,
+      // color: AppsColor.alternativeBlack,
       color: const Color.fromARGB(255, 158, 158, 158).withOpacity(.4),
       fontWeight: FontWeight.bold);
 
-  static const qtyText =
-      TextStyle(fontSize: 14, color: Colors.black, fontWeight: FontWeight.bold);
+  static const qtyText = TextStyle(
+      fontSize: 14,
+      color: AppsColor.alternativeBlack,
+      fontWeight: FontWeight.bold);
 
-  static const addBtn =
-      TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold);
+  static const addBtn = TextStyle(
+      fontSize: 14,
+      color: AppsColor.alternativeWhite,
+      fontWeight: FontWeight.bold);
 
   static const lblTotal = TextStyle(
       fontSize: 12,
@@ -302,33 +283,33 @@ class TrxTxtStyle {
 
   static const valTotal = TextStyle(
       fontSize: 12,
-      color: Colors.black,
+      color: AppsColor.alternativeBlack,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
 
   static const lblBtnTotal = TextStyle(
       fontSize: 14,
-      color: Colors.white,
+      color: AppsColor.alternativeWhite,
       // fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
 
   static const valBtnTotal = TextStyle(
       fontSize: 15,
-      color: Colors.white,
+      color: AppsColor.alternativeWhite,
       fontWeight: FontWeight.bold,
       fontFamily: "Poppins");
 
   static const totTagihanText = TextStyle(
     fontFamily: "Poppins",
     fontSize: 10,
-    color: Colors.white,
+    color: AppsColor.alternativeWhite,
     // fontWeight: FontWeight.bold
   );
 
   static const lblDetailItem = TextStyle(
     // fontFamily: "Poppins",
     fontSize: 10,
-    color: Colors.white,
+    color: AppsColor.alternativeWhite,
     fontWeight: FontWeight.bold,
   );
 
@@ -342,13 +323,13 @@ class TrxTxtStyle {
   static const lblTotDetailItem = TextStyle(
     // fontFamily: "Poppins",
     fontSize: 10,
-    color: Colors.white,
+    color: AppsColor.alternativeWhite,
     fontWeight: FontWeight.bold,
   );
 
   static const totTagihanVal = TextStyle(
       fontFamily: "Poppins",
       fontSize: 16,
-      color: Colors.white,
+      color: AppsColor.alternativeWhite,
       fontWeight: FontWeight.bold);
 }

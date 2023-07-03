@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:posumkm/main.dart';
 import 'package:posumkm/views/BaseLayoutPage.dart';
 import 'package:posumkm/views/widget/ChangePasswordWidget.dart';
 import 'package:posumkm/views/widget/Redicrect.dart';
@@ -23,7 +24,7 @@ class _UserAccountPageState extends State<UserAccountPage> {
         // height: sizeScreen.height * .5,
         width: double.infinity,
         decoration: const BoxDecoration(
-          color: Colors.white,
+          color: AppsColor.alternativeWhite,
           // borderRadius: BorderRadius.only(
           //     topLeft: Radius.circular(20), topRight: Radius.circular(20))
         ),
@@ -208,7 +209,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 25,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
               fontWeight: FontWeight.bold,
               // fontFamily: 'PT-Sans',
             ),
@@ -218,7 +219,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 15,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
               fontWeight: FontWeight.w500,
               // fontFamily: 'PT-Sans',
             ),
@@ -250,7 +251,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 25,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
               fontWeight: FontWeight.bold,
               // fontFamily: 'PT-Sans',
             ),
@@ -260,7 +261,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 15,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
               fontWeight: FontWeight.w500,
               // fontFamily: 'PT-Sans',
             ),
@@ -270,7 +271,7 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.white,
+              color: AppsColor.alternativeWhite,
               fontWeight: FontWeight.normal,
               // fontFamily: 'PT-Sans',
             ),

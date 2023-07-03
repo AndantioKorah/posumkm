@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
       width: double.infinity,
       padding: EdgeInsets.only(left: 10, top: 10, right: 10),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppsColor.alternativeWhite,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20), topRight: Radius.circular(20))),
       child: MenusWidget(),
