@@ -7,6 +7,12 @@ class TransactionDetailModel extends HttpResponseModel {
       harga,
       qty,
       total_harga,
+      id_m_merchant,
+      id_m_jenis_menu,
+      id_m_kategori_menu,
+      deskripsi,
+      nama_jenis_menu, 
+      nama_kategori_menu,
       nama_menu_merchant;
 
   TransactionDetailModel({
@@ -17,6 +23,12 @@ class TransactionDetailModel extends HttpResponseModel {
     required this.qty,
     required this.total_harga,
     required this.nama_menu_merchant,
+    required this.id_m_merchant,
+    required this.id_m_jenis_menu,
+    required this.id_m_kategori_menu,
+    required this.deskripsi,
+    required this.nama_jenis_menu, 
+    required this.nama_kategori_menu,
   });
 
   Map<String, dynamic> toJson() {
@@ -27,6 +39,12 @@ class TransactionDetailModel extends HttpResponseModel {
     result['harga'] = harga;
     result['qty'] = qty;
     result['nama_menu_merchant'] = nama_menu_merchant;
+    result['id_m_merchant'] = id_m_merchant;
+    result['id_m_jenis_menu'] = id_m_jenis_menu;
+    result['id_m_kategori_menu'] = id_m_kategori_menu;
+    result['deskripsi'] = deskripsi;
+    result['nama_jenis_menu'] = nama_jenis_menu;
+    result['nama_kategori_menu'] = nama_kategori_menu;
 
     return result;
   }
@@ -49,6 +67,24 @@ class TransactionDetailModel extends HttpResponseModel {
     }
     if (json['nama_menu_merchant'] != null) {
       nama_menu_merchant = json['nama_menu_merchant'];
+    }
+    if (json['id_m_merchant'] != null) {
+      id_m_merchant = json['id_m_merchant'];
+    }
+    if (json['id_m_jenis_menu'] != null) {
+      id_m_jenis_menu = json['id_m_jenis_menu'];
+    }
+    if (json['id_m_kategori_menu'] != null) {
+      id_m_kategori_menu = json['id_m_kategori_menu'];
+    }
+    if (json['deskripsi'] != null) {
+      deskripsi = json['deskripsi'];
+    }
+    if (json['nama_jenis_menu'] != null) {
+      nama_jenis_menu = json['nama_jenis_menu'];
+    }
+    if (json['nama_kategori_menu'] != null) {
+      nama_kategori_menu = json['nama_kategori_menu'];
     }
   }
 }

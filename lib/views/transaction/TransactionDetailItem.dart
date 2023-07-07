@@ -1,25 +1,26 @@
-import 'dart:convert';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:posumkm/controllers/api/TransactionController.dart';
 import 'package:posumkm/main.dart';
+import 'package:posumkm/models/TransactionModel.dart';
 import 'package:posumkm/views/transaction/InputTransactionPage.dart';
 import 'package:posumkm/views/transaction/PaymentPage.dart';
 import 'package:posumkm/views/widget/ToastDialog.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/MenuMerchantProvider.dart';
 import '../../utils/Utils.dart';
+
+var selectedDataItem;
 
 // ignore: must_be_immutable
 class TransactionDetailitem extends StatefulWidget {
   var listDataItem;
-  var selectedDataItem;
+  TransactionModel transaksi;
 
   TransactionDetailitem(
-      {super.key, required this.listDataItem, required this.selectedDataItem});
+      {super.key, required this.listDataItem, required this.transaksi});
 
   @override
   State<TransactionDetailitem> createState() => _TransactionDetailitemState();
@@ -35,6 +36,11 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
       TimeOfDay(hour: DateTime.now().hour, minute: DateTime.now().minute);
 
   Future<void> _selectDate(BuildContext context) async {
+    if(widget.transaksi.id != "0"){
+      // Map<String, int> trxDate = Utils().extractDate(widget.transaksi.tanggal_transaksi);
+      selectedDate = DateTime.parse(widget.transaksi.tanggal_transaksi);
+    }
+
     datePicked = await showDatePicker(
         confirmText: "Lanjut",
         cancelText: "Batal",
@@ -47,8 +53,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
         selectedDate = datePicked!;
       });
       // ignore: use_build_context_synchronously
-      timePicked =
-          await showTimePicker(context: context, initialTime: selectedTime);
+      timePicked = await showTimePicker(context: context, initialTime: selectedTime);
       if (timePicked != null) {
         setState(() {
           selectedTime = timePicked!;
@@ -66,12 +71,19 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
     super.initState();
     tglTransaksiController.text =
         Utils().formatDate(selectedDate.toString(), "/");
+    if(widget.transaksi.id != "0"){
+      namaController.text = widget.transaksi.nama;
+      tglTransaksiController.text =
+        Utils().formatDate(widget.transaksi.tanggal_transaksi, "/");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var sizeScreen = MediaQuery.of(context).size;
+    final provider  = Provider.of<MenuMerchantProvider>(context, listen: true);
+    selectedDataItem = provider.getListSelected;
     return Stack(
       children: [
         Container(
@@ -193,11 +205,11 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                                       for (var i = 0;
                                           i < widget.listDataItem.length;
                                           i++) ...{
-                                        if (widget.selectedDataItem.containsKey(
+                                        if (selectedDataItem.containsKey(
                                             widget.listDataItem[i].id)) ...{
                                           rowItemDetail(
                                               context,
-                                              widget.selectedDataItem[
+                                              selectedDataItem[
                                                   widget.listDataItem[i].id]!)
                                         }
                                       }
@@ -294,9 +306,9 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                                 style: TrxTxtStyle.totTagihanText,
                               ),
                               Text(
-                                menuMerchantProvider.getTotalTransaksi() > 0
+                                provider.getTotalTransaksi() > 0
                                     ? Utils().formatCurrency(
-                                        menuMerchantProvider
+                                        provider
                                             .getTotalTransaksi()
                                             .toString(),
                                         "")

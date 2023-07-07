@@ -29,7 +29,7 @@ class _TransactionPageState extends State<TransactionPage> {
             Navigator.push(
                 context,
                 PageTransition(
-                    child: InputTransactionPage(),
+                    child: InputTransactionPage(idTransaksi: "10",),
                     type: PageTransitionType.bottomToTop));
           },
           child: Container(

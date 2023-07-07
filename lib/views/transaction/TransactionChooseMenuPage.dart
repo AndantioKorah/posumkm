@@ -3,9 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/models/MenuMerchantModel.dart';
 import 'package:posumkm/views/widget/EmptyDataImageWidget.dart';
 import 'package:posumkm/views/widget/LoadingImageWidget.dart';
+import 'package:provider/provider.dart';
 import 'package:searchable_listview/resources/arrays.dart';
 
 import '../../main.dart';
+import '../../providers/MenuMerchantProvider.dart';
 import '../../utils/Utils.dart';
 import 'InputTransactionPage.dart';
 
@@ -21,6 +23,8 @@ class MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider  = Provider.of<MenuMerchantProvider>(context, listen: true);
+    var _selectedMenu = menuMerchantProvider.getListSelected;
     return Wrap(
       children: [
         Container(
@@ -35,10 +39,10 @@ class MenuItem extends StatelessWidget {
               // borderRadius: BorderRadius.circular(10),
               border: Border(
                 bottom: BorderSide(
-                    color: selectedMenu.containsKey(item.id)
+                    color: _selectedMenu.containsKey(item.id)
                         ? Color.fromARGB(255, 27, 94, 32)
                         : Colors.transparent,
-                    width: selectedMenu.containsKey(item.id) ? 5 : 0),
+                    width: _selectedMenu.containsKey(item.id) ? 5 : 0),
                 // bottom: const BorderSide(
                 //   color: Colors.grey,
                 //   width: 1
@@ -91,7 +95,7 @@ class MenuItem extends StatelessWidget {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    menuMerchantProvider.removeMenu(item);
+                                    provider.removeMenu(item);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(2),
@@ -99,14 +103,14 @@ class MenuItem extends StatelessWidget {
                                         color: Colors.transparent,
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
-                                            color: selectedMenu
+                                            color: _selectedMenu
                                                     .containsKey(item.id)
                                                 ? Colors.blueGrey
                                                 : Colors.grey.withOpacity(.4),
                                             width: 2)),
                                     child: Icon(
                                       FontAwesomeIcons.minus,
-                                      color: selectedMenu.containsKey(item.id)
+                                      color: _selectedMenu.containsKey(item.id)
                                           ? Colors.blueGrey
                                           : Colors.grey.withOpacity(.4),
                                       size: 12,
@@ -114,18 +118,18 @@ class MenuItem extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  selectedMenu.containsKey(item.id)
-                                      ? selectedMenu[item.id]!
+                                  _selectedMenu.containsKey(item.id)
+                                      ? _selectedMenu[item.id]!
                                           .selectedCount
                                           .toString()
                                       : "0",
-                                  style: selectedMenu.containsKey(item.id)
+                                  style: _selectedMenu.containsKey(item.id)
                                       ? TrxTxtStyle.qtyText
                                       : TrxTxtStyle.qtyTextZero,
                                 ),
                                 InkWell(
                                   onTap: () {
-                                    menuMerchantProvider.addMenu(item);
+                                    provider.addMenu(item);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(2),
@@ -133,14 +137,14 @@ class MenuItem extends StatelessWidget {
                                         color: Colors.transparent,
                                         borderRadius: BorderRadius.circular(20),
                                         border: Border.all(
-                                            color: selectedMenu
+                                            color: _selectedMenu
                                                     .containsKey(item.id)
                                                 ? Colors.blueGrey
                                                 : Colors.grey.withOpacity(.4),
                                             width: 2)),
                                     child: Icon(
                                       FontAwesomeIcons.plus,
-                                      color: selectedMenu.containsKey(item.id)
+                                      color: _selectedMenu.containsKey(item.id)
                                           ? Colors.blueGrey
                                           : Colors.grey.withOpacity(.4),
                                       size: 12,
@@ -155,7 +159,7 @@ class MenuItem extends StatelessWidget {
                     ],
                   ),
                   LineDividerWidget(
-                    color: selectedMenu.containsKey(item.id)
+                    color: _selectedMenu.containsKey(item.id)
                         ? const Color.fromARGB(255, 27, 94, 32)
                         : Colors.grey.withOpacity(.4),
                     // color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -172,16 +176,16 @@ class MenuItem extends StatelessWidget {
                         SizedBox(
                           // width: 60,
                           child: Text(
-                            // selectedMenu.containsKey(listData[index].id) ? selectedMenu[listData[index].id]!.selectedCount.toString()
-                            selectedMenu.containsKey(item.id)
+                            // _selectedMenu.containsKey(listData[index].id) ? _selectedMenu[listData[index].id]!.selectedCount.toString()
+                            _selectedMenu.containsKey(item.id)
                                 ? Utils().formatCurrency(
-                                    (selectedMenu[item.id]!.selectedCount *
+                                    (_selectedMenu[item.id]!.selectedCount *
                                             int.parse(
-                                                selectedMenu[item.id]!.harga))
+                                                _selectedMenu[item.id]!.harga))
                                         .toString(),
                                     "nonSymbol")
                                 : "0",
-                            style: selectedMenu.containsKey(item.id)
+                            style: _selectedMenu.containsKey(item.id)
                                 ? TrxTxtStyle.valTotal
                                 : TrxTxtStyle.valTotalZero,
                             textAlign: TextAlign.end,
@@ -201,76 +205,82 @@ class MenuItem extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class TransactionChooseMenuPage extends StatefulWidget {
+class TransactionChooseMenuPage extends StatelessWidget {
   var listData;
+  Function callback;
 
-  TransactionChooseMenuPage({super.key, required this.listData});
+  TransactionChooseMenuPage({super.key, required this.listData, required this.callback});
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _TransactionChooseMenuPageState createState() =>
-      _TransactionChooseMenuPageState();
-}
-
-class _TransactionChooseMenuPageState extends State<TransactionChooseMenuPage> {
   final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    _listMenuMerchant = widget.listData;
+    _listMenuMerchant = listData;
     return Expanded(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: Container(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: SearchableList<MenuMerchantModel>(
-            initialList: widget.listData,
-            builder: (MenuMerchantModel item) => MenuItem(item: item),
-            asyncListFilter: (q, list) {
-              return list
-                  .where((element) =>
-                      element.nama_menu_merchant.toLowerCase().contains(q))
-                  .toList();
-            },
-            loadingWidget: loadingDataWidget(context),
-            errorWidget: emptyDataWidget(context, null),
-            emptyWidget: emptyDataWidget(context, null),
-            asyncListCallback: () async {
-              await Future.delayed(
-                const Duration(
-                  milliseconds: 1000,
-                ),
-              );
-              return widget.listData;
-            },
-            searchTextController: searchController,
-            autoFocusOnSearch: false,
-            searchTextPosition: SearchTextPosition.top,
-            inputDecoration: const InputDecoration(
-              // suffixIcon: InkWell(
-              //   onTap: () {
-              //     widget.searchController.clear();
-              //   },
-              //   child: const Icon(
-              //     Icons.cancel_rounded,
-              //     size: 15,
-              //     color: Colors.grey,
-              //   ),
-              // ),
-              contentPadding: EdgeInsets.only(
-                left: 10,
-                right: 10,
-              ),
-              border: OutlineInputBorder(),
-              hintText: "Cari Menu",
-              fillColor: AppsColor.alternativeWhite,
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontFamily: "Poppins",
-              ),
-              // prefixIcon: Icon(Icons.search_rounded),
-              // prefixIconColor: Colors.grey
+          child: listData.length > 0 ? 
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                for(var i = 0; i < listData.length; i++)...{
+                  MenuItem(item: listData[i],)
+                }
+              ],
             ),
-          ),
+          )
+          : emptyDataWidget(context),
+          // child: SearchableList<MenuMerchantModel>(
+          //   initialList: listData,
+          //   builder: (MenuMerchantModel item) => MenuItem(item: item),
+          //   asyncListFilter: (q, list) {
+          //     return list
+          //         .where((element) =>
+          //             element.nama_menu_merchant.toLowerCase().contains(q))
+          //         .toList();
+          //   },
+          //   loadingWidget: loadingDataWidget(context),
+          //   errorWidget: emptyDataWidget(context, null),
+          //   emptyWidget: emptyDataWidget(context, null),
+          //   asyncListCallback: () async {
+          //     await Future.delayed(
+          //       const Duration(
+          //         milliseconds: 5000,
+          //       ),
+          //     );
+          //     return listData;
+          //   },
+          //   searchTextController: searchController,
+          //   autoFocusOnSearch: false,
+          //   searchTextPosition: SearchTextPosition.top,
+          //   inputDecoration: const InputDecoration(
+          //     // suffixIcon: InkWell(
+          //     //   onTap: () {
+          //     //     widget.searchController.clear();
+          //     //   },
+          //     //   child: const Icon(
+          //     //     Icons.cancel_rounded,
+          //     //     size: 15,
+          //     //     color: Colors.grey,
+          //     //   ),
+          //     // ),
+          //     contentPadding: EdgeInsets.only(
+          //       left: 10,
+          //       right: 10,
+          //     ),
+          //     border: OutlineInputBorder(),
+          //     hintText: "Cari Menu",
+          //     fillColor: AppsColor.alternativeWhite,
+          //     hintStyle: TextStyle(
+          //       color: Colors.grey,
+          //       fontFamily: "Poppins",
+          //     ),
+          //     // prefixIcon: Icon(Icons.search_rounded),
+          //     // prefixIconColor: Colors.grey
+          //   ),
+          // ),
         ),
       ),
     );

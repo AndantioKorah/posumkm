@@ -60,6 +60,30 @@ class TransactionController {
     }
   }
 
+  static Future<HttpResponseModel> getTransactionDetail(String id) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "id": id,
+      "password": users.password,
+      "username": users.username,
+      "device_id": deviceData['deviceId']
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}transaction/detail"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
+
   static Future<HttpResponseModel> createPembayaran(
       String id_t_transaksi,
       String tanggal_pembayaran,

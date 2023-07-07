@@ -36,6 +36,17 @@ class TransactionModel extends HttpResponseModel {
     return result;
   }
 
+  TransactionModel.setNull(){
+    id = "0";
+    id_m_merchant = "";
+    tanggal_transaksi = "";
+    nomor_transaksi = "";
+    nama = "";
+    total_harga = "";
+    detail = [];
+    status_transaksi = "";
+  }
+
   TransactionModel.fromJson(Map<String, dynamic> json) {
     if (json['id'] != null) {
       id = json['id'];

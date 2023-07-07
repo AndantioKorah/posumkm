@@ -43,4 +43,18 @@ class Utils{
       default: return DateFormat("dd-MM-yyyy HH:mm").format(DateTime.parse(date));
     }
   }
+
+  Map<String, int> extractDate(String date){
+    final split = date.split(" ");
+    final dateSplit = split[0].split("-");
+    final timeSplit = split[1].split(":");
+    return {
+      "year": int.parse(dateSplit[0]),
+      "month": int.parse(dateSplit[1]),
+      "date": int.parse(dateSplit[2]),
+      "hour": int.parse(timeSplit[0]),
+      "minute": int.parse(timeSplit[1]),
+      "second": int.parse(timeSplit[2]),
+    };
+  }
 }

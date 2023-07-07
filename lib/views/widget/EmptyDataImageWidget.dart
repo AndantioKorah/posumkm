@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:posumkm/main.dart';
 
-Widget emptyDataWidget(BuildContext ctx, Function()? callbackRefresh) {
+Widget emptyDataWidget(BuildContext ctx) {
   return SingleChildScrollView(
     child: SizedBox(
       width: MediaQuery.of(ctx).size.width,
@@ -25,39 +25,6 @@ Widget emptyDataWidget(BuildContext ctx, Function()? callbackRefresh) {
           const SizedBox(
             height: 10,
           ),
-          callbackRefresh != null
-              ? InkWell(
-                  onTap: () => {callbackRefresh()},
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Theme.of(ctx).colorScheme.onPrimaryContainer,
-                        borderRadius: BorderRadius.circular(30)),
-                    padding: const EdgeInsets.all(5),
-                    child: const Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.refresh_rounded,
-                          size: 15,
-                          color: AppsColor.alternativeWhite,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          "Refresh",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppsColor.alternativeWhite,
-                              fontSize: 15,
-                              fontFamily: "Poppins"),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              : const Text("")
         ],
       ),
     ),

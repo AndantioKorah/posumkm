@@ -47,6 +47,21 @@ class PembayaranModel extends HttpResponseModel {
     return result;
   }
 
+  PembayaranModel.setNull(){
+    id = "0";
+    id_t_transaksi = "";
+    id_m_jenis_pembayaran = "";
+    id_m_merchant = "";
+    tanggal_pembayaran = "";
+    total_pembayaran = "";
+    nomor_referensi_pembayaran = "";
+    keterangan = "";
+    nomor_pembayaran = "";
+    nama_jenis_pembayaran = "";
+    nama_pembayar = "";
+    kembalian = "";
+  }
+
   PembayaranModel.fromJson(Map<String, dynamic> json) {
     if (json['id'] != null) {
       id = json['id'];

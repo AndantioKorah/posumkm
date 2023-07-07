@@ -2,32 +2,32 @@ import 'dart:ui';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:posumkm/controllers/api/TransactionController.dart';
+import 'package:posumkm/models/TransactionDetailModel.dart';
 // import 'package:page_transition/page_transition.dart';
 import 'package:posumkm/utils/Utils.dart';
 import 'package:posumkm/views/transaction/TransactionChooseMenuPage.dart';
 import 'package:posumkm/views/transaction/TransactionDetailItem.dart';
+import 'package:posumkm/views/widget/HttpToastDialog.dart';
+import 'package:posumkm/views/widget/LoadingImageWidget.dart';
 import 'package:provider/provider.dart';
 
-import '../../controllers/api/MasterController.dart';
 import '../../main.dart';
 import '../../models/HttpResponseModel.dart';
-import '../../models/JenisMenuModel.dart';
-import '../../models/KategoriMenuModel.dart';
-import '../../models/MasterMenuModel.dart';
 import '../../models/MenuMerchantModel.dart';
+import '../../models/TransactionModel.dart';
 import '../../providers/MenuMerchantProvider.dart';
 import '../widget/Redicrect.dart';
 
-var menuMerchantProvider;
 var selectedMenu;
-List<JenisMenuModel> _listJenisMenu = [];
-List<KategoriMenuModel> _listKategoriMenu = [];
-List<MenuMerchantModel> _listMenuMerchant = [];
-late MasterMenuModel _masterMenuModel;
+var menuMerchantProvider;
 
+// ignore: must_be_immutable
 class InputTransactionPage extends StatefulWidget {
-  const InputTransactionPage({super.key});
+  String idTransaksi;
+  InputTransactionPage({super.key, required this.idTransaksi});
 
   @override
   State<InputTransactionPage> createState() => _InputTransactionState();
@@ -52,7 +52,7 @@ class _InputTransactionState extends State<InputTransactionPage> {
               ),
               // onPressed: () => Navigator.of(context).pop()
               onPressed: () {
-                if (selectedMenu.length == 0) {
+                if (selectedMenu.length > 0) {
                   Navigator.of(context).pop();
                 } else {
                   AwesomeDialog(
@@ -64,7 +64,9 @@ class _InputTransactionState extends State<InputTransactionPage> {
                     showCloseIcon: true,
                     // btnOkText: "Tutup",
                     // btnOkColor: Colors.red,
-                    btnOkOnPress: () => Navigator.of(context).pop(),
+                    btnOkOnPress: () {
+                      Navigator.of(context).pop();
+                    },
                     btnOkText: "Lanjutkan",
                     btnOkColor: Colors.green[900],
                     btnCancelOnPress: () {},
@@ -78,7 +80,7 @@ class _InputTransactionState extends State<InputTransactionPage> {
         ),
         body: ChangeNotifierProvider(
             create: (context) => MenuMerchantProvider(),
-            child: InputTransactionContent()),
+            child: InputTransactionContent(idTransaksi: widget.idTransaksi,))
       ),
     );
   }
@@ -86,78 +88,102 @@ class _InputTransactionState extends State<InputTransactionPage> {
 
 // ignore: must_be_immutable
 class InputTransactionContent extends StatefulWidget {
-  const InputTransactionContent({
-    super.key,
-  });
+  String? idTransaksi;
+  InputTransactionContent({super.key, this.idTransaksi});
 
   @override
-  State<InputTransactionContent> createState() =>
-      _InputTransactionContentState();
+  State<InputTransactionContent> createState() => _InputTransactionContentState();
 }
 
 class _InputTransactionContentState extends State<InputTransactionContent> {
+  bool _showLoader = true;
   String _messageRedirect = "";
-  Future<HttpResponseModel> _refreshMasterMenu() async {
-    setState(() {});
-    HttpResponseModel rs = await MasterController.getAllMasterMenu();
+  List<MenuMerchantModel> _listMenuMerchant = [];
+  late TransactionModel _transaksi = TransactionModel.setNull();
+  List<TransactionDetailModel> _listDetailTransaksi = [];
+  late HttpResponseModel rs;
 
+  Future<void> _getDetailTransaction() async {
+    rs = await TransactionController.getTransactionDetail(widget.idTransaksi!);
     // ignore: unnecessary_null_comparison
     if (rs != null) {
       if (rs.code == 200) {
-        _masterMenuModel = rs.data;
-        _listJenisMenu = _masterMenuModel.listJenisMenu;
-        _listKategoriMenu = _masterMenuModel.listKategoriMenu;
-        _listMenuMerchant = _masterMenuModel.listMenuMerchant;
+        if(rs.data['transaksi'].containsKey("id")){
+          _transaksi = TransactionModel.fromJson(rs.data['transaksi']);
+          _listDetailTransaksi = _transaksi.detail;
+        }
+        _listMenuMerchant = convertToListMenuMerchant(rs.data['list_menu']);
       } else if (rs.code == 302) {
         _messageRedirect = rs.message!;
         // ignore: use_build_context_synchronously
         redirectLogout(context, _messageRedirect);
+      } else {
+        // ignore: use_build_context_synchronously
+        httpToastDialog(
+          rs,
+          context,
+          ToastGravity.BOTTOM,
+          const Duration(seconds: 2),
+          const Duration(seconds: 2)
+        );
       }
     }
-    setState(() {});
-    return rs;
+    setState(() {
+      _showLoader = false;
+    }); 
   }
 
   @override
   void initState() {
     super.initState();
-    _refreshMasterMenu();
+    _getDetailTransaction();
   }
 
   @override
   Widget build(BuildContext context) {
-    menuMerchantProvider = Provider.of<MenuMerchantProvider>(context);
-    selectedMenu = menuMerchantProvider.getListSelected;
-    // menuMerchantProvider.setListMenu(listData);
+    if(!_showLoader){
+      menuMerchantProvider = Provider.of<MenuMerchantProvider>(context, listen: false);
+      if(_listDetailTransaksi.isNotEmpty){
+        menuMerchantProvider.setListDataFromWs(_listDetailTransaksi);
+      }
+      selectedMenu = menuMerchantProvider.getListSelected;
+    }
     var sizeScreen = MediaQuery.of(context).size;
-    return SafeArea(
+    return Consumer(
+      builder: (context, value, child){
+        return SafeArea(
         child: Row(
       children: [
-        TransactionDetailitem(
-            listDataItem: _listMenuMerchant, selectedDataItem: selectedMenu),
-        Container(
-          color: Colors.transparent,
-          height: double.infinity,
-          width: sizeScreen.width * .6,
-          child: Column(
-            children: [
-              // SearchField(
-              //     listData: _listMenuMerchant,
-              //     searchController: searchController,
-              //     callback: _callbackMenuMerchant),
-              // LineDividerWidget(
-              //   color: Colors.grey.withOpacity(.3),
-              //   height: 1,
-              // ),
-              const SizedBox(
-                height: 10,
-              ),
-              TransactionChooseMenuPage(listData: _listMenuMerchant),
-            ],
+        if(_showLoader)...{
+          loadingDataWidget(context)
+        } else...{
+          TransactionDetailitem(
+            listDataItem: _listMenuMerchant, transaksi: _transaksi,),
+          Container(
+            color: Colors.transparent,
+            height: double.infinity,
+            width: sizeScreen.width * .6,
+            child: Column(
+              children: [
+                // SearchField(
+                //     listData: _listMenuMerchant,
+                //     searchController: searchController,
+                //     callback: _callbackMenuMerchant),
+                // LineDividerWidget(
+                //   color: Colors.grey.withOpacity(.3),
+                //   height: 1,
+                // ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TransactionChooseMenuPage(listData: _listMenuMerchant, callback: _getDetailTransaction,),
+              ],
+            ),
           ),
-        ),
+        }
       ],
     ));
+      });
   }
 }
 
