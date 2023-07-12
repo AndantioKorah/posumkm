@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:posumkm/controllers/api/TransactionController.dart';
 import 'package:posumkm/main.dart';
 import 'package:posumkm/models/TransactionModel.dart';
 import 'package:posumkm/views/transaction/InputTransactionPage.dart';
@@ -30,6 +34,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
   DateTime selectedDate = DateTime.now();
   TextEditingController tglTransaksiController = TextEditingController();
   TextEditingController namaController = TextEditingController();
+  TextEditingController noTransaksiController = TextEditingController();
   DateTime? datePicked;
   TimeOfDay? timePicked;
   TimeOfDay selectedTime =
@@ -73,6 +78,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
         Utils().formatDate(selectedDate.toString(), "/");
     if(widget.transaksi.id != "0"){
       namaController.text = widget.transaksi.nama;
+      noTransaksiController.text = widget.transaksi.nomor_transaksi;
       tglTransaksiController.text =
         Utils().formatDate(widget.transaksi.tanggal_transaksi, "/");
     }
@@ -108,6 +114,38 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                   ])),
           child: Column(
             children: [
+              if(widget.transaksi.id != "0")...{
+                SizedBox(
+                  height: 40,
+                  child: TextField(
+                    controller: noTransaksiController,
+                    enabled: false,
+                    style: TrxTxtStyle.valTxtField,
+                    cursorColor: AppsColor.alternativeWhite,
+                    decoration: InputDecoration(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                      labelText: "No. Transaksi",
+                      labelStyle: TrxTxtStyle.lblTxtField,
+                      focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1, color: AppsColor.alternativeWhite)),
+                      border: const OutlineInputBorder(),
+                      disabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(100, 255, 255, 255))),
+                      enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(100, 255, 255, 255))),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                )
+              },
               SizedBox(
                 height: 40,
                 child: TextField(
@@ -245,32 +283,32 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                         gravity: ToastGravity.BOTTOM)
                     .showDialog();
               } else {
-                // TransactionController.createTransaksi(json.encode(selectedMenu),
-                //         tglTransaksiController.text, namaController.text)
-                //     .then((value) {
-                //   if (value.code != 200 || value.code != 201) {
-                //     AwesomeDialog(
-                //             context: context,
-                //             dialogType: DialogType.ERROR,
-                //             animType: AnimType.SCALE,
-                //             title: "Error",
-                //             desc: value.message,
-                //             showCloseIcon: true,
-                //             btnOkText: "Tutup",
-                //             btnOkColor: Colors.red,
-                //             btnOkOnPress: () {})
-                //         .show();
-                //   } else {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        // child: PaymentPage(id: value.data,),
-                        child: PaymentPage(
-                          id: "10",
-                        ),
-                        type: PageTransitionType.rightToLeft));
-                //   }
-                // });
+                TransactionController.createTransaksi(json.encode(selectedMenu),
+                        tglTransaksiController.text, namaController.text, widget.transaksi.id)
+                    .then((value) {
+                  if (value.code != 200 && value.code != 201) {
+                    AwesomeDialog(
+                            context: context,
+                            dialogType: DialogType.ERROR,
+                            animType: AnimType.SCALE,
+                            title: "Error",
+                            desc: value.message,
+                            showCloseIcon: true,
+                            btnOkText: "Tutup",
+                            btnOkColor: Colors.red,
+                            btnOkOnPress: () {})
+                        .show();
+                  } else {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                          // child: PaymentPage(id: value.data,),
+                          child: PaymentPage(
+                            id: value.data,
+                          ),
+                          type: PageTransitionType.rightToLeft));
+                  }
+                });
               }
             },
             child: Container(

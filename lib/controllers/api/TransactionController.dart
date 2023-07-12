@@ -10,11 +10,12 @@ import '../../models/UserModel.dart';
 
 class TransactionController {
   static Future<HttpResponseModel> createTransaksi(
-      String data, String tanggal_transaksi, String nama) async {
+      String data, String tanggal_transaksi, String nama, String id) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     UserModel users = UserModel.fromJson(
         jsonDecode(pref.getString("userLoggedIn").toString()));
     Map<String, String> body = {
+      "id": id,
       "nama": nama,
       "data": data,
       "tanggal_transaksi": tanggal_transaksi,
@@ -22,7 +23,6 @@ class TransactionController {
       "username": users.username,
       "device_id": deviceData['deviceId']
     };
-
     var req = await http.post(
         Uri.parse("${AppConstants.apiBaseUrl}transaction/create"),
         body: body);
