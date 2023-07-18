@@ -75,7 +75,7 @@ class _InputTransactionState extends State<InputTransactionPage> {
                 }
               }),
           backgroundColor: theme.colorScheme.onPrimaryContainer,
-          title: const Text("TRANSAKSI BARU", style: BaseTextStyle.appBarTitle),
+          title: Text(widget.idTransaksi == "0" ? "TRANSAKSI BARU" : "TRANSAKSI", style: BaseTextStyle.appBarTitle),
           centerTitle: true,
         ),
         body: ChangeNotifierProvider(

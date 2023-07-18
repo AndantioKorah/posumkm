@@ -9,7 +9,9 @@ class TransactionModel extends HttpResponseModel {
       nomor_transaksi,
       nama,
       total_harga,
-      status_transaksi;
+      status_transaksi,
+      total_item,
+      list_nama_item;
   List<TransactionDetailModel> detail = [];
 
   TransactionModel(
@@ -20,7 +22,10 @@ class TransactionModel extends HttpResponseModel {
       required this.nama,
       required this.total_harga,
       required this.detail,
-      required this.status_transaksi});
+      required this.status_transaksi,
+      required this.total_item,
+      required this.list_nama_item,
+      });
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> result = <String, dynamic>{};
@@ -32,6 +37,8 @@ class TransactionModel extends HttpResponseModel {
     result['total_harga'] = total_harga;
     result['detail'] = detail;
     result['status_transaksi'] = status_transaksi;
+    result['total_item'] = total_item;
+    result['list_nama_item'] = list_nama_item;
 
     return result;
   }
@@ -45,6 +52,8 @@ class TransactionModel extends HttpResponseModel {
     total_harga = "";
     detail = [];
     status_transaksi = "";
+    total_item = "0";
+    list_nama_item = "";
   }
 
   TransactionModel.fromJson(Map<String, dynamic> json) {
@@ -72,5 +81,23 @@ class TransactionModel extends HttpResponseModel {
     if (json['status_transaksi'] != null) {
       status_transaksi = json['status_transaksi'];
     }
+    if (json['total_item'] != null) {
+      total_item = json['total_item'].toString();
+    }
+    if (json['list_nama_item'] != null) {
+      list_nama_item = json['list_nama_item'];
+    }
   }
+}
+
+List<TransactionModel> convertToList(List<dynamic> res) {
+  List<TransactionModel> transactionModel = [];
+  TransactionModel? temp;
+
+  for (var i = 0; i < res.length; i++) {
+    temp = TransactionModel.fromJson(res[i]);
+    transactionModel.add(temp);
+  }
+
+  return transactionModel;
 }

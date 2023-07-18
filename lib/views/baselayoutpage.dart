@@ -17,8 +17,13 @@ import 'transaction/TransactionPage.dart';
 
 UserModel? userLoggedIn;
 
+// ignore: must_be_immutable
 class BaseLayoutPage extends StatefulWidget {
-  const BaseLayoutPage({Key? key}) : super(key: key);
+  // int openPage;
+  const BaseLayoutPage({
+    Key? key,
+    // required this.openPage
+  }) : super(key : key);
 
   @override
   State<BaseLayoutPage> createState() => _BaseLayoutPageState();
@@ -37,6 +42,15 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
       selectedPage = selectedIndex;
     });
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   selectedPage = widget.openPage;
+  //   setState(() {
+      
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
