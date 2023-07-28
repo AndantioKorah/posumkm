@@ -87,3 +87,15 @@ class UserModel extends HttpResponseModel {
     }
   }
 }
+
+List<UserModel> convertToList(List<dynamic> res) {
+  List<UserModel> userModel = [];
+  UserModel? temp;
+
+  for (var i = 0; i < res.length; i++) {
+    temp = UserModel.fromJson(res[i]);
+    userModel.add(temp);
+  }
+
+  return userModel;
+}

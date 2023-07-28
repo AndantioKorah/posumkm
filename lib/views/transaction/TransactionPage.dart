@@ -16,6 +16,7 @@ import '../../controllers/api/TransactionController.dart';
 import '../../main.dart';
 import '../../models/HttpResponseModel.dart';
 import '../../models/TransactionModel.dart';
+import 'PaymentPage.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
@@ -268,7 +269,11 @@ class _ListTransaksiItemState extends State<ListTransaksiItem> {
             Navigator.push(
                 context,
                 PageTransition(
-                    child: InputTransactionPage(idTransaksi: widget.listData[index].id,),
+                    child: 
+                    widget.listData[index].status_transaksi == "Lunas" ?
+                    PaymentPage(id: widget.listData[index].id)
+                    :
+                    InputTransactionPage(idTransaksi: widget.listData[index].id,),
                     type: PageTransitionType.bottomToTop));
           },
           child: Container(

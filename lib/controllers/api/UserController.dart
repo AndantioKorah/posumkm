@@ -85,4 +85,28 @@ class UserController {
           code: 500, message: "Terjadi Kesalahan \n $e", data: null);
     }
   }
+
+  static Future<HttpResponseModel> getAllMerchantUsers() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    UserModel users = UserModel.fromJson(
+        jsonDecode(pref.getString("userLoggedIn").toString()));
+    Map<String, String> body = {
+      "id_m_merchant": users.id_m_merchant,
+      "password": users.password,
+      "username": users.username,
+      "device_id": deviceData['deviceId']
+    };
+
+    var req = await http.post(
+        Uri.parse("${AppConstants.apiBaseUrl}merchant/users"),
+        body: body);
+    try {
+      var res = json.decode(req.body);
+      return HttpResponseModel(
+          code: res['code'], message: res['message'], data: res['data']);
+    } catch (e) {
+      return HttpResponseModel(
+          code: 500, message: "Terjadi Kesalahan \n $e", data: null);
+    }
+  }
 }
