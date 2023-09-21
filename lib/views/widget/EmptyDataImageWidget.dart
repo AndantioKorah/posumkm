@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:posumkm/main.dart';
 
 Widget emptyDataWidget(BuildContext ctx) {
   return SingleChildScrollView(
