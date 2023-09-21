@@ -4,7 +4,6 @@ import 'package:posumkm/controllers/api/UserController.dart';
 import 'package:posumkm/models/UserModel.dart';
 import 'package:posumkm/views/widget/LoadingImageWidget.dart';
 
-import '../../controllers/api/TransactionController.dart';
 import '../../main.dart';
 import '../../models/HttpResponseModel.dart';
 import '../widget/HttpToastDialog.dart';

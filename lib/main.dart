@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -245,6 +244,18 @@ class AppsColor {
 
 class BaseTextStyle {
   final Color color = Colors.grey;
+
+  static const lblDashboard = TextStyle(
+      fontSize: 14,
+      color: Color.fromARGB(255, 182, 217, 235),
+      // fontWeight: FontWeight.bold,
+      fontFamily: "Poppins");
+
+  static const valDashboard = TextStyle(
+      fontSize: 25,
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontFamily: "Varela-Round");
 
   static const appBarTitle = TextStyle(
       fontSize: 16,

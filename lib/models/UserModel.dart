@@ -11,7 +11,8 @@ class UserModel extends HttpResponseModel {
       kode_nama_role,
       nama_merchant = '',
       alamat = '',
-      logo = '';
+      logo = '',
+      expire_date = '';
 
   UserModel({
     required this.username,
@@ -25,6 +26,7 @@ class UserModel extends HttpResponseModel {
     required this.nama_merchant,
     required this.alamat,
     required this.logo,
+    required this.expire_date,
   });
 
   Map<String, dynamic> toJson() {
@@ -40,6 +42,7 @@ class UserModel extends HttpResponseModel {
     result['nama_merchant'] = nama_merchant;
     result['alamat'] = alamat;
     result['logo'] = logo;
+    result['expire_date'] = expire_date;
 
     return result;
   }
@@ -78,6 +81,11 @@ class UserModel extends HttpResponseModel {
       alamat = json['alamat'];
     } else {
       alamat = 'PROGRAMMER';
+    }
+    if (json['expire_date'] != null) {
+      expire_date = json['expire_date'];
+    } else {
+      expire_date = '31 Desember 3000';
     }
     if (json['logo'] != null) {
       logo = json['logo'];

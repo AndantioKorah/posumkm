@@ -9,7 +9,7 @@ import 'package:posumkm/models/PembayaranModel.dart';
 import 'package:posumkm/models/TransactionDetailModel.dart';
 import 'package:posumkm/models/TransactionModel.dart';
 import 'package:posumkm/utils/Utils.dart';
-import 'package:posumkm/views/BaseLayoutPage.dart';
+import 'package:posumkm/views/transaction/TransactionPage.dart';
 import 'package:posumkm/views/widget/LoadingImageWidget.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 // import 'package:toast/toast.dart';
@@ -1351,7 +1351,7 @@ class _PaymentPageState extends State<PaymentPage> {
                                     });
                                     Navigator.pushAndRemoveUntil(
                                     context, MaterialPageRoute(
-                                        builder: (context) => const BaseLayoutPage()),(route) => false,
+                                        builder: (context) => const TransactionPage()),(route) => false,
                                     );
                                   }
                                 });

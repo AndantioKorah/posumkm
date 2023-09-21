@@ -304,7 +304,7 @@ class _TransactionDetailitemState extends State<TransactionDetailitem> {
                       PageTransition(
                           // child: PaymentPage(id: value.data,),
                           child: PaymentPage(
-                            id: value.data,
+                            id: value.data.toString(),
                           ),
                           type: PageTransitionType.rightToLeft));
                   }

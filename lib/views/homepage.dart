@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:posumkm/main.dart';
 import 'package:posumkm/views/home_pages/LaporanPage.dart';
 import 'package:posumkm/views/home_pages/MenuPage.dart';
-import 'package:posumkm/views/home_pages/UserManagementPage.dart';
+import 'package:posumkm/views/transaction/TransactionPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -95,6 +96,19 @@ class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
                 Navigator.push(
                     context,
                     PageTransition(
+                        child: TransactionPage(),
+                        type: PageTransitionType.bottomToTop));
+              },
+              child: CustomButton(
+                text: "Kasir",
+                icon: FontAwesomeIcons.cashRegister,
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    PageTransition(
                         child: MenuPage(),
                         type: PageTransitionType.bottomToTop));
               },
@@ -103,19 +117,19 @@ class _MerchantMenuWidgetState extends State<MerchantMenuWidget> {
                 icon: Icons.menu_book_rounded,
               ),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: UserManagementPage(),
-                        type: PageTransitionType.bottomToTop));
-              },
-              child: CustomButton(
-                text: "User",
-                icon: Icons.manage_accounts_rounded,
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     Navigator.push(
+            //         context,
+            //         PageTransition(
+            //             child: UserManagementPage(),
+            //             type: PageTransitionType.bottomToTop));
+            //   },
+            //   child: CustomButton(
+            //     text: "User",
+            //     icon: Icons.manage_accounts_rounded,
+            //   ),
+            // ),
           ],
         ),
       ),

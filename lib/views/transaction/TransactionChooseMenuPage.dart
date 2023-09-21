@@ -221,66 +221,66 @@ class TransactionChooseMenuPage extends StatelessWidget {
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
         child: Container(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: listData.length > 0 ? 
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                for(var i = 0; i < listData.length; i++)...{
-                  MenuItem(item: listData[i],)
-                }
-              ],
-            ),
-          )
-          : emptyDataWidget(context),
-          // child: SearchableList<MenuMerchantModel>(
-          //   initialList: listData,
-          //   builder: (MenuMerchantModel item) => MenuItem(item: item),
-          //   asyncListFilter: (q, list) {
-          //     return list
-          //         .where((element) =>
-          //             element.nama_menu_merchant.toLowerCase().contains(q))
-          //         .toList();
-          //   },
-          //   loadingWidget: loadingDataWidget(context),
-          //   errorWidget: emptyDataWidget(context, null),
-          //   emptyWidget: emptyDataWidget(context, null),
-          //   asyncListCallback: () async {
-          //     await Future.delayed(
-          //       const Duration(
-          //         milliseconds: 5000,
-          //       ),
-          //     );
-          //     return listData;
-          //   },
-          //   searchTextController: searchController,
-          //   autoFocusOnSearch: false,
-          //   searchTextPosition: SearchTextPosition.top,
-          //   inputDecoration: const InputDecoration(
-          //     // suffixIcon: InkWell(
-          //     //   onTap: () {
-          //     //     widget.searchController.clear();
-          //     //   },
-          //     //   child: const Icon(
-          //     //     Icons.cancel_rounded,
-          //     //     size: 15,
-          //     //     color: Colors.grey,
-          //     //   ),
-          //     // ),
-          //     contentPadding: EdgeInsets.only(
-          //       left: 10,
-          //       right: 10,
-          //     ),
-          //     border: OutlineInputBorder(),
-          //     hintText: "Cari Menu",
-          //     fillColor: AppsColor.alternativeWhite,
-          //     hintStyle: TextStyle(
-          //       color: Colors.grey,
-          //       fontFamily: "Poppins",
-          //     ),
-          //     // prefixIcon: Icon(Icons.search_rounded),
-          //     // prefixIconColor: Colors.grey
+          // child: listData.length > 0 ? 
+          // SingleChildScrollView(
+          //   child: Column(
+          //     children: [
+          //       for(var i = 0; i < listData.length; i++)...{
+          //         MenuItem(item: listData[i],)
+          //       }
+          //     ],
           //   ),
-          // ),
+          // )
+          // : emptyDataWidget(context),
+          child: SearchableList<MenuMerchantModel>(
+            initialList: listData,
+            builder: (MenuMerchantModel item) => MenuItem(item: item),
+            asyncListFilter: (q, list) {
+              return list
+                  .where((element) =>
+                      element.nama_menu_merchant.toLowerCase().contains(q))
+                  .toList();
+            },
+            loadingWidget: loadingDataWidget(context),
+            errorWidget: emptyDataWidget(context),
+            emptyWidget: emptyDataWidget(context),
+            asyncListCallback: () async {
+              // await Future.delayed(
+              //   const Duration(
+              //     milliseconds: 5000,
+              //   ),
+              // );
+              return listData;
+            },
+            searchTextController: searchController,
+            autoFocusOnSearch: false,
+            searchTextPosition: SearchTextPosition.top,
+            inputDecoration: const InputDecoration(
+              // suffixIcon: InkWell(
+              //   onTap: () {
+              //     widget.searchController.clear();
+              //   },
+              //   child: const Icon(
+              //     Icons.cancel_rounded,
+              //     size: 15,
+              //     color: Colors.grey,
+              //   ),
+              // ),
+              contentPadding: EdgeInsets.only(
+                left: 10,
+                right: 10,
+              ),
+              border: OutlineInputBorder(),
+              hintText: "Cari Menu",
+              fillColor: AppsColor.alternativeWhite,
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontFamily: "Poppins",
+              ),
+              // prefixIcon: Icon(Icons.search_rounded),
+              // prefixIconColor: Colors.grey
+            ),
+          ),
         ),
       ),
     );

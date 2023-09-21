@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:posumkm/main.dart';
+import 'package:posumkm/utils/Utils.dart';
 import 'package:posumkm/views/BaseLayoutPage.dart';
 import 'package:posumkm/views/widget/ChangePasswordWidget.dart';
 import 'package:posumkm/views/widget/Redicrect.dart';
@@ -267,15 +268,15 @@ class _ContentTopWidgetState extends State<ContentTopWidget> {
             ),
             child: Text(userLoggedIn?.alamat ?? 'PROGRAMMER'),
           ),
-          const DefaultTextStyle(
+          DefaultTextStyle(
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               color: AppsColor.alternativeWhite,
               fontWeight: FontWeight.normal,
               // fontFamily: 'PT-Sans',
             ),
-            child: Text('Expire Date: 18 Januari 2024'),
+            child: Text("Expired Date : "+Utils().formatDateOnlyNamaBulan(userLoggedIn!.expire_date,)),
           ),
         ]),
       ),

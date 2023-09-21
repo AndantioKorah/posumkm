@@ -84,6 +84,9 @@ class _TransactionPageState extends State<TransactionPage> {
     tglTransaksiController.text =
         Utils().formatDateOnly(selectedDate.toString(), "/");
     _getAllTransaksi();
+    tglTransaksiController.addListener(() {
+      _getAllTransaksi();
+    });
   }
 
   @override
@@ -91,8 +94,12 @@ class _TransactionPageState extends State<TransactionPage> {
     var sizeScreen = MediaQuery.of(context).size;
     var theme = Theme.of(context);
 
-    return Expanded(
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
       child: Scaffold(
+
         floatingActionButton: InkWell(
           onTap: () {
             Navigator.push(
@@ -115,15 +122,16 @@ class _TransactionPageState extends State<TransactionPage> {
           ),
         ),
         appBar: AppBar(
-          // leading: IconButton(
-          //   icon: const Icon(
-          //     Icons.chevron_left_rounded,
-          //     size: 30,
-          //     color: AppsColor.alternativeWhite,
-          //   ),
-          //   onPressed: () => Navigator.of(context).pop()),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.chevron_left_rounded,
+              size: 30,
+              color: AppsColor.alternativeWhite,
+            ),
+            onPressed: () => Navigator.of(context).pop()),
           backgroundColor: theme.colorScheme.onPrimaryContainer,
-          title: const Text("TRANSAKSI", style: BaseTextStyle.appBarTitle),
+          title: const Text("TRANSAKSI", style: BaseTextStyle.appBarTitle,),
+          centerTitle: true,
           // centerTitle: true,
           actions: [
             Container(
