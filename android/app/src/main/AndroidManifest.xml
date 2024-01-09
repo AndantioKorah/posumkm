@@ -1,8 +1,10 @@
+<!-- android:name="${applicationName}"
+android:icon="@mipmap/ic_launcher"> -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="posumkm"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:label="NiCash"
+        android:name="NiCash"
+        android:icon="assets/images/main-launcher-logo.png">
         <activity
             android:name=".MainActivity"
             android:exported="true"
