@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: AppsColor.alternativeWhite,
                     fontWeight: FontWeight.bold,
                     fontFamily: "Poppins"),
-                child: Text("NiKita POS"),
+                child: Text("NiCash"),
               ),
             ]),
           ),

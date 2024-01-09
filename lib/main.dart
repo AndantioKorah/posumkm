@@ -226,7 +226,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UserProvider()),
       ],
       child: MaterialApp(
-        title: 'NiKita POS UMKM',
+        title: 'NiCash',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Varela-Round',
