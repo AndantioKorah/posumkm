@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/UserModel.dart';
+import 'views/LoginPage.dart';
 
 UserModel? userLoggedInApps;
 var databaseFactory;
@@ -25,9 +26,10 @@ void main() async {
   // }
 
   // databaseFactory = databaseFactoryFfi;
-  // await _loadUserLoggedIn();
+  WidgetsFlutterBinding.ensureInitialized();
   deviceData = await getDeviceInfo();
   runApp(const MyApp());
+  await _loadUserLoggedIn();
 }
 
 Future<Map<String, dynamic>> getDeviceInfo() async {
@@ -51,6 +53,7 @@ Future<Map<String, dynamic>> getDeviceInfo() async {
       'hardware': build.hardware,
       'host': build.host,
       'id': build.id,
+      'deviceId': build.id,
       'manufacturer': build.manufacturer,
       'model': build.model,
       'product': build.product,
@@ -95,6 +98,7 @@ Future<Map<String, dynamic>> getDeviceInfo() async {
       'name': data.name,
       'version': data.version,
       'id': data.id,
+      'deviceId': data.id,
       'idLike': data.idLike,
       'versionCodename': data.versionCodename,
       'versionId': data.versionId,

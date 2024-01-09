@@ -8,7 +8,7 @@ Widget emptyDataWidget(BuildContext ctx) {
         children: [
           Center(
             child: Image(
-                width: MediaQuery.of(ctx).size.width * .6,
+                width: MediaQuery.of(ctx).size.height * .5,
                 image: const AssetImage("assets/images/empty-data-image.png")),
           ),
           Center(

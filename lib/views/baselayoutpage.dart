@@ -84,6 +84,11 @@ class _BaseLayoutPageState extends State<BaseLayoutPage> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: theme.colorScheme.onPrimaryContainer,
+        toolbarHeight: .000001,
+        shadowColor: Colors.grey
+      ),
         bottomNavigationBar: CurvedNavigationBar(
           height: 55,
           backgroundColor: AppsColor.alternativeWhite,

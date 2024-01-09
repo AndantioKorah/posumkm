@@ -31,9 +31,11 @@ class _LoginPageState extends State<LoginPage> {
   //   // Future.delayed(const Duration(seconds: 3))
   //   //     .then((value) => {FlutterNativeSplash.remove()});
   // }
-
   @override
   Widget build(BuildContext context) {
+    userName.text = "testing";
+    password.text = "112233";
+
     var sizeScreen = MediaQuery.of(context).size;
     var theme = Theme.of(context);
 
@@ -85,126 +87,128 @@ class _LoginPageState extends State<LoginPage> {
         Scaffold(
           backgroundColor: Colors.transparent,
           // backgroundColor: theme.colorScheme.onPrimaryContainer,
-          body: SafeArea(
-            child: Column(
-              children: [
-                Container(
-                  height: sizeScreen.height * .5,
-                  decoration: BoxDecoration(
-                    // color: theme.colorScheme.onPrimaryContainer,
-                    color: Colors.transparent,
-                    // image: DecorationImage(
-                    //   image: AssetImage("assets/images/login-image.png")
-                    // ),
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  Container(
+                    height: sizeScreen.height * .5,
+                    decoration: BoxDecoration(
+                      // color: theme.colorScheme.onPrimaryContainer,
+                      color: Colors.transparent,
+                      // image: DecorationImage(
+                      //   image: AssetImage("assets/images/login-image.png")
+                      // ),
+                    ),
                   ),
-                ),
-                Container(
-                  height: sizeScreen.height * .5,
-                  decoration: BoxDecoration(
-                      color: AppsColor.alternativeWhite,
-                      borderRadius: BorderRadius.only(
-                          // topLeft: Radius.circular(10),
-                          topRight: Radius.circular(50))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(left: 40),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Please Login to continue',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                              color: theme.colorScheme.onPrimaryContainer,
+                  Container(
+                    height: sizeScreen.height * .5,
+                    decoration: BoxDecoration(
+                        color: AppsColor.alternativeWhite,
+                        borderRadius: BorderRadius.only(
+                            // topLeft: Radius.circular(10),
+                            topRight: Radius.circular(50))),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 40),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Please Login to continue',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: theme.colorScheme.onPrimaryContainer,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: sizeScreen.height * .02,
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            loginTextField(
-                                context,
-                                userName,
-                                "Username",
-                                TextInputAction.next,
-                                TextInputType.name,
-                                false,
-                                FontAwesomeIcons.solidUser),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            loginTextField(
-                                context,
-                                password,
-                                "Password",
-                                TextInputAction.done,
-                                TextInputType.name,
-                                true,
-                                FontAwesomeIcons.key),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 40,
-                              child: RoundedLoadingButton(
-                                valueColor: AppsColor.alternativeWhite,
-                                animateOnTap: true,
-                                color: theme.colorScheme.onPrimaryContainer,
-                                controller: buttonSumbit,
-                                // onPressed: () {
-                                //   buttonSumbit.reset();
-                                //   print(deviceData['deviceId']);
-                                // },
-                                onPressed: () => UserController.loginFunction(
-                                        userName.text, password.text)
-                                    .then((value) {
-                                  buttonSumbit.reset();
-                                  if (value.code == 200) {
-                                    UserPreferences.setUserLoggedIn(value.data);
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                BaseLayoutPage()));
-                                  } else {
-                                    AwesomeDialog(
-                                            context: context,
-                                            dialogType: DialogType.ERROR,
-                                            animType: AnimType.SCALE,
-                                            title: "LOGIN ERROR",
-                                            desc: value.message,
-                                            showCloseIcon: true,
-                                            btnOkText: "Tutup",
-                                            btnOkColor: Colors.red[900],
-                                            btnOkOnPress: () {})
-                                        .show();
-                                  }
-                                }),
-                                child: Text(
-                                  "LOGIN",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: AppsColor.alternativeWhite),
-                                ),
-                              ),
-                            )
-                          ],
+                        SizedBox(
+                          height: sizeScreen.height * .02,
                         ),
-                      ),
-                    ],
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              loginTextField(
+                                  context,
+                                  userName,
+                                  "Username",
+                                  TextInputAction.next,
+                                  TextInputType.name,
+                                  false,
+                                  FontAwesomeIcons.solidUser),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              loginTextField(
+                                  context,
+                                  password,
+                                  "Password",
+                                  TextInputAction.done,
+                                  TextInputType.name,
+                                  true,
+                                  FontAwesomeIcons.key),
+                              SizedBox(
+                                height: 30,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                height: 40,
+                                child: RoundedLoadingButton(
+                                  valueColor: AppsColor.alternativeWhite,
+                                  animateOnTap: true,
+                                  color: theme.colorScheme.onPrimaryContainer,
+                                  controller: buttonSumbit,
+                                  // onPressed: () {
+                                  //   buttonSumbit.reset();
+                                  //   print(deviceData['deviceId']);
+                                  // },
+                                  onPressed: () => UserController.loginFunction(
+                                          userName.text, password.text)
+                                      .then((value) {
+                                    buttonSumbit.reset();
+                                    if (value.code == 200) {
+                                      UserPreferences.setUserLoggedIn(value.data);
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BaseLayoutPage()));
+                                    } else {
+                                      AwesomeDialog(
+                                              context: context,
+                                              dialogType: DialogType.ERROR,
+                                              animType: AnimType.SCALE,
+                                              title: "LOGIN ERROR",
+                                              desc: value.message,
+                                              showCloseIcon: true,
+                                              btnOkText: "Tutup",
+                                              btnOkColor: Colors.red[900],
+                                              btnOkOnPress: () {})
+                                          .show();
+                                    }
+                                  }),
+                                  child: Text(
+                                    "LOGIN",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppsColor.alternativeWhite),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

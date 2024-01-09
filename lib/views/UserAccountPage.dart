@@ -22,7 +22,7 @@ class _UserAccountPageState extends State<UserAccountPage> {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        // height: sizeScreen.height * .5,
+        height: MediaQuery.of(context).size.height * .5,
         width: double.infinity,
         decoration: const BoxDecoration(
           color: AppsColor.alternativeWhite,
@@ -152,41 +152,40 @@ class _TopWidgetUserAccountState extends State<TopWidgetUserAccount> {
   Widget build(BuildContext context) {
     var sizeScreen = MediaQuery.of(context).size;
 
-    return Expanded(
-      child: Container(
+    return Container(
+        width: double.infinity,
+        // height: sizeScreen.height * .3,
+        height: sizeScreen.height * .5,
+        // padding: EdgeInsets.all(),
+        decoration: const BoxDecoration(
+          color: Colors.transparent,
+        ),
+        child: Container(
           width: double.infinity,
-          height: sizeScreen.height * .3,
-          // padding: EdgeInsets.all(),
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
+          // padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            // borderRadius: BorderRadius.all(Radius.circular(10)),
+            image: DecorationImage(
+              // image: AssetImage("assets/images/logo-default-merchant.jpg"),
+              image: ImageUtils().loadMerchantLogo(userLoggedIn?.logo ?? ''),
+              fit: BoxFit.cover,
+            ),
           ),
-          child: Container(
-            width: double.infinity,
-            // padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              // borderRadius: BorderRadius.all(Radius.circular(10)),
-              image: DecorationImage(
-                // image: AssetImage("assets/images/logo-default-merchant.jpg"),
-                image: ImageUtils().loadMerchantLogo(userLoggedIn?.logo ?? ''),
-                fit: BoxFit.cover,
-              ),
-            ),
-            child: ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.4),
-                    // borderRadius: BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: const ContentTopWidget(),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.4),
+                  // borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
+                child: const ContentTopWidget(),
               ),
             ),
-          )),
-    );
+          ),
+        ));
   }
 }
 

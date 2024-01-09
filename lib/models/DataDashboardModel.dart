@@ -40,31 +40,31 @@ class DataDashboardModel extends HttpResponseModel {
 
   DataDashboardModel.fromJson(Map<String, dynamic> json) {
     if (json['total_penjualan'] != null) {
-      total_penjualan = json['total_penjualan'];
+      total_penjualan = json['total_penjualan'].toString();
     }
     if (json['total_penjualan_lunas'] != null) {
-      total_penjualan_lunas = json['total_penjualan_lunas'];
+      total_penjualan_lunas = json['total_penjualan_lunas'].toString();
     }
     if (json['total_penjualan_belum_lunas'] != null) {
-      total_penjualan_belum_lunas = json['total_penjualan_belum_lunas'];
+      total_penjualan_belum_lunas = json['total_penjualan_belum_lunas'].toString();
     }
     if (json['total_transaksi'] != null) {
-      total_transaksi = json['total_transaksi'];
+      total_transaksi = json['total_transaksi'].toString();
     }
     if (json['total_transaksi_lunas'] != null) {
-      total_transaksi_lunas = json['total_transaksi_lunas'];
+      total_transaksi_lunas = json['total_transaksi_lunas'].toString();
     }
     if (json['total_transaksi_belum_lunas'] != null) {
-      total_transaksi_belum_lunas = json['total_transaksi_belum_lunas'];
+      total_transaksi_belum_lunas = json['total_transaksi_belum_lunas'].toString();
     }
     if (json['total_item'] != null) {
-      total_item = json['total_item'];
+      total_item = json['total_item'].toString();
     }
     if (json['total_item_lunas'] != null) {
-      total_item_lunas = json['total_item_lunas'];
+      total_item_lunas = json['total_item_lunas'].toString();
     }
     if (json['total_item_belum_lunas'] != null) {
-      total_item_belum_lunas = json['total_item_belum_lunas'];
+      total_item_belum_lunas = json['total_item_belum_lunas'].toString();
     }
   }
 }
