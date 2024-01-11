@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 // import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:posumkm/providers/UserProvider.dart';
 import 'package:posumkm/views/SplashScreenPage.dart';
@@ -11,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'models/UserModel.dart';
-import 'views/LoginPage.dart';
 
 UserModel? userLoggedInApps;
 var databaseFactory;
@@ -27,6 +27,8 @@ void main() async {
 
   // databaseFactory = databaseFactoryFfi;
   WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   deviceData = await getDeviceInfo();
   runApp(const MyApp());
   await _loadUserLoggedIn();
