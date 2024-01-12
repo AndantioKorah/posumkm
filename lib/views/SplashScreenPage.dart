@@ -53,8 +53,9 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 Image(
                   // image: AssetImage("assets/images/logo-pos-white-navy.png"),
-                  image: AssetImage("assets/images/logo-pos-navy-white.png"),
-                  width: sizeScreen.width * 0.4,
+                  image: AssetImage("assets/images/splash-screen-image.png"),
+                  width: 500,
+                  // height: sizeScreen.height,
                 ),
               ],
             ),
@@ -79,7 +80,7 @@ class BottomText extends StatelessWidget {
         DefaultTextStyle(
           style: TextStyle(
               fontSize: 15,
-              color: theme.colorScheme.primaryContainer,
+              color: theme.colorScheme.onBackground,
               fontWeight: FontWeight.bold),
           child: Text("Make It Simple."),
         ),
@@ -87,7 +88,7 @@ class BottomText extends StatelessWidget {
           height: 15,
         ),
         SpinKitFadingFour(
-          color: theme.colorScheme.primaryContainer,
+          color: theme.colorScheme.onBackground,
           size: 25,
         ),
         SizedBox(
@@ -110,12 +111,11 @@ class SplashBackground extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
         colors: [
-          Color.fromRGBO(47, 56, 92, 1),
-          theme.colorScheme.onPrimaryContainer,
-          Color.fromRGBO(47, 56, 92, 1)
+          theme.colorScheme.onSecondary,
+          Color.fromARGB(255, 3, 83, 110),
         ],
       )),
     );

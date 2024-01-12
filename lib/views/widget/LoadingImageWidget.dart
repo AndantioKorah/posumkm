@@ -9,7 +9,7 @@ Widget loadingDataWidget(BuildContext ctx){
         children: [
           Center(
             child: Image(
-              width: MediaQuery.of(ctx).size.width * .6,
+              width: MediaQuery.of(ctx).size.width * .3,
               image: const AssetImage("assets/images/loading-image.png")),
           ),
           Center(

@@ -4,7 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 // import 'package:posumkm/preferences/UserPreferences.dart';
 import 'package:posumkm/providers/UserProvider.dart';
 import 'package:posumkm/views/SplashScreenPage.dart';

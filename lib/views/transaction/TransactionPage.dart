@@ -99,7 +99,6 @@ class _TransactionPageState extends State<TransactionPage> {
         return true;
       },
       child: Scaffold(
-
         floatingActionButton: InkWell(
           onTap: () {
             Navigator.push(
@@ -149,103 +148,105 @@ class _TransactionPageState extends State<TransactionPage> {
             )
           ],
         ),
-        body: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children:[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: sizeScreen.width * .45,
-                    child: InkWell(
-                      onTap: () {
-                        _selectDate(context);
-                      },
-                      child: Container(
-                        height: 40,
-                        margin: const EdgeInsets.only(top: 10),
-                        child: TextField(
-                          controller: tglTransaksiController,
-                          enabled: false,
-                          // autofocus: true,
-                          style: TextStyle(
-                            color: AppsColor.alternativeBlack,
-                            fontSize: 15,
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.bold
-                          ),
-                          cursorColor: AppsColor.alternativeBlack,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 0),
-                            labelText: "Tgl. Transaksi",
-                            labelStyle: TrxTxtStyle.lblTxtField,
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1, color: AppsColor.alternativeBlack)),
-                            border: const OutlineInputBorder(),
-                            disabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: AppsColor.alternativeBlack)),
-                            enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: AppsColor.alternativeBlack)),
-                            // color: Color.fromARGB(100, 255, 255, 255))),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              children:[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: sizeScreen.width * .45,
+                      child: InkWell(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: Container(
+                          height: 40,
+                          margin: const EdgeInsets.only(top: 10),
+                          child: TextField(
+                            controller: tglTransaksiController,
+                            enabled: false,
+                            // autofocus: true,
+                            style: TextStyle(
+                              color: AppsColor.alternativeBlack,
+                              fontSize: 15,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.bold
+                            ),
+                            cursorColor: AppsColor.alternativeBlack,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 0),
+                              labelText: "Tgl. Transaksi",
+                              labelStyle: TrxTxtStyle.lblTxtField,
+                              focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1, color: AppsColor.alternativeBlack)),
+                              border: const OutlineInputBorder(),
+                              disabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color: AppsColor.alternativeBlack)),
+                              enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color: AppsColor.alternativeBlack)),
+                              // color: Color.fromARGB(100, 255, 255, 255))),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: sizeScreen.width * .45,
-                    child: Container(
-                        height: 40,
-                        margin: const EdgeInsets.only(top: 10),
-                        child: TextField(
-                          controller: searchController,
-                          // autofocus: true,
-                          style: TextStyle(
-                            color: AppsColor.alternativeBlack,
-                            fontSize: 15,
-                            fontFamily: "Poppins",
-                            fontWeight: FontWeight.bold
-                          ),
-                          cursorColor: AppsColor.alternativeBlack,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 0),
-                            labelText: "Cari Data",
-                            labelStyle: TrxTxtStyle.lblTxtField,
-                            focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1, color: AppsColor.alternativeBlack)),
-                            border: const OutlineInputBorder(),
-                            disabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: AppsColor.alternativeBlack)),
-                            enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: AppsColor.alternativeBlack)),
-                            // color: Color.fromARGB(100, 255, 255, 255))),
+                    Container(
+                      width: sizeScreen.width * .45,
+                      child: Container(
+                          height: 40,
+                          margin: const EdgeInsets.only(top: 10),
+                          child: TextField(
+                            controller: searchController,
+                            // autofocus: true,
+                            style: TextStyle(
+                              color: AppsColor.alternativeBlack,
+                              fontSize: 15,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.bold
+                            ),
+                            cursorColor: AppsColor.alternativeBlack,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 0),
+                              labelText: "Cari Data",
+                              labelStyle: TrxTxtStyle.lblTxtField,
+                              focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1, color: AppsColor.alternativeBlack)),
+                              border: const OutlineInputBorder(),
+                              disabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color: AppsColor.alternativeBlack)),
+                              enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 1,
+                                      color: AppsColor.alternativeBlack)),
+                              // color: Color.fromARGB(100, 255, 255, 255))),
+                            ),
                           ),
                         ),
-                      ),
-                  )
-                ],
-              ),
-              _showLoader ? 
-              loadingDataWidget(context)
-              :
-              Container(
-                padding: EdgeInsets.only(top: 10, bottom: 10),
-                child: ListTransaksiItem(listData: listTransaksi),
-              )              
-            ]
+                    )
+                  ],
+                ),
+                _showLoader ? 
+                loadingDataWidget(context)
+                :
+                Container(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: ListTransaksiItem(listData: listTransaksi),
+                )              
+              ]
+            ),
           ),
         )
       ),

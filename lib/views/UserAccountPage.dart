@@ -21,36 +21,38 @@ class _UserAccountPageState extends State<UserAccountPage> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Container(
-        height: MediaQuery.of(context).size.height * .5,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          color: AppsColor.alternativeWhite,
-          // borderRadius: BorderRadius.only(
-          //     topLeft: Radius.circular(20), topRight: Radius.circular(20))
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // const SizedBox(height: 10,),
-              InkWell(
-                onTap: () => showChangePasswordDialog(context),
-                child: const ButtonUserPage(
-                  text: "Ganti Password",
-                  icon: Icons.lock_outline_rounded,
+      child: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height * .5,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            color: AppsColor.alternativeWhite,
+            // borderRadius: BorderRadius.only(
+            //     topLeft: Radius.circular(20), topRight: Radius.circular(20))
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // const SizedBox(height: 10,),
+                InkWell(
+                  onTap: () => showChangePasswordDialog(context),
+                  child: const ButtonUserPage(
+                    text: "Ganti Password",
+                    icon: Icons.lock_outline_rounded,
+                  ),
                 ),
-              ),
-              // const SizedBox(height: 10,),
-              InkWell(
-                onTap: () {
-                  _showLogoutConfirmationDialog(context);
-                },
-                child: const ButtonUserPage(
-                  text: "Logout",
-                  icon: Icons.output_rounded,
+                // const SizedBox(height: 10,),
+                InkWell(
+                  onTap: () {
+                    _showLogoutConfirmationDialog(context);
+                  },
+                  child: const ButtonUserPage(
+                    text: "Logout",
+                    icon: Icons.output_rounded,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
